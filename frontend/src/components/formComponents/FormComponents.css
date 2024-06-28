@@ -1,0 +1,67 @@
+/*=======================================
+      css for the input text feild
+=========================================*/
+.form-input .error {
+   font-size: 13px;
+   color: var(--fourth-color)
+}
+
+.form-input.variant-1 input,
+.form-input.variant-1 select,
+.form-input.variant-1 textarea {
+   padding: 4.5px 8px;
+   border-radius: var(--inner-radius);
+   border: 1px solid var(--black);
+   display: block;
+   width: 100%;
+   margin-top: 3px;
+}
+
+.form-input.variant-1 {
+   margin-top: 10px;
+}
+
+.form-input.variant-1 textarea {
+   height: 200px;
+   width: 100%;
+}
+
+.password-input.variant-1 .input-wrapper {
+   position: relative;
+}
+
+.password-input.variant-1 .icon {
+   position: absolute;
+   right: 6px;
+   top: 4.5px;
+   cursor: pointer;
+}
+
+/*=======================================
+      css for the input feild file 
+=========================================*/
+
+.file-input {
+   position: relative;
+}
+
+.file-input.variant-1 input {
+   display: none;
+}
+
+.file-input.variant-1 label {
+   display: none;
+}
+
+.file-input button {
+   padding: 3px 5px;
+   border-radius: 5px;
+   outline: none;
+   border: 1px solid #0008;
+   box-shadow: 0px 0px 2px #0005;
+   font-size: 14px;
+}
+
+/*=======================================
+      css for the select feild
+=========================================*/
