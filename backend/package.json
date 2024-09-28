@@ -1,7 +1,7 @@
 {
-   "name": "miniflicks private theator",
+   "name": "miniflicks-private-theator",
    "version": "1.0.0",
-   "description": "backend for the backend application",
+   "description": "backend for the miniflicks private theator web application",
    "main": "server.js",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
