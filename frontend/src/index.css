@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+	}
+	* {
+		@apply m-0 p-0 box-border text-sm font-normal font-author text-zinc-800;
+	}
+	h3 {
+		@apply text-lg font-medium;
+	}
+	h4 {
+		@apply text-md font-medium;
+	}
+	input::placeholder {
+		@apply text-xs;
+	}
+	nav * {
+		@apply font-medium;
+	}
+}
