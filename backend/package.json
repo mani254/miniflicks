@@ -1,29 +1,39 @@
 {
-   "name": "miniflicks",
+   "name": "miniflicks private theator",
    "version": "1.0.0",
-   "description": "This is the project for the Private Theator booking and Maintainace.",
-   "main": "sever.js",
+   "description": "backend for the backend application",
+   "main": "server.js",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "dev": "nodemon server.js"
+      "dev": "nodemon server.js",
+      "start": "node server.js"
+   },
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/mani254/miniflicks"
    },
    "keywords": [
-      "private",
-      "theater",
-      "miniflicks"
+      "private theator",
+      "private theator backend",
+      "function Hall Booking"
    ],
    "author": "Manikanta",
-   "license": "UNLICENSED",
+   "license": "MIT",
+   "bugs": {
+      "url": "https://github.com/mani254/miniflicks/issues"
+   },
+   "homepage": "https://github.com/mani254/miniflicks#readme",
    "dependencies": {
-      "bcrypt": "^5.1.1",
-      "body-parser": "^1.20.2",
+      "body-parser": "^1.20.3",
       "cookie-parser": "^1.4.6",
       "cors": "^2.8.5",
+      "crypto": "^1.0.1",
       "dotenv": "^16.4.5",
-      "express": "^4.19.2",
+      "express": "^4.21.0",
       "jsonwebtoken": "^9.0.2",
-      "mongoose": "^8.3.2",
+      "mongoose": "^8.6.2",
       "multer": "^1.4.5-lts.1",
-      "nodemon": "^3.1.0"
+      "nodemon": "^3.1.4",
+      "slugify": "^1.6.6"
    }
 }
