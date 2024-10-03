@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { addCity } from "../../redux/citiy/cityActions";
+import { useNavigate } from "react-router-dom";
 
 function AddCities({ addCity }) {
+	const navigate = useNavigate();
+
 	const [details, setDetails] = useState({
+		name: "",
+		status: true,
+	});
+	const [errors, setErrors] = useState({
 		name: "",
 		status: true,
 	});
@@ -20,9 +27,9 @@ function AddCities({ addCity }) {
 		e.preventDefault();
 		try {
 			await addCity(details);
-			setDetails({ name: "", status: "" });
+			navigate("/admin/citites");
 		} catch (error) {
-			console.error("Failed to add city:", error);
+			console.error(error);
 		}
 	};
 
