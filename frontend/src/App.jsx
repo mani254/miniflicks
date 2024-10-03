@@ -10,6 +10,8 @@ import Login from "./pages/Login";
 import BackendLayout from "./layouts/BackendLayout";
 import Locations from "./components/Locations/Locations";
 import Dashboard from "./components/Dashboard/Dashboard";
+import Cities from "./components/Cities/Cities";
+import AddCities from "./components/Cities/addCities";
 
 const Modal = lazy(() => import("./components/Modal/Modal"));
 
@@ -25,6 +27,10 @@ function App({ modal }) {
 						<Route index element={<Dashboard />} />
 						<Route path="locations">
 							<Route index element={<Locations />} />
+						</Route>
+						<Route path="cities">
+							<Route index element={<Cities />} />
+							<Route path="add" element={<AddCities />} />
 						</Route>
 					</Route>
 				</Routes>

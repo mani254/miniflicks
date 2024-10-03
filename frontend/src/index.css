@@ -21,4 +21,51 @@
 	nav * {
 		@apply font-medium;
 	}
+	span svg {
+		color: inherit;
+		fill: inherit;
+	}
+	.outer-box {
+		@apply mt-4 p-4 bg-white rounded-lg;
+		box-shadow: var(--box-shadow);
+	}
+	.btn {
+		@apply px-4 text-sm font-medium text-white bg-logo rounded-md;
+	}
+	.btn.btn-1 {
+		@apply w-full py-1;
+	}
+	.main-table {
+		@apply mt-5 w-full border-collapse;
+	}
+	.main-table thead {
+		@apply rounded-md bg-logo;
+	}
+	.main-table thead * {
+		@apply text-white;
+	}
+	.main-table td,
+	.main-table th {
+		@apply px-2 py-1;
+	}
+	.main-table tr {
+		@apply border border-gray-300;
+	}
+	.main-table th {
+		@apply py-2 text-left;
+	}
+
+	.input-wrapper {
+		@apply mb-4;
+	}
+	.input-wrapper label {
+		@apply block mb-1;
+	}
+	.input-wrapper input,
+	.input-wrapper select {
+		@apply w-full border border-gray-400 py-[2px] px-2 rounded-md focus:outline focus:outline-blue-200;
+	}
+	.input-wrapper select {
+		@apply py-[5px];
+	}
 }
