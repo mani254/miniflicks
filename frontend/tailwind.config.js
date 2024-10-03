@@ -8,10 +8,11 @@ export default {
       extend: {
          fontFamily: {
             manrope: 'Manrope',
-            author: 'Author'
+            author: 'Author',
+            jokerman: 'Jokerman'
          },
          colors: {
-            logo: ({ opacityValue }) => `rgba(0, 64, 80, ${opacityValue})`,
+            logo: ({ opacityValue }) => `rgba(50, 107, 159, ${opacityValue})`,
          },
          container: {
             center: true,
