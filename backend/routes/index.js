@@ -1,7 +1,8 @@
 const express = require("express");
 const apiRouter = express.Router();
 
-//example usage 
-// apiRouter.use('/auth', authRouter)
+const cityRouter = require('./city')
+
+apiRouter.use('/cities', cityRouter)
 
 module.exports = apiRouter;

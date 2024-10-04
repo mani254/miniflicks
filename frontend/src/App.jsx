@@ -12,13 +12,15 @@ import Locations from "./components/Locations/Locations";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Cities from "./components/Cities/Cities";
 import AddCities from "./components/Cities/addCities";
-
-const Modal = lazy(() => import("./components/Modal/Modal"));
+import CitiesWrapper from "./components/Cities/CitiesWrapper";
+import Notification from "./components/Notifications/Notifications";
+import Modal from "./components/Modal/Modal";
 
 function App({ modal }) {
 	return (
 		<React.Fragment>
 			<div className="bg-zinc-100 min-h-screen">
+				<Notification />
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<Login />} />
@@ -28,9 +30,10 @@ function App({ modal }) {
 						<Route path="locations">
 							<Route index element={<Locations />} />
 						</Route>
-						<Route path="cities">
+						<Route path="cities" element={<CitiesWrapper />}>
 							<Route index element={<Cities />} />
 							<Route path="add" element={<AddCities />} />
+							<Route path="edit/:id" element={<AddCities update={true} />} />
 						</Route>
 					</Route>
 				</Routes>

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 
 const Modal = ({ props, component }) => {
+	console.log(props, component);
 	const modalRoot = document.getElementById("modal-root");
 	const el = document.createElement("div");
 

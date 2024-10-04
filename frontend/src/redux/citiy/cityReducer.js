@@ -1,16 +1,7 @@
 import cityTypes from './cityActionTypes';
 
 const initialState = {
-   cities: [
-      { id: 1, name: "New York", status: true },
-      { id: 2, name: "Los Angeles", status: false },
-      { id: 3, name: "Chicago", status: true },
-      { id: 4, name: "Houston", status: false },
-      { id: 5, name: "Phoenix", status: true },
-      { id: 6, name: "Philadelphia", status: false },
-      { id: 7, name: "San Antonio", status: true },
-      { id: 8, name: "San Diego", status: false },
-   ],
+   cities: [],
    loading: false,
    error: null,
 };
@@ -46,7 +37,7 @@ const cityReducer = (state = initialState, action) => {
             ...state,
             loading: false,
             cities: state.cities.map(city =>
-               city.id === action.payload.id ? action.payload : city
+               city._id === action.payload._id ? action.payload : city
             ),
          };
 
@@ -54,7 +45,7 @@ const cityReducer = (state = initialState, action) => {
          return {
             ...state,
             loading: false,
-            cities: state.cities.filter(city => city.id !== action.payload),
+            cities: state.cities.filter(city => city._id !== action.payload),
          };
 
       case cityTypes.ADD_CITY_FAILURE:

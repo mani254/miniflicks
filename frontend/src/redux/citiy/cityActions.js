@@ -21,9 +21,9 @@ export const addCity = (cityData) => async (dispatch) => {
    dispatch(addCityRequest());
    try {
       const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/cities`, cityData);
-      dispatch(addCitySuccess(response.data));
+      dispatch(addCitySuccess(response.data.city));
       dispatch(showNotification('City added successfully!'));
-      return Promise.resolve(response.data);
+      return Promise.resolve();
    } catch (error) {
       let errMessage = error.response ? error.response.data.error : 'Something went wrong';
       dispatch(addCityFailure(errMessage));
@@ -54,7 +54,7 @@ export const getCities = () => async (dispatch) => {
    try {
       const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/cities`);
       dispatch(getCitiesSuccess(response.data));
-      return Promise.resolve(response.data);
+      return Promise.resolve();
    } catch (error) {
       let errMessage = error.response ? error.response.data.error : 'Something went wrong';
       dispatch(getCitiesFailure(errMessage));
@@ -84,9 +84,22 @@ export const updateCity = (cityId, cityData) => async (dispatch) => {
    dispatch(updateCityRequest());
    try {
       const response = await axios.put(`${import.meta.env.VITE_APP_BACKENDURI}/api/cities/${cityId}`, cityData);
-      dispatch(updateCitySuccess(response.data));
+      dispatch(updateCitySuccess(response.data.city));
       dispatch(showNotification('City updated successfully!'));
-      return Promise.resolve(response.data);
+      return Promise.resolve();
+   } catch (error) {
+      let errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      dispatch(updateCityFailure(errMessage));
+      dispatch(showNotification(errMessage));
+      return Promise.reject(errMessage);
+   }
+};
+
+export const updateCityStatus = (cityId, cityData) => async (dispatch) => {
+   try {
+      const response = await axios.put(`${import.meta.env.VITE_APP_BACKENDURI}/api/cities/${cityId}`, cityData);
+      dispatch(updateCitySuccess(response.data.city));
+      return Promise.resolve();
    } catch (error) {
       let errMessage = error.response ? error.response.data.error : 'Something went wrong';
       dispatch(updateCityFailure(errMessage));

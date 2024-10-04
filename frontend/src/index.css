@@ -36,10 +36,10 @@
 		@apply w-full py-1;
 	}
 	.main-table {
-		@apply mt-5 w-full border-collapse;
+		@apply mt-5 w-full border-collapse rounded-t-md overflow-hidden;
 	}
 	.main-table thead {
-		@apply rounded-md bg-logo;
+		@apply rounded-md bg-logo overflow-hidden;
 	}
 	.main-table thead * {
 		@apply text-white;
