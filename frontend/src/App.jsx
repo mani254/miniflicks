@@ -8,13 +8,17 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 
 import BackendLayout from "./layouts/BackendLayout";
-import Locations from "./components/Locations/Locations";
 import Dashboard from "./components/Dashboard/Dashboard";
-import Cities from "./components/Cities/Cities";
-import AddCities from "./components/Cities/addCities";
-import CitiesWrapper from "./components/Cities/CitiesWrapper";
 import Notification from "./components/Notifications/Notifications";
 import Modal from "./components/Modal/Modal";
+
+import CitiesWrapper from "./components/Cities/CitiesWrapper";
+import Cities from "./components/Cities/Cities";
+import AddCities from "./components/Cities/addCities";
+
+import LocationsWrapper from "./components/Locations/LocationsWrapper";
+import Locations from "./components/Locations/Locations";
+import AddLocations from "./components/Locations/AddLocations";
 
 function App({ modal }) {
 	return (
@@ -27,13 +31,15 @@ function App({ modal }) {
 
 					<Route path="/admin" element={<BackendLayout />}>
 						<Route index element={<Dashboard />} />
-						<Route path="locations">
-							<Route index element={<Locations />} />
-						</Route>
 						<Route path="cities" element={<CitiesWrapper />}>
 							<Route index element={<Cities />} />
 							<Route path="add" element={<AddCities />} />
 							<Route path="edit/:id" element={<AddCities update={true} />} />
+						</Route>
+						<Route path="locations" element={<LocationsWrapper />}>
+							<Route index element={<Locations />} />
+							<Route path="add" element={<AddLocations />} />
+							<Route path="edit/:id" element={<AddLocations update={true} />} />
 						</Route>
 					</Route>
 				</Routes>

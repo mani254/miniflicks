@@ -24,6 +24,7 @@
    },
    "homepage": "https://github.com/mani254/miniflicks#readme",
    "dependencies": {
+      "bcryptjs": "^2.4.3",
       "body-parser": "^1.20.3",
       "cookie-parser": "^1.4.6",
       "cors": "^2.8.5",

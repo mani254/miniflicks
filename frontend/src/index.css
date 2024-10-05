@@ -25,6 +25,9 @@
 		color: inherit;
 		fill: inherit;
 	}
+	.error {
+		@apply text-red-400 text-xs;
+	}
 	.outer-box {
 		@apply mt-4 p-4 bg-white rounded-lg;
 		box-shadow: var(--box-shadow);

@@ -13,7 +13,7 @@ const citySchema = new mongoose.Schema({
    },
    locations: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Screen'
+      ref: 'Location'
    }]
 })
 

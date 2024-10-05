@@ -13,7 +13,6 @@ function AddCities({ addCity, update = false, updateCity }) {
 		name: "",
 		status: true,
 	});
-
 	useEffect(() => {
 		if (update) {
 			const currentCity = citiesData.cities.find((city) => city._id == id);
