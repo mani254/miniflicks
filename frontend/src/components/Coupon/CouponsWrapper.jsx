@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
-import { getLocations } from "../../redux/location/locationActions";
+import { getCoupons } from "../../redux/coupon/couponActions";
 
-function LocationsWrapper({ getLocations, locationsData }) {
+function CouponsWrapper({ getCoupons, couponsData }) {
 	useEffect(() => {
 		(async () => {
 			try {
-				await getLocations();
+				await getCoupons();
 			} catch (err) {
 				console.log(err);
 			}
@@ -16,19 +16,19 @@ function LocationsWrapper({ getLocations, locationsData }) {
 
 	return (
 		<>
-			<Outlet context={locationsData} />
+			<Outlet context={couponsData} />
 		</>
 	);
 }
 
 const mapStateToProps = (state) => {
 	return {
-		locationsData: state.locations,
+		couponsData: state.coupons,
 	};
 };
 
 const mapDispatchToProps = (dispatch) => ({
-	getLocations: () => dispatch(getLocations()),
+	getCoupons: () => dispatch(getCoupons()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocationsWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(CouponsWrapper);

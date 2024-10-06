@@ -13,7 +13,6 @@ import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
 function Locations({ showModal, deleteLocation, changeLocationStatus }) {
 	const navigate = useNavigate();
 	const locationsData = useOutletContext();
-	console.log(locationsData);
 
 	const alertData = {
 		title: "Are You sure?",

@@ -20,6 +20,10 @@ import LocationsWrapper from "./components/Locations/LocationsWrapper";
 import Locations from "./components/Locations/Locations";
 import AddLocations from "./components/Locations/AddLocations";
 
+import CouponsWrapper from "./components/Coupon/CouponsWrapper";
+import AddCoupons from "./components/Coupon/AddCoupons";
+import Coupons from "./components/Coupon/Coupons";
+
 function App({ modal }) {
 	return (
 		<React.Fragment>
@@ -40,6 +44,11 @@ function App({ modal }) {
 							<Route index element={<Locations />} />
 							<Route path="add" element={<AddLocations />} />
 							<Route path="edit/:id" element={<AddLocations update={true} />} />
+						</Route>
+						<Route path="coupons" element={<CouponsWrapper />}>
+							<Route index element={<Coupons />} />
+							<Route path="add" element={<AddCoupons />} />
+							<Route path="edit/:id" element={<AddCoupons />} />
 						</Route>
 					</Route>
 				</Routes>

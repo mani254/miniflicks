@@ -42,9 +42,9 @@ const navlinks = [
 		to: "/admin/screens",
 	},
 	{
-		title: "Cupons",
+		title: "Coupons",
 		image: "https://cdn-icons-png.freepik.com/512/6977/6977692.png",
-		to: "/admin/cupons",
+		to: "/admin/coupons",
 	},
 	{
 		title: "Customers",
