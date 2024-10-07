@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { validation } from "../../utils";
 import CityOptions from "../Cities/CityOptions";
 
 import { connect } from "react-redux";
 import { addLocation, updateLocation } from "../../redux/location/locationActions";
+import AddonsList from "../Addon/AddonsList";
+import GiftsList from "../Gift/GiftsList";
 
 import { ImageUploaderComponent } from "editorify-dev/imageUploader";
 import "editorify-dev/css/imageUploader";
@@ -29,6 +31,9 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 		status: true,
 	});
 
+	const [selectedAddons, setSelectedAddons] = useState([]);
+	const [selectedGifts, setSelectedGifts] = useState([]);
+
 	const [loadedImages, setLoadedImages] = useState([]);
 	const [errors, setErrors] = useState({
 		name: "",
@@ -52,10 +57,12 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 			}
 			setDetails(currentLocation);
 			setLoadedImages([currentLocation.image]);
+			setSelectedAddons(currentLocation.addons || []);
+			setSelectedGifts(currentLocation.gifts || []);
 		}
 	}, [update, id, locationsData.locations]);
 
-	const handleChange = (e) => {
+	const handleChange = useCallback((e) => {
 		const { name, value } = e.target;
 		if (name.startsWith("admin.")) {
 			const adminField = name.split(".")[1];
@@ -91,7 +98,27 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 				};
 			}
 		});
-	};
+	}, []);
+
+	const handleAddonsChange = useCallback((addonId, isChecked) => {
+		setSelectedAddons((prev) => {
+			if (isChecked) {
+				return [...prev, addonId];
+			} else {
+				return prev.filter((id) => id !== addonId);
+			}
+		});
+	}, []);
+
+	const handleGiftsChange = useCallback((addonId, isChecked) => {
+		setSelectedGifts((prev) => {
+			if (isChecked) {
+				return [...prev, addonId];
+			} else {
+				return prev.filter((id) => id !== addonId);
+			}
+		});
+	}, []);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -117,6 +144,8 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 		locationData.append("admin[email]", details.admin.email);
 		locationData.append("admin[number]", details.admin.number);
 		locationData.append("admin[password]", details.admin.password);
+		locationData.append("addons", JSON.stringify(selectedAddons));
+		locationData.append("gifts", JSON.stringify(selectedGifts));
 
 		if (update) {
 			try {
@@ -187,40 +216,50 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 								</div>
 							</div>
 						</div>
+						<div className="outer-box">
+							<h3 className="mb-3">Add Ons</h3>
+							<AddonsList checkedValues={selectedAddons} handleChange={handleAddonsChange} />
+						</div>
+						<div className="outer-box">
+							<h3 className="mb-3">Add Ons</h3>
+							<GiftsList checkedValues={selectedGifts} handleChange={handleGiftsChange} />
+						</div>
 					</div>
 
 					<div className="outer-box w-1/3 min-w-[320px] flex flex-col justify-between">
-						<h4 className="mb-3">Status & Location Image</h4>
+						<div>
+							<h4 className="mb-3">Status & Location Image</h4>
 
-						<CityOptions value={details.cityId} changeHandler={handleChange} />
+							<CityOptions value={details.cityId} changeHandler={handleChange} />
 
-						<div className="input-wrapper">
-							<label htmlFor="status">Status</label>
-							<select id="status" name="status" value={details.status} onChange={handleChange}>
-								<option value={true}>Active</option>
-								<option value={false}>In Active</option>
-							</select>
-						</div>
-						<div className="mb-3">
-							<p className="mb-2">Location Image</p>
-							{update ? (
-								<ImageUploaderComponent
-									id="location-image"
-									maxImages={1}
-									onImagesChange={(images) => {
-										setDetails((prev) => ({ ...prev, image: images[0] }));
-									}}
-									loadedImages={loadedImages ? loadedImages : []}
-								/>
-							) : (
-								<ImageUploaderComponent
-									id="location-image"
-									maxImages={1}
-									onImagesChange={(images) => {
-										setDetails((prev) => ({ ...prev, image: images[0] }));
-									}}
-								/>
-							)}
+							<div className="input-wrapper">
+								<label htmlFor="status">Status</label>
+								<select id="status" name="status" value={details.status} onChange={handleChange}>
+									<option value={true}>Active</option>
+									<option value={false}>In Active</option>
+								</select>
+							</div>
+							<div className="mb-3">
+								<p className="mb-2">Location Image</p>
+								{update ? (
+									<ImageUploaderComponent
+										id="location-image"
+										maxImages={1}
+										onImagesChange={(images) => {
+											setDetails((prev) => ({ ...prev, image: images[0] }));
+										}}
+										loadedImages={loadedImages ? loadedImages : []}
+									/>
+								) : (
+									<ImageUploaderComponent
+										id="location-image"
+										maxImages={1}
+										onImagesChange={(images) => {
+											setDetails((prev) => ({ ...prev, image: images[0] }));
+										}}
+									/>
+								)}
+							</div>
 						</div>
 
 						<button type="submit" className="btn btn-1">

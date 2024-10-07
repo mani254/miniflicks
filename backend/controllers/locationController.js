@@ -3,6 +3,7 @@ const City = require('../schema/citySchema');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 require('dotenv').config()
 
 
@@ -26,9 +27,10 @@ const addLocation = async (req, res) => {
       if (req.file) {
          imageFileName = `${process.env.BACKENDURI}/uploads/locations/${req.file.filename}`;
       }
-      // else {
-      //    imageFileName = `${process.env.BACKENDURI}/uploads/locations/default.jpg`
-      // }
+
+      locationData.addons ? locationData.addons = JSON.parse(locationData.addons) : locationData.addons = []
+      locationData.gifts ? locationData.gifts = JSON.parse(locationData.gifts) : locationData.gifts = []
+
 
       const hashedPassword = await bcrypt.hash(locationData.admin.password, 10);
       locationData.admin.password = hashedPassword;
@@ -75,7 +77,6 @@ const updateLocation = async (req, res) => {
          return res.status(404).json({ error: 'Location not found.' });
       }
 
-
       if (!mongoose.Types.ObjectId.isValid(locationData.cityId)) {
          return res.status(400).json({ error: 'city is Required' })
       }
@@ -98,6 +99,8 @@ const updateLocation = async (req, res) => {
          locationData.image = null
       }
 
+      locationData.addons ? locationData.addons = JSON.parse(locationData.addons) : locationData.addons = []
+      locationData.gifts ? locationData.gifts = JSON.parse(locationData.gifts) : locationData.gifts = []
 
       if (locationData.admin.password) {
          const hashedPassword = await bcrypt.hash(locationData.admin.password, 10);

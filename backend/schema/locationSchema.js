@@ -29,6 +29,18 @@ const locationSchema = new mongoose.Schema({
       ref: 'City',
       required: [true, 'City is required']
    },
+   addons: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Addon'
+      }
+   ],
+   gifts: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: 'Gift',
+      }
+   ],
    admin: {
       name: {
          type: String,

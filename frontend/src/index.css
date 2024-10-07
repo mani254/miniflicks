@@ -69,10 +69,20 @@
 	.input-wrapper textarea {
 		@apply w-full border border-gray-400 py-[2px] px-2 rounded-md focus:outline focus:outline-blue-200;
 	}
-	.input-wrapper textarea {
-		height: 100px;
+	.input-wrapper input[type="checkbox"] {
+		@apply w-4 h-4;
 	}
+
 	.input-wrapper select {
 		@apply py-[5px];
+	}
+	.input-wrapper.checkbox input {
+		@apply w-5 h-5 rounded-md outline-none;
+	}
+	.input-wrapper.checkbox label {
+		@apply mb-0;
+	}
+	.mb-0-i {
+		margin-bottom: 0px;
 	}
 }

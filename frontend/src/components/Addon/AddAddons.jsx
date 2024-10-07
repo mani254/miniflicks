@@ -51,7 +51,7 @@ function AddAddon({ addAddon, update = false, updateAddon, showNotification }) {
 		addonData.append("description", details.description);
 		addonData.append("price", details.price);
 		addonData.append("image", details.image);
-		giftData.append("position", details.position);
+		addonData.append("position", details.position);
 
 		if (update) {
 			try {

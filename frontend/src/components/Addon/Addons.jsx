@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -46,8 +46,8 @@ function Addons({ showModal, deleteAddon }) {
 							</tr>
 						</thead>
 						<tbody>
-							{sortedAddons.length >= 1 &&
-								sortedAddons.map((addon, index) => (
+							{addonsData.addons.length >= 1 &&
+								addonsData.addons.map((addon, index) => (
 									<tr key={addon._id}>
 										<td>{index + 1}</td>
 										<td>
