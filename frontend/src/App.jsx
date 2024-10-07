@@ -24,6 +24,10 @@ import CouponsWrapper from "./components/Coupon/CouponsWrapper";
 import AddCoupons from "./components/Coupon/AddCoupons";
 import Coupons from "./components/Coupon/Coupons";
 
+import BannersWrapper from "./components/Banner/BannersWrapper";
+import Banners from "./components/Banner/Banners";
+import AddBanner from "./components/Banner/AddBanner";
+
 function App({ modal }) {
 	return (
 		<React.Fragment>
@@ -49,6 +53,11 @@ function App({ modal }) {
 							<Route index element={<Coupons />} />
 							<Route path="add" element={<AddCoupons />} />
 							<Route path="edit/:id" element={<AddCoupons />} />
+						</Route>
+						<Route path="banners" element={<BannersWrapper />}>
+							<Route index element={<Banners />} />
+							<Route path="add" element={<AddBanner />} />
+							<Route path="edit/:id" element={<AddBanner update={true} />} />
 						</Route>
 					</Route>
 				</Routes>
