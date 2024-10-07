@@ -75,6 +75,11 @@ const updateLocation = async (req, res) => {
          return res.status(404).json({ error: 'Location not found.' });
       }
 
+
+      if (!mongoose.Types.ObjectId.isValid(locationData.cityId)) {
+         return res.status(400).json({ error: 'city is Required' })
+      }
+
       const isUnique = await Location.isNameUniqueInCity(locationData.name, locationData.cityId, id);
       if (!isUnique) {
          return res.status(400).json({ error: 'Location name already added in this city.' });
@@ -109,7 +114,6 @@ const updateLocation = async (req, res) => {
             await oldCity.save();
          }
 
-         // Add to the new city
          const newCity = await City.findById(locationData.cityId);
          if (newCity) {
             newCity.locations.push(id);
@@ -144,11 +148,14 @@ const deleteLocation = async (req, res) => {
          return res.status(404).json({ error: 'Location not found.' });
       }
 
-      const city = await City.findById(existingLocation.city);
-      if (city) {
-         city.locations = city.locations.filter(loc => !loc.equals(id));
-         await city.save();
+      if (!mongoose.Types.ObjectId.isValid(existingLocation.city)) {
+         const city = await City.findById(existingLocation.city);
+         if (city) {
+            city.locations = city.locations.filter(loc => !loc.equals(id));
+            await city.save();
+         }
       }
+
 
       if (existingLocation.image) {
          const fileName = existingLocation.image.slice(existingLocation.image.lastIndexOf('/') + 1);

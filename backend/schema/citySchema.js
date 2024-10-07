@@ -17,6 +17,13 @@ const citySchema = new mongoose.Schema({
    }]
 })
 
+citySchema.pre('save', function (next) {
+   if (this.isModified('name')) {
+      this.name = this.name.charAt(0).toUpperCase() + this.name.slice(1);
+   }
+   next();
+});
+
 const City = mongoose.model('City', citySchema)
 
 module.exports = City

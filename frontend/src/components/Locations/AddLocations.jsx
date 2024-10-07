@@ -47,7 +47,9 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 			const currentLocation = locationsData.locations.find((location) => location._id === id);
 			if (!currentLocation) return;
 			currentLocation.admin.password = "";
-			currentLocation.cityId = currentLocation.city._id;
+			if (currentLocation.city?._id) {
+				currentLocation.cityId = currentLocation.city._id;
+			}
 			setDetails(currentLocation);
 			setLoadedImages([currentLocation.image]);
 		}
@@ -93,6 +95,10 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		if (!details.cityId) {
+			return;
+		}
 
 		const hasErrors = Object.values(errors).some((error) => (typeof error === "object" ? Object.values(error).some((fieldError) => fieldError !== "") : error !== ""));
 		if (hasErrors) {

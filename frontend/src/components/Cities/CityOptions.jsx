@@ -19,7 +19,7 @@ function CityOptions({ value, changeHandler, city, getCities }) {
 		if (city.cities.length > 0) {
 			changeHandler({ target: { name: "cityId", value: city.cities[0]._id } });
 		}
-	}, [city.cities]);
+	}, [city.cities, value]);
 
 	return (
 		<div className="input-wrapper">
