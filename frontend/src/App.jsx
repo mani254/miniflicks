@@ -28,6 +28,10 @@ import BannersWrapper from "./components/Banner/BannersWrapper";
 import Banners from "./components/Banner/Banners";
 import AddBanner from "./components/Banner/AddBanner";
 
+import GiftsWrapper from "./components/Gift/GiftsWrapper";
+import Gifts from "./components/Gift/Gifts";
+import AddGift from "./components/Gift/AddGift";
+
 function App({ modal }) {
 	return (
 		<React.Fragment>
@@ -58,6 +62,11 @@ function App({ modal }) {
 							<Route index element={<Banners />} />
 							<Route path="add" element={<AddBanner />} />
 							<Route path="edit/:id" element={<AddBanner update={true} />} />
+						</Route>
+						<Route path="gifts" element={<GiftsWrapper />}>
+							<Route index element={<Gifts />} />
+							<Route path="add" element={<AddGift />} />
+							<Route path="edit/:id" element={<AddGift update={true} />} />
 						</Route>
 					</Route>
 				</Routes>
