@@ -61,6 +61,11 @@ const navlinks = [
 		to: "/admin/gifts",
 		image: "https://cdn-icons-png.flaticon.com/256/666/666201.png",
 	},
+	{
+		title: "Addons",
+		to: "/admin/addons",
+		image: "https://cdn-icons-png.flaticon.com/256/666/666201.png",
+	},
 ];
 
 function BackendNav() {

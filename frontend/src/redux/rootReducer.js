@@ -7,6 +7,7 @@ import locationReducer from "./location/locationReducer";
 import couponReducer from "./coupon/couponReducer";
 import bannerReducer from "./banner/bannerReducer";
 import giftReducer from "./gift/giftReducer";
+import addonReducer from "./addon/addonReducer";
 
 const rootReducer = combineReducers({
    modal: modalReducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
    locations: locationReducer,
    coupons: couponReducer,
    banners: bannerReducer,
-   gifts: giftReducer
+   gifts: giftReducer,
+   addons: addonReducer,
 })
 
 export default rootReducer;

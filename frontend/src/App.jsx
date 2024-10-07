@@ -32,6 +32,10 @@ import GiftsWrapper from "./components/Gift/GiftsWrapper";
 import Gifts from "./components/Gift/Gifts";
 import AddGift from "./components/Gift/AddGift";
 
+import AddAddons from "./components/Addon/AddAddons";
+import Addons from "./components/Addon/Addons";
+import AddonsWrapper from "./components/Addon/AddonsWrapper";
+
 function App({ modal }) {
 	return (
 		<React.Fragment>
@@ -67,6 +71,11 @@ function App({ modal }) {
 							<Route index element={<Gifts />} />
 							<Route path="add" element={<AddGift />} />
 							<Route path="edit/:id" element={<AddGift update={true} />} />
+						</Route>
+						<Route path="addons" element={<AddonsWrapper />}>
+							<Route index element={<Addons />} />
+							<Route path="add" element={<AddAddons />} />
+							<Route path="edit/:id" element={<AddAddons update={true} />} />
 						</Route>
 					</Route>
 				</Routes>

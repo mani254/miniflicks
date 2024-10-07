@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const giftSchema = new mongoose.Schema({
+const addonSchema = new mongoose.Schema({
    name: {
       type: String,
       required: [true, 'Name is required'],
@@ -10,13 +10,13 @@ const giftSchema = new mongoose.Schema({
       type: String,
       trim: true,
    },
-   image: {
-      type: String,
-      required: [true, 'Image is required'],
-   },
    position: {
       type: Number,
       default: 0
+   },
+   image: {
+      type: String,
+      required: [true, 'Image is required'],
    },
    price: {
       type: Number,
@@ -24,6 +24,6 @@ const giftSchema = new mongoose.Schema({
    },
 });
 
-const Gift = mongoose.model('Gift', giftSchema);
+const Addon = mongoose.model('Addon', addonSchema);
 
-module.exports = Gift;
+module.exports = Addon;

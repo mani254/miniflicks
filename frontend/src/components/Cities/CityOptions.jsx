@@ -20,7 +20,6 @@ function CityOptions({ value, changeHandler, city, getCities }) {
 			changeHandler({ target: { name: "cityId", value: city.cities[0]._id } });
 		}
 	}, [city.cities, value]);
-
 	return (
 		<div className="input-wrapper">
 			<label htmlFor="cityId">City</label>

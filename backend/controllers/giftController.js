@@ -7,7 +7,7 @@ const addGift = async (req, res) => {
    try {
       const giftData = req.body;
 
-      if (!giftData.name || !giftData.description || !req.file) {
+      if (!giftData.name || !req.file) {
          return res.status(400).json({ error: 'Name, description, and image are required.' });
       }
 
@@ -26,7 +26,7 @@ const addGift = async (req, res) => {
 
 const getGifts = async (req, res) => {
    try {
-      const gifts = await Gift.find().sort({ name: 1 });
+      const gifts = await Gift.find().sort({ position: 1 });
       return res.status(200).json({ message: 'Gifts fetched successfully', gifts });
    } catch (error) {
       console.error('Error getting gifts:', error);
