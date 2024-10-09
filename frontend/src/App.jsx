@@ -36,6 +36,10 @@ import AddAddons from "./components/Addon/AddAddons";
 import Addons from "./components/Addon/Addons";
 import AddonsWrapper from "./components/Addon/AddonsWrapper";
 
+import ScreensWrapper from "./components/Screen/ScreensWrapper";
+import AddScreen from "./components/Screen/AddScreen";
+import Screens from "./components/Screen/Screens";
+
 function App({ modal }) {
 	return (
 		<React.Fragment>
@@ -51,6 +55,11 @@ function App({ modal }) {
 							<Route index element={<Cities />} />
 							<Route path="add" element={<AddCities />} />
 							<Route path="edit/:id" element={<AddCities update={true} />} />
+						</Route>
+						<Route path="screens" element={<ScreensWrapper />}>
+							<Route index element={<Screens />} />
+							<Route path="add" element={<AddScreen />} />
+							<Route path="edit/:id" element={<AddScreen update={true} />} />
 						</Route>
 						<Route path="locations" element={<LocationsWrapper />}>
 							<Route index element={<Locations />} />

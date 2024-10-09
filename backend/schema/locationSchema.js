@@ -61,10 +61,10 @@ const locationSchema = new mongoose.Schema({
          type: String,
       }
    },
-   // screens: [{
-   //    type: mongoose.Schema.Types.ObjectId,
-   //    ref: 'Screen',
-   // }]
+   screens: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Screen',
+   }]
 });
 
 
