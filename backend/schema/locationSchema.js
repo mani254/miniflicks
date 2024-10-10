@@ -67,14 +67,17 @@ const locationSchema = new mongoose.Schema({
    }]
 });
 
+locationSchema.pre('save', function (next) {
+   if (this.name) {
+      this.name = this.name.charAt(0).toUpperCase() + this.name.slice(1).toLowerCase();
+   }
+   next();
+});
 
 locationSchema.statics.isNameUniqueInCity = async function (name, cityId, locationId = null) {
-   // console.log(name, cityId, locationId)
    const city = await City.findById(cityId).populate('locations');
    if (!city) return false;
-   // console.log(city)
    const locationExists = city.locations.some(location => location.name === name);
-   // console.log(locationExists)
 
    if (locationExists && locationId) {
       return !city.locations.some(location => location._id.toString() !== locationId && location.name === name);
