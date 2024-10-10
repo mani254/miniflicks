@@ -30,6 +30,16 @@ const bannerSchema = new mongoose.Schema({
    },
 });
 
+bannerSchema.pre('save', function (next) {
+   if (this.title) {
+      this.title = this.title.charAt(0).toUpperCase() + this.title.slice(1).toLowerCase();
+   }
+   if (this.description) {
+      this.description = this.description.charAt(0).toUpperCase() + this.description.slice(1).toLowerCase();
+   }
+   next();
+});
+
 const Banner = mongoose.model('Banner', bannerSchema);
 
 module.exports = Banner;

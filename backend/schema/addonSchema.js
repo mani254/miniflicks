@@ -24,6 +24,13 @@ const addonSchema = new mongoose.Schema({
    },
 });
 
+addonSchema.pre('save', function (next) {
+   if (this.name) {
+      this.name = this.name.charAt(0).toUpperCase() + this.name.slice(1);
+   }
+   next();
+});
+
 const Addon = mongoose.model('Addon', addonSchema);
 
 module.exports = Addon;

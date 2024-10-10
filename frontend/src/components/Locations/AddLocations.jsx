@@ -221,7 +221,7 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 							<AddonsList checkedValues={selectedAddons} handleChange={handleAddonsChange} />
 						</div>
 						<div className="outer-box">
-							<h3 className="mb-3">Add Ons</h3>
+							<h3 className="mb-3">Gifts</h3>
 							<GiftsList checkedValues={selectedGifts} handleChange={handleGiftsChange} />
 						</div>
 					</div>
