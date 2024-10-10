@@ -120,3 +120,17 @@ export const deleteScreen = (screenId) => async (dispatch) => {
       return Promise.reject(errMessage);
    }
 };
+
+export const changeScreenStatus = (screenId, status) => async (dispatch) => {
+   try {
+      const response = await axios.put(`${import.meta.env.VITE_APP_BACKENDURI}/api/screens/status/${screenId}`, { status });
+      dispatch(updateScreenSuccess(response.data.screen));
+      return Promise.resolve();
+   } catch (error) {
+      console.log(error.message);
+      let errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      dispatch(updateScreenFailure(errMessage));
+      dispatch(showNotification(errMessage));
+      return Promise.reject(errMessage);
+   }
+};

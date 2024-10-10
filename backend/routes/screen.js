@@ -1,8 +1,8 @@
 const express = require('express');
 const createFileUploadMiddleware = require('../middleware/fileUploadMiddleWare');
 const screenRouter = express.Router();
-const { addScreen, getScreens, updateScreen, deleteScreen, changeScreenStatus } = require('../controllers/screenController');
 const path = require('path');
+const ScreenController = require('../controllersClass/screenController')
 
 const uploadOptions = {
    storagePath: path.join(__dirname, '../public/uploads/screens'),
@@ -13,11 +13,11 @@ const uploadOptions = {
    allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'],
 };
 
-screenRouter.post('/', createFileUploadMiddleware(uploadOptions), addScreen);
-screenRouter.post('/', addScreen);
-screenRouter.get('/', getScreens);
-screenRouter.put('/:id', createFileUploadMiddleware(uploadOptions), updateScreen);
-screenRouter.put('/status/:id', changeScreenStatus);
-screenRouter.delete('/:id', deleteScreen);
+screenRouter.post('/', createFileUploadMiddleware(uploadOptions), ScreenController.addScreen);
+screenRouter.post('/', ScreenController.addScreen);
+screenRouter.get('/', ScreenController.getScreens);
+screenRouter.put('/:id', createFileUploadMiddleware(uploadOptions), ScreenController.updateScreen);
+screenRouter.put('/status/:id', ScreenController.changeScreenStatus);
+screenRouter.delete('/:id', ScreenController.deleteScreen);
 
 module.exports = screenRouter;

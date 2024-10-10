@@ -1,11 +1,11 @@
 const express = require('express');
 const couponRouter = express.Router();
+const CouponController = require('../controllersClass/couponController');
 
-const { addCoupon, getCoupons, deleteCoupon, updateCoupon } = require('../controllers/couponController');
 
-couponRouter.post('/', addCoupon);
-couponRouter.get('/', getCoupons);
-couponRouter.delete('/:id', deleteCoupon);
-couponRouter.put('/:id', updateCoupon);
+couponRouter.post('/', CouponController.addCoupon);
+couponRouter.get('/', CouponController.getCoupons);
+couponRouter.delete('/:id', CouponController.deleteCoupon);
+couponRouter.put('/:id', CouponController.updateCoupon);
 
 module.exports = couponRouter;

@@ -7,10 +7,10 @@ import Switch from "../Switch/Switch.jsx";
 
 import { connect } from "react-redux";
 import { showModal } from "../../redux/modal/modalActions";
-import { deleteScreen } from "../../redux/screen/screenActions.js";
+import { deleteScreen, changeScreenStatus } from "../../redux/screen/screenActions.js";
 import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
 
-function Screens({ showModal, deleteScreen }) {
+function Screens({ showModal, deleteScreen, changeScreenStatus }) {
 	const navigate = useNavigate();
 	const screensData = useOutletContext();
 
@@ -92,7 +92,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		showModal: (props, component) => dispatch(showModal(props, component)),
 		deleteScreen: (screenId) => dispatch(deleteScreen(screenId)),
-		// changeScreenStatus: (screenId, status) => dispatch(changeScreenStatus(screenId, status)),
+		changeScreenStatus: (screenId, status) => dispatch(changeScreenStatus(screenId, status)),
 	};
 };
 
