@@ -14,7 +14,7 @@ const navlinks = [
 		children: [
 			{
 				title: "New Booking",
-				to: "/admin/bookings/newBooking",
+				to: "/admin/bookings/newbooking",
 			},
 			{
 				title: "Bookings Today",

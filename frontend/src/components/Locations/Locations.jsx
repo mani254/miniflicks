@@ -63,7 +63,7 @@ function Locations({ showModal, deleteLocation, changeLocationStatus }) {
 									<tr key={location._id}>
 										<td>{index + 1}</td>
 										<td>{location.name}</td>
-										<td>{location.city?.name ? location.city.name : "un Allocated"}</td>
+										<td className={`${location.city?.name ? "" : "text-gray-500"}`}>{location.city?.name || "Unallocated"}</td>
 										<td>{location.admin.name}</td>
 										<td>{location.admin.number}</td>
 										<td>{location.admin.email}</td>

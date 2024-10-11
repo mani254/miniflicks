@@ -8,6 +8,7 @@ const bannerRouter = require('./banner');
 const giftRouter = require("./gift");
 const addonRouter = require("./addon");
 const screenRouter = require("./screen");
+const bookingRouter = require("./booking");
 
 
 apiRouter.use('/cities', cityRouter)
@@ -17,5 +18,6 @@ apiRouter.use('/banners', bannerRouter);
 apiRouter.use('/gifts', giftRouter)
 apiRouter.use('/addons', addonRouter)
 apiRouter.use('/screens', screenRouter)
+apiRouter.use('/bookings', bookingRouter)
 
 module.exports = apiRouter;

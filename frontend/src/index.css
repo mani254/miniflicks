@@ -85,4 +85,7 @@
 	.mb-0-i {
 		margin-bottom: 0px;
 	}
+	.filters .input-wrapper {
+		@apply flex gap-2 items-center;
+	}
 }

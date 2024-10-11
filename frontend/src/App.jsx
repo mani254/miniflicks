@@ -40,6 +40,9 @@ import ScreensWrapper from "./components/Screen/ScreensWrapper";
 import AddScreen from "./components/Screen/AddScreen";
 import Screens from "./components/Screen/Screens";
 
+import BookingsWrapper from "./components/Booking/BookingsWrapper";
+import Bookings from "./components/Booking/Bookings";
+
 function App({ modal }) {
 	return (
 		<React.Fragment>
@@ -85,6 +88,9 @@ function App({ modal }) {
 							<Route index element={<Addons />} />
 							<Route path="add" element={<AddAddons />} />
 							<Route path="edit/:id" element={<AddAddons update={true} />} />
+						</Route>
+						<Route path="bookings" element={<BookingsWrapper />}>
+							<Route index element={<Bookings />} />
 						</Route>
 					</Route>
 				</Routes>

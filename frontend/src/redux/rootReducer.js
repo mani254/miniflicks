@@ -9,6 +9,8 @@ import bannerReducer from "./banner/bannerReducer";
 import giftReducer from "./gift/giftReducer";
 import addonReducer from "./addon/addonReducer";
 import screenReducer from "./screen/screenReducer";
+import bookingReducer from "./booking/bookingReducer";
+import customerReducer from "./customer/customerReducer";
 
 const rootReducer = combineReducers({
    modal: modalReducer,
@@ -19,7 +21,9 @@ const rootReducer = combineReducers({
    banners: bannerReducer,
    gifts: giftReducer,
    addons: addonReducer,
-   screens: screenReducer
+   screens: screenReducer,
+   bookings: bookingReducer,
+   customers: customerReducer
 })
 
 export default rootReducer;

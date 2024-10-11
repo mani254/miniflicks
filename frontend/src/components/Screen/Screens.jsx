@@ -62,7 +62,7 @@ function Screens({ showModal, deleteScreen, changeScreenStatus }) {
 									<tr key={screen._id}>
 										<td>{index + 1}</td>
 										<td>{screen.name}</td>
-										<td>{screen.location.name}</td>
+										<td className={`${screen.location?.name ? "" : "text-gray-500"}`}>{screen.location?.name || "Unallocated"}</td>
 										<td>{screen.capacity}</td>
 										<td>{screen.minPeople}</td>
 										<td>

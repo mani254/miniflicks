@@ -1,30 +1,56 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getLocations } from "../../redux/location/locationActions";
 
-function LocationOptions({ value, changeHandler, location, getLocations }) {
+function LocationOptions({ location, getLocations, value, changeHandler, params = false, setParams }) {
+	const [locationValue, setLocationValue] = useState("");
+
 	useEffect(() => {
-		(async () => {
+		const fetchLocations = async () => {
 			try {
 				await getLocations();
 			} catch (err) {
 				console.log(err);
 			}
-		})();
+		};
+		fetchLocations();
+
+		if (params && params.get("location")) {
+			setLocationValue(params.get("location"));
+		}
 	}, []);
 
 	useEffect(() => {
-		if (value || location.locations.length === 0) return;
+		if (location.locations.length === 0 || params) return;
+
+		if (value) {
+			return setLocationValue(value);
+		}
+
 		if (location.locations.length > 0) {
 			changeHandler({ target: { name: "location", value: location.locations[0]._id } });
 		}
 	}, [location.locations, value]);
 
+	function handleLocationChange(event) {
+		const { value } = event.target;
+		setLocationValue(value);
+
+		if (params) {
+			const newParams = new URLSearchParams(params);
+			value ? newParams.set("location", value) : newParams.delete("location");
+			setParams(newParams);
+		} else {
+			changeHandler(event);
+		}
+	}
+
 	return (
 		<div className="input-wrapper">
 			<label htmlFor="location">Location</label>
 			{location.locations.length > 0 && (
-				<select id="location" name="location" value={value} onChange={changeHandler} required>
+				<select id="location" name="location" value={locationValue} onChange={handleLocationChange} required>
+					{params && <option value="">All</option>}
 					{location.locations.map((loc) => (
 						<option key={loc._id} value={loc._id}>
 							{loc.name}
