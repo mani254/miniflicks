@@ -6,14 +6,19 @@ import { connect } from "react-redux";
 import { getBookings } from "../../redux/booking/bookingActions";
 import { useSearchParams } from "react-router-dom";
 import BookingsFilter from "./BookingsFilter";
+import Pagination from "../Pagination/Pagination";
 
 function Bookings({ getBookings, bookingData }) {
 	const [params, setParams] = useSearchParams();
+	const [currentPage, setCurrentPage] = useState(1);
+	const [noOfDocuments, setNoOfDocuments] = useState(0);
 
 	useEffect(() => {
 		(async () => {
 			try {
-				await getBookings(Object.fromEntries(params));
+				const data = await getBookings(Object.fromEntries(params));
+				console.log(data);
+				setNoOfDocuments(data.totalDocuments);
 			} catch (err) {
 				console.log(err);
 			}
@@ -40,6 +45,7 @@ function Bookings({ getBookings, bookingData }) {
 								<th>Phone no</th>
 								<th>Screen</th>
 								<th>Location</th>
+								<th>Date</th>
 								<th>Slot</th>
 								<th>Total</th>
 								<th>Advance</th>
@@ -57,10 +63,11 @@ function Bookings({ getBookings, bookingData }) {
 										<td>{booking.customer.number}</td>
 										<td className={`${booking.screen?.name ? "" : "text-gray-500"}`}>{booking.screen?.name || "undefined"}</td>
 										<td className={`${booking.location?.name ? "" : "text-gray-500"}`}>{booking.location?.name || "undefined"}</td>
-										<td>{booking.slot.from - booking.slot.to}</td>
+										<td>{new Date(booking.bookingDate).toLocaleString()}</td>
+										<td>{booking.bookingSlot.from + "-" + booking.bookingSlot.to}</td>
 										<td>{booking.totalPrice}</td>
 										<td>{booking.advancePrice}</td>
-										<td>{booking.remainingPrice}</td>
+										<td>{booking.remainingAmount}</td>
 										<td>{booking.status}</td>
 										<td>
 											<div className="flex">
@@ -73,6 +80,7 @@ function Bookings({ getBookings, bookingData }) {
 								))}
 						</tbody>
 					</table>
+					<Pagination noOfDocuments={noOfDocuments} limit={5} currentPage={currentPage} setCurrentPage={setCurrentPage} params={params} setParams={setParams} />
 				</div>
 			)}
 		</div>

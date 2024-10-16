@@ -21,7 +21,7 @@ export const getCustomers = (params) => async (dispatch) => {
    try {
       const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/customers`, { params });
       dispatch(getCustomersSuccess(response.data.customers));
-      return Promise.resolve();
+      return Promise.resolve({ totalDocuments: response.data.totalDocuments });
    } catch (error) {
       let errMessage = error.response ? error.response.data.error : 'Something went wrong';
       dispatch(getCustomersFailure(errMessage));

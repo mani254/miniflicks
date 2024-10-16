@@ -48,8 +48,10 @@ function SearchComponent({ debounce = 0, searchFunction, params = false, setPara
 	useEffect(() => {
 		if (params && params.get("search")) {
 			setSearchValue(params.get("search"));
+		} else {
+			setSearchValue("");
 		}
-	}, []);
+	}, [params]);
 
 	useEffect(() => {
 		return () => {

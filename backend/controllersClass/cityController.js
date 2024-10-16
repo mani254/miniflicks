@@ -2,6 +2,14 @@ const City = require('../schema/citySchema');
 const { ObjectId } = require('mongoose').Types;
 
 class CityController {
+
+   constructor() {
+      this.getCities = this.getCities.bind(this)
+      this.addCity = this.addCity.bind(this)
+      this.deleteCity = this.deleteCity.bind(this)
+      this.updateCity = this.updateCity.bind(this)
+   }
+
    async addCity(req, res) {
       try {
          const { name, status } = req.body;
@@ -21,6 +29,7 @@ class CityController {
 
    async getCities(req, res) {
       try {
+
          const cities = await City.find({}, { name: 1, status: 1, _id: 1 });
          res.status(200).json(cities);
       } catch (err) {

@@ -1,8 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import LocationOptions from "../Locations/LocationOptions";
-import CityOptions from "../Cities/CityOptions";
 import SearchComponent from "../SearchComponent/SearchComponent";
+
 function BookingsFilter({ params, setParams }) {
+	const [clearFlag, setClearFlag] = useState(false);
+
+	const clearFilters = () => {
+		const newParams = new URLSearchParams();
+		setParams(newParams);
+		setClearFlag(!clearFlag);
+	};
+
+	function handleFiltersChange(event) {
+		const { name, value } = event.target;
+		const newParams = new URLSearchParams(params);
+
+		if (value) {
+			newParams.set(name, value);
+		} else {
+			newParams.delete(name);
+		}
+
+		setParams(newParams);
+	}
+
 	return (
 		<div className="flex filters">
 			<div className="mr-6">
@@ -11,8 +32,22 @@ function BookingsFilter({ params, setParams }) {
 			<div className="mr-6">
 				<LocationOptions params={params} setParams={setParams} />
 			</div>
-			<div>
-				<CityOptions params={params} setParams={setParams} />
+			<div className="mr-6">
+				<div className="input-wrapper">
+					<label htmlFor="fromDate">From:</label>
+					<input type="date" id="fromDate" name="fromDate" value={params?.get("fromDate") || ""} onChange={handleFiltersChange} />
+				</div>
+			</div>
+			<div className="mr-6">
+				<div className="input-wrapper">
+					<label htmlFor="toDate">To:</label>
+					<input type="date" id="toDate" name="toDate" value={params?.get("toDate") || ""} onChange={handleFiltersChange} />
+				</div>
+			</div>
+			<div className="mr-6">
+				<button className="px-3 py-[2px] bg-gray-300 text-sm rounded-md" onClick={clearFilters}>
+					Clear
+				</button>
 			</div>
 		</div>
 	);

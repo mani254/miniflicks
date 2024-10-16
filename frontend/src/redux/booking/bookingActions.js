@@ -21,7 +21,7 @@ export const getBookings = (params) => async (dispatch) => {
    try {
       const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings`, { params });
       dispatch(getBookingsSuccess(response.data.bookings));
-      return Promise.resolve();
+      return Promise.resolve({ totalDocuments: response.data.totalDocuments });
    } catch (error) {
       let errMessage = error.response ? error.response.data.error : 'Something went wrong';
       dispatch(getBookingsFailure(errMessage));

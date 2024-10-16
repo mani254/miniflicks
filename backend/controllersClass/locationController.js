@@ -15,6 +15,7 @@ class LocationController {
       this.changeLocationStatus = this.changeLocationStatus.bind(this);
       this.handleError = this.handleError.bind(this);
    }
+
    async addLocation(req, res) {
       try {
          const locationData = req.body;

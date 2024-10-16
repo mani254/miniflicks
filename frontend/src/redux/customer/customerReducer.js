@@ -2,7 +2,7 @@ import customerTypes from "./customerActionTypes";
 
 const initialState = {
    customers: [],
-   loading: false,
+loading: false,
    error: null,
 };
 

@@ -42,6 +42,8 @@ import Screens from "./components/Screen/Screens";
 
 import BookingsWrapper from "./components/Booking/BookingsWrapper";
 import Bookings from "./components/Booking/Bookings";
+import CustomersWrapper from "./components/Customers/CustomersWrapper";
+import Customers from "./components/Customers/Customers";
 
 function App({ modal }) {
 	return (
@@ -91,6 +93,9 @@ function App({ modal }) {
 						</Route>
 						<Route path="bookings" element={<BookingsWrapper />}>
 							<Route index element={<Bookings />} />
+						</Route>
+						<Route path="customers" element={<CustomersWrapper />}>
+							<Route index element={<Customers />} />
 						</Route>
 					</Route>
 				</Routes>

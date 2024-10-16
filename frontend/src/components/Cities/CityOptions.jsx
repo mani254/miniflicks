@@ -15,9 +15,13 @@ function CityOptions({ city, getCities, value, changeHandler, params = false, se
 			}
 		};
 		fetchCities();
+	}, []);
 
+	useEffect(() => {
 		if (params && params.get("city")) {
 			setCityValue(params.get("city"));
+		} else {
+			setCityValue("");
 		}
 	}, []);
 

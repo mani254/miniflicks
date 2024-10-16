@@ -7,11 +7,11 @@ class CustomerController {
    }
 
    async getCustomers(req, res) {
-      const { search, limit = 10, skip = 0, location } = req.query;
+      const { search, limit = 10, page = 1, location } = req.query;
+      const skip = ((page - 1) * limit)
 
       try {
          let bookingQuery = {};
-
          if (req.location) {
             bookingQuery.location = req.location;
          } else if (location) {
@@ -29,12 +29,10 @@ class CustomerController {
          }
 
          let customerQuery = { _id: { $in: customerIds } };
-
          if (search) {
-            customerQuery.$or = [
-               { name: { $regex: search, $options: 'i' } },
-               { number: search }
-            ];
+            customerQuery.$or = [];
+            customerQuery.$or.push({ name: { $regex: search, $options: 'i' } });
+            customerQuery.$or.push({ number: { $regex: search, $options: 'i' } });
          }
 
          const customers = await Customer.find(customerQuery)
@@ -42,9 +40,10 @@ class CustomerController {
             .limit(Number(limit))
             .sort({ createdAt: -1 });
 
-         const totalCustomersCount = await Customer.countDocuments(customerQuery);
+         const totalDocuments = await Customer.countDocuments(customerQuery);
 
-         res.status(200).json({ customers, totalCustomersCount });
+
+         res.status(200).json({ customers, totalDocuments });
 
       } catch (error) {
          console.error(error);

@@ -14,11 +14,15 @@ function LocationOptions({ location, getLocations, value, changeHandler, params 
 			}
 		};
 		fetchLocations();
+	}, []);
 
+	useEffect(() => {
 		if (params && params.get("location")) {
 			setLocationValue(params.get("location"));
+		} else {
+			setLocationValue("");
 		}
-	}, []);
+	}, [params]);
 
 	useEffect(() => {
 		if (location.locations.length === 0 || params) return;

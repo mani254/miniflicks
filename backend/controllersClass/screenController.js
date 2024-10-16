@@ -27,7 +27,7 @@ class ScreenController {
          const screen = new Screen(screenData);
          const newScreen = await screen.save();
          await this.updateLocationScreens(screenData.location, newScreen._id);
-         const populatedScreen = await Screen.findById(updatedScreen._id).populate('location', "name _id");
+         const populatedScreen = await Screen.findById(newScreen._id).populate('location', "name _id");
          return res.status(200).json({ message: 'Screen added successfully.', screen: populatedScreen });
       } catch (error) {
          console.error('Error adding screen:', error);

@@ -88,4 +88,7 @@
 	.filters .input-wrapper {
 		@apply flex gap-2 items-center;
 	}
+	.filters label {
+		@apply whitespace-nowrap;
+	}
 }
