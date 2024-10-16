@@ -55,7 +55,7 @@ function App({ modal }) {
 					<Route path="/login" element={<Login />} />
 
 					<Route path="/admin" element={<BackendLayout />}>
-						<Route index element={<Dashboard />} />
+						<Route path="/admin/dashboard" element={<Dashboard />} />
 						<Route path="cities" element={<CitiesWrapper />}>
 							<Route index element={<Cities />} />
 							<Route path="add" element={<AddCities />} />

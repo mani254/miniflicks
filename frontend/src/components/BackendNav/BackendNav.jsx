@@ -8,6 +8,11 @@ const navlinks = [
 		image: "https://cdn-icons-png.flaticon.com/512/25/25694.png",
 	},
 	{
+		title: "Dashboard",
+		to: "/admin/dashboard",
+		image: "https://cdn-icons-png.flaticon.com/512/25/25694.png",
+	},
+	{
 		title: "Bookings",
 		to: "/admin/bookings",
 		image: "https://img.icons8.com/m_rounded/512w/purchase-order.png",
