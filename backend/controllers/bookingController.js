@@ -106,6 +106,7 @@ async function getBookings(req, res) {
 async function getDashboardInfo(req, res) {
    try {
       const { location, fromDate, toDate } = req.query;
+      // console.log(req.query, 'req.query')
 
       let bookingQuery = {};
 
@@ -125,11 +126,13 @@ async function getDashboardInfo(req, res) {
             $lt: endDate
          };
       }
+      // console.log(bookingQuery, 'booking Query')
 
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
       const todayEnd = new Date();
       todayEnd.setHours(23, 59, 59, 999);
+
 
       const [totals] = await Booking.aggregate([
          { $match: bookingQuery },
@@ -156,9 +159,24 @@ async function getDashboardInfo(req, res) {
             }
          }
       ]);
+
+      // console.log(totals)
       const totalCities = await City.countDocuments({ status: true });
       const totalLocations = await Location.countDocuments({ status: true });
       const totalScreens = await Screen.countDocuments({ status: true });
+
+      if (!totals) {
+         return res.status(200).json({
+            message: "No bookings found",
+            totalIncome: 0,
+            totalBookings: 0,
+            todayBookings: 0,
+            pendingAmount: 0,
+            totalLocations,
+            totalScreens,
+            totalCities
+         });
+      }
 
       res.status(200).json({
          message: "Bookings fetched successfully",

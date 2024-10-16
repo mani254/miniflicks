@@ -6,6 +6,7 @@ import { getBookings } from "../../redux/booking/bookingActions";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import { showNotification } from "../../redux/notification/notificationActions";
+import DashboardFilters from "./DashboardFilters";
 
 function Dashboard({ bookingData, getBookings, showNotification }) {
 	const [locations, setLocations] = useState([]);
@@ -48,7 +49,7 @@ function Dashboard({ bookingData, getBookings, showNotification }) {
 		async function fetchDashboardCount() {
 			setCountLoading(true);
 			try {
-				const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/getDashboardInfo`, { filters });
+				const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/getDashboardInfo`, { params: filters });
 				setNumsInfo([
 					{ count: response.data.totalIncome, title: "Total Income" },
 					{ count: response.data.totalIncome - response.data.pendingAmount, title: "Current Amount" },
@@ -75,7 +76,7 @@ function Dashboard({ bookingData, getBookings, showNotification }) {
 			const colors = ["#9061F9", "#3F83F8", "#F05252", "#6875F5", "#C27803", "#E74694", "#0E9F6E"];
 
 			try {
-				const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/getGraphData`, { filters });
+				const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/getGraphData`, { params: filters });
 				let coloredLocations = response.data.map((location, index) => ({
 					...location,
 					color: index < colors.length ? colors[index] : getRandomColor(),
@@ -104,6 +105,7 @@ function Dashboard({ bookingData, getBookings, showNotification }) {
 		<div className="px-2">
 			<div className="flex w-full items-center justify-between rounded-md border-b border-gray-400">
 				<h3>Dashboard</h3>
+				<DashboardFilters filters={filters} setFilters={setFilters} />
 			</div>
 			<div className="mt-4 flex space-x-3">
 				{graphLoading ? (
