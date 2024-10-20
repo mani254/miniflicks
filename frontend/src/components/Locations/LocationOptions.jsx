@@ -4,7 +4,6 @@ import { getLocations } from "../../redux/location/locationActions";
 
 function LocationOptions({ location, getLocations, value, changeHandler, params = false, setParams, all = false }) {
 	const [locationValue, setLocationValue] = useState("");
-	console.log(value, "value");
 
 	useEffect(() => {
 		const fetchLocations = async () => {

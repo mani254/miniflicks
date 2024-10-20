@@ -45,7 +45,10 @@ import Bookings from "./components/Booking/Bookings";
 import CustomersWrapper from "./components/Customers/CustomersWrapper";
 import Customers from "./components/Customers/Customers";
 
+import axios from "axios";
+
 function App({ modal }) {
+	axios.defaults.withCredentials = true;
 	return (
 		<React.Fragment>
 			<div className="bg-zinc-100 min-h-screen">
@@ -53,9 +56,10 @@ function App({ modal }) {
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<Login />} />
+					<Route path="/register" element={<Login />} />
 
 					<Route path="/admin" element={<BackendLayout />}>
-						<Route path="/admin/dashboard" element={<Dashboard />} />
+						<Route path="dashboard" element={<Dashboard />} />
 						<Route path="cities" element={<CitiesWrapper />}>
 							<Route index element={<Cities />} />
 							<Route path="add" element={<AddCities />} />

@@ -10,7 +10,7 @@ const addonRouter = require("./addon");
 const screenRouter = require("./screen");
 const bookingRouter = require("./booking");
 const customerRouter = require("./customer")
-
+const authRouter = require('./authRouter')
 
 apiRouter.use('/cities', cityRouter)
 apiRouter.use('/locations', locationRouter)
@@ -21,5 +21,6 @@ apiRouter.use('/addons', addonRouter)
 apiRouter.use('/screens', screenRouter)
 apiRouter.use('/bookings', bookingRouter)
 apiRouter.use('/customers', customerRouter)
+apiRouter.use('/auth', authRouter)
 
 module.exports = apiRouter;

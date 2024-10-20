@@ -1,11 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import BackendNav from "../components/BackendNav/BackendNav";
 import BackendHeader from "../components/BackendHeader/BackendHeader";
 
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { initialLogin } from "../redux/auth/authActions";
 
-function BackendLayout() {
+function BackendLayout({ initialLogin, auth }) {
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (auth.isLoggedIn) return;
+
+		const fetchInitialData = async () => {
+			try {
+				const token = localStorage.getItem("authToken");
+				if (token) {
+					await initialLogin(token);
+					console.log("code after await initialLogin in try block");
+				} else {
+					navigate("/login");
+				}
+			} catch (err) {
+				navigate("/login");
+				console.log(err);
+			}
+		};
+		fetchInitialData();
+	}, []);
+
 	return (
 		<React.Fragment>
 			<div className="fixed w-full top-0 right-0 z-10">
@@ -23,4 +47,16 @@ function BackendLayout() {
 	);
 }
 
-export default BackendLayout;
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		initialLogin: (token) => dispatch(initialLogin(token)),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BackendLayout);

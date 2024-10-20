@@ -11,6 +11,7 @@ import addonReducer from "./addon/addonReducer";
 import screenReducer from "./screen/screenReducer";
 import bookingReducer from "./booking/bookingReducer";
 import customerReducer from "./customer/customerReducer";
+import authReducer from './auth/authReducer'
 
 const rootReducer = combineReducers({
    modal: modalReducer,
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
    addons: addonReducer,
    screens: screenReducer,
    bookings: bookingReducer,
-   customers: customerReducer
+   customers: customerReducer,
+   auth: authReducer
 })
 
 export default rootReducer;

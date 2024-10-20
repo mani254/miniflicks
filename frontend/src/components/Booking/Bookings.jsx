@@ -80,7 +80,7 @@ function Bookings({ getBookings, bookingData }) {
 								))}
 						</tbody>
 					</table>
-					<Pagination noOfDocuments={noOfDocuments} limit={5} currentPage={currentPage} setCurrentPage={setCurrentPage} params={params} setParams={setParams} />
+					<Pagination noOfDocuments={noOfDocuments} limit={10} currentPage={currentPage} setCurrentPage={setCurrentPage} params={params} setParams={setParams} />
 				</div>
 			)}
 		</div>
