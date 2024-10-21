@@ -5,6 +5,8 @@ const locationRouter = express.Router()
 const locationController = require('../controllersClass/locationController')
 const path = require('path');
 
+const { authorization, superAdminAuth } = require('../middleware/authorization')
+
 const uploadOptions = {
    storagePath: path.join(__dirname, '../public/uploads/locations'),
    fileSize: 1024 * 1024 * 5,
@@ -14,17 +16,13 @@ const uploadOptions = {
    allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'],
 };
 
-// locationRouter.post('/', createFileUploadMiddleware(uploadOptions), addLocation)
-// locationRouter.get('/', getLocations)
-// locationRouter.put('/:id', createFileUploadMiddleware(uploadOptions), updateLocation)
-// locationRouter.put('/status/:id', changeLocationStatus);
-// locationRouter.delete('/:id', deleteLocation);
-locationRouter.post('/', createFileUploadMiddleware(uploadOptions), locationController.addLocation)
-locationRouter.get('/', locationController.getLocations)
-locationRouter.get('/:id', locationController.getLocation)
-locationRouter.put('/:id', createFileUploadMiddleware(uploadOptions), locationController.updateLocation)
-locationRouter.put('/status/:id', locationController.changeLocationStatus);
-locationRouter.delete('/:id', locationController.deleteLocation);
+
+locationRouter.post('/', superAdminAuth, createFileUploadMiddleware(uploadOptions), locationController.addLocation)
+locationRouter.get('/', authorization, locationController.getLocations)
+locationRouter.get('/:id', authorization, locationController.getLocation)
+locationRouter.put('/:id', authorization, createFileUploadMiddleware(uploadOptions), locationController.updateLocation)
+locationRouter.put('/status/:id', authorization, locationController.changeLocationStatus);
+locationRouter.delete('/:id', superAdminAuth, locationController.deleteLocation);
 
 
 module.exports = locationRouter

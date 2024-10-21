@@ -48,7 +48,13 @@ class LocationController {
 
    async getLocations(req, res) {
       try {
-         const locations = await Location.find().populate('city');
+         let locations = []
+         if (req.location) {
+            locations = await Location.find({ _id: req.location }).populate('city');
+         }
+         else {
+            locations = await Location.find().populate('city');
+         }
          return res.status(200).json({ message: 'Locations fetched successfully', locations });
       } catch (error) {
          this.handleError(error, res);
@@ -77,6 +83,12 @@ class LocationController {
       try {
          const { id } = req.params;
          const locationData = req.body;
+
+         if (req.location) {
+            if (req.location != id) {
+               return res.status(401).json({ message: "You are not Authorized ot access this data" })
+            }
+         }
 
          const existingLocation = await Location.findById(id);
          if (!existingLocation) return res.status(404).json({ error: 'Location not found.' });

@@ -17,7 +17,6 @@ const addLocation = async (req, res) => {
          return res.status(400).json({ error: 'Admin data is incomplete.' });
       }
 
-
       const isUnique = await Location.isNameUniqueInCity(locationData.name, locationData.cityId);
 
       if (!isUnique) {

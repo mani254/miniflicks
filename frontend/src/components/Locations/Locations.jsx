@@ -10,7 +10,7 @@ import { showModal } from "../../redux/modal/modalActions";
 import { deleteLocation, changeLocationStatus } from "../../redux/location/locationActions";
 import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
 
-function Locations({ showModal, deleteLocation, changeLocationStatus }) {
+function Locations({ showModal, deleteLocation, changeLocationStatus, auth }) {
 	const navigate = useNavigate();
 	const locationsData = useOutletContext();
 
@@ -34,9 +34,11 @@ function Locations({ showModal, deleteLocation, changeLocationStatus }) {
 		<div className="w-full container  px-6 mt-3">
 			<div className="flex justify-between pb-2 border-b border-gray-400">
 				<h3>Locations</h3>
-				<button className="btn" onClick={() => navigate("/admin/locations/add")}>
-					Add Locatins
-				</button>
+				{auth.admin?.superAdmin && (
+					<button className="btn" onClick={() => navigate("/admin/locations/add")}>
+						Add Locatins
+					</button>
+				)}
 			</div>
 			{locationsData.loading ? (
 				<div className="h-96 relative">
@@ -89,6 +91,13 @@ function Locations({ showModal, deleteLocation, changeLocationStatus }) {
 		</div>
 	);
 }
+
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth,
+	};
+};
+
 const mapDispatchToProps = (dispatch) => {
 	return {
 		showModal: (props, component) => dispatch(showModal(props, component)),
@@ -97,4 +106,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(null, mapDispatchToProps)(Locations);
+export default connect(mapStateToProps, mapDispatchToProps)(Locations);

@@ -3,7 +3,7 @@ const Admin = require('../schema/adminSchema');
 const Location = require('../schema/locationSchema')
 
 
-const authorize = async (req, res, next) => {
+const authorization = async (req, res, next) => {
    const token = req.cookies?.authToken;
 
    console.log(token, 'token from the authorisation')
@@ -15,7 +15,6 @@ const authorize = async (req, res, next) => {
    try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      console.log(decoded, 'decoded')
 
       if (decoded.superAdmin) {
          req.superAdmin = true;
@@ -41,4 +40,34 @@ const authorize = async (req, res, next) => {
    }
 };
 
-module.exports = authorize;
+const superAdminAuth = async (req, res, next) => {
+   const token = req.cookies?.authToken;
+
+   console.log(token, 'token from the authorisation')
+
+   if (!token) {
+      return res.status(401).json({ error: 'No token provided in cookies' });
+   }
+
+   try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      if (decoded.superAdmin) {
+         req.superAdmin = true;
+         req.location = null;
+         return next();
+      }
+      else {
+         return res.status(404).json({ error: 'Not authorized to access data' });
+      }
+
+   } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+         return res.status(404).json({ error: 'Token expired, please log in again' });
+      }
+
+      return res.status(401).json({ error: 'Invalid token' });
+   }
+};
+
+module.exports = { authorization, superAdminAuth };

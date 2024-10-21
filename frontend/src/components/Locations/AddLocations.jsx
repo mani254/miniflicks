@@ -10,8 +10,9 @@ import GiftsList from "../Gift/GiftsList";
 
 import { ImageUploaderComponent } from "editorify-dev/imageUploader";
 import "editorify-dev/css/imageUploader";
+import { showNotification } from "../../redux/notification/notificationActions";
 
-function AddLocations({ addLocation, update = false, updateLocation }) {
+function AddLocations({ addLocation, update = false, updateLocation, auth, showNotification }) {
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const locationsData = useOutletContext();
@@ -46,6 +47,13 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 			password: "",
 		},
 	});
+
+	useEffect(() => {
+		if (!update && !auth.admin?.superAdmin) {
+			navigate("/login", { replace: true });
+			showNotification("Login in as super Admin to add Location");
+		}
+	}, [auth.admin, update]);
 
 	useEffect(() => {
 		if (update) {
@@ -272,11 +280,18 @@ function AddLocations({ addLocation, update = false, updateLocation }) {
 	);
 }
 
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth,
+	};
+};
+
 const mapDispatchToProps = (dispatch) => {
 	return {
 		addLocation: (details) => dispatch(addLocation(details)),
 		updateLocation: (locationId, locationData) => dispatch(updateLocation(locationId, locationData)),
+		showNotification: (message) => dispatch(showNotification(message)),
 	};
 };
 
-export default connect(null, mapDispatchToProps)(AddLocations);
+export default connect(mapStateToProps, mapDispatchToProps)(AddLocations);
