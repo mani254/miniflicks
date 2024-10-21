@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import LocationOptions from "../Locations/LocationOptions";
 import SearchComponent from "../SearchComponent/SearchComponent";
 
-function BookingsFilter({ params, setParams }) {
+import { connect } from "react-redux";
+
+function BookingsFilter({ params, setParams, auth }) {
 	const [clearFlag, setClearFlag] = useState(false);
 
 	const clearFilters = () => {
@@ -29,9 +31,12 @@ function BookingsFilter({ params, setParams }) {
 			<div className="mr-6">
 				<SearchComponent debounce={2000} params={params} setParams={setParams} />
 			</div>
-			<div className="mr-6">
-				<LocationOptions params={params} setParams={setParams} />
-			</div>
+			{auth.admin?.superAdmin && (
+				<div className="mr-6">
+					<LocationOptions params={params} setParams={setParams} />
+				</div>
+			)}
+
 			<div className="mr-6">
 				<div className="input-wrapper">
 					<label htmlFor="fromDate">From:</label>
@@ -53,4 +58,10 @@ function BookingsFilter({ params, setParams }) {
 	);
 }
 
-export default BookingsFilter;
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth,
+	};
+};
+
+export default connect(mapStateToProps, null)(BookingsFilter);

@@ -40,7 +40,6 @@ function Dashboard({ bookingData, getBookings, showNotification, auth, getLocati
 		(async () => {
 			try {
 				await getBookings({ fromDate, toDate, location: filters.location });
-				// setNoOfDocuments(data.totalDocuments);
 			} catch (err) {
 				console.log(err);
 			}
@@ -102,7 +101,7 @@ function Dashboard({ bookingData, getBookings, showNotification, auth, getLocati
 			}
 		}
 		fetchGraphData();
-	}, [filters.fromDate, filters.toDate]);
+	}, [filters.fromDate, filters.toDate, auth.admin]);
 
 	// useEffect to fetch the single lcoation for
 	useEffect(() => {

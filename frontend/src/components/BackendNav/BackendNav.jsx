@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
+import { connect } from "react-redux";
+
 const navlinks = [
 	{
 		title: "Home",
@@ -23,7 +25,7 @@ const navlinks = [
 			},
 			{
 				title: "Bookings Today",
-				to: "/admin/bookings/today",
+				to: "/admin/bookings?page=1&limit=10&toDate=2024-10-21&fromDate=2024-10-21",
 			},
 			{
 				title: "Upcoming",
@@ -73,7 +75,7 @@ const navlinks = [
 	},
 ];
 
-function BackendNav() {
+function BackendNav({ auth }) {
 	const location = useLocation();
 
 	return (
@@ -105,4 +107,10 @@ function BackendNav() {
 	);
 }
 
-export default BackendNav;
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth,
+	};
+};
+
+export default connect(mapStateToProps, null)(BackendNav);
