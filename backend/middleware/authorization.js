@@ -4,14 +4,18 @@ const Location = require('../schema/locationSchema')
 
 
 const authorize = async (req, res, next) => {
-   const token = req.cookies?.token;
+   const token = req.cookies?.authToken;
+
+   console.log(token, 'token from the authorisation')
 
    if (!token) {
-      return res.status(401).json({ message: 'No token provided in cookies' });
+      return res.status(401).json({ error: 'No token provided in cookies' });
    }
 
    try {
-      const decoded = jwt.verify(error, process.env.JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      console.log(decoded, 'decoded')
 
       if (decoded.superAdmin) {
          req.superAdmin = true;
@@ -33,7 +37,7 @@ const authorize = async (req, res, next) => {
          return res.status(404).json({ error: 'Token expired, please log in again' });
       }
 
-      return res.status(401).json({ error: 'Invalid token', error });
+      return res.status(401).json({ error: 'Invalid token' });
    }
 };
 

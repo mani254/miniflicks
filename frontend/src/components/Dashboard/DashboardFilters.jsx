@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import LocationOptions from "../Locations/LocationOptions";
 
-function DashboardFilters({ filters, setFilters }) {
+import { connect } from "react-redux";
+
+function DashboardFilters({ filters, setFilters, auth }) {
 	const [clearFlag, setClearFlag] = useState(false);
 
 	const clearFilters = () => {
@@ -28,9 +30,11 @@ function DashboardFilters({ filters, setFilters }) {
 
 	return (
 		<div className="flex filters">
-			<div className="mr-6">
-				<LocationOptions value={filters.location} changeHandler={handleChange} all={true} />
-			</div>
+			{auth.admin?.superAdmin && (
+				<div className="mr-6">
+					<LocationOptions value={filters.location} changeHandler={handleChange} all={true} />
+				</div>
+			)}
 			<div className="mr-6">
 				<div className="input-wrapper">
 					<label htmlFor="fromDate">From:</label>
@@ -52,4 +56,10 @@ function DashboardFilters({ filters, setFilters }) {
 	);
 }
 
-export default DashboardFilters;
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth,
+	};
+};
+
+export default connect(mapStateToProps, null)(DashboardFilters);

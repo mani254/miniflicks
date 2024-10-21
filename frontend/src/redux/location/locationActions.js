@@ -135,3 +135,30 @@ export const changeLocationStatus = (locationId, status) => async (dispatch) => 
    }
 };
 
+const getLocationRequest = () => ({
+   type: locationTypes.GET_LOCATION_REQUEST,
+});
+
+const getLocationSuccess = (location) => ({
+   type: locationTypes.GET_LOCATION_SUCCESS,
+   payload: location,
+});
+
+const getLocationFailure = (error) => ({
+   type: locationTypes.GET_LOCATION_FAILURE,
+   payload: error,
+});
+
+export const getLocation = (id) => async (dispatch) => {
+   dispatch(getLocationRequest());
+   try {
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/locations/${id}`,);
+      dispatch(getLocationSuccess(response.data.location));
+      return Promise.resolve();
+   } catch (error) {
+      let errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      dispatch(getLocationFailure(errMessage));
+      dispatch(showNotification(errMessage));
+      return Promise.reject(errMessage);
+   }
+};

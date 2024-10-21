@@ -10,6 +10,7 @@ class LocationController {
    constructor() {
       this.addLocation = this.addLocation.bind(this);
       this.getLocations = this.getLocations.bind(this);
+      this.getLocation = this.getLocation.bind(this);
       this.updateLocation = this.updateLocation.bind(this);
       this.deleteLocation = this.deleteLocation.bind(this);
       this.changeLocationStatus = this.changeLocationStatus.bind(this);
@@ -49,6 +50,24 @@ class LocationController {
       try {
          const locations = await Location.find().populate('city');
          return res.status(200).json({ message: 'Locations fetched successfully', locations });
+      } catch (error) {
+         this.handleError(error, res);
+      }
+   }
+
+   async getLocation(req, res) {
+      let location = null
+      const { id } = req.params
+
+      if (req.location) {
+         location = req.location
+      }
+      else {
+         location = id
+      }
+      try {
+         const locationData = await Location.findById(location).populate('city');
+         return res.status(200).json({ message: 'single Location fetched successfully', location: locationData });
       } catch (error) {
          this.handleError(error, res);
       }

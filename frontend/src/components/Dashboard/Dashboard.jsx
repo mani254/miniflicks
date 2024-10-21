@@ -7,8 +7,9 @@ import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import { showNotification } from "../../redux/notification/notificationActions";
 import DashboardFilters from "./DashboardFilters";
+import { getLocation } from "../../redux/location/locationActions";
 
-function Dashboard({ bookingData, getBookings, showNotification }) {
+function Dashboard({ bookingData, getBookings, showNotification, auth, getLocation, locationData }) {
 	const [locations, setLocations] = useState([]);
 
 	const [numsInfo, setNumsInfo] = useState([
@@ -31,6 +32,7 @@ function Dashboard({ bookingData, getBookings, showNotification }) {
 	const [graphLoading, setGraphLoading] = useState(false);
 	const [countLoading, setCountLoading] = useState(false);
 
+	// useeffect to fetch the upcomming bookings when filter location changed
 	useEffect(() => {
 		const fromDate = new Date();
 		const toDate = new Date();
@@ -45,21 +47,29 @@ function Dashboard({ bookingData, getBookings, showNotification }) {
 		})();
 	}, [filters.location]);
 
+	// useEffect to fetch the dashboard info when the filters changed
 	useEffect(() => {
 		async function fetchDashboardCount() {
 			setCountLoading(true);
 			try {
 				const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/getDashboardInfo`, { params: filters });
-				setNumsInfo([
+
+				const newInfo = [
 					{ count: response.data.totalIncome, title: "Total Income" },
 					{ count: response.data.totalIncome - response.data.pendingAmount, title: "Current Amount" },
 					{ count: response.data.pendingAmount, title: "Pending Amount" },
 					{ count: response.data.totalBookings, title: "Total Bookings" },
 					{ count: response.data.todayBookings, title: "Today Bookings" },
-					{ count: response.data.totalCities, title: "Total Cities" },
-					{ count: response.data.totalLocations, title: "Total Locations" },
 					{ count: response.data.totalScreens, title: "Total Screens" },
-				]);
+				];
+
+				if (response.data.totalCities && response.data.totalLocations) {
+					newInfo.push({ count: response.data.totalCities, title: "Total Cities" });
+					newInfo.push({ count: response.data.totalLocations, title: "Total Locations" });
+				}
+
+				setNumsInfo(newInfo);
+
 				setCountLoading(false);
 			} catch (error) {
 				let errMessage = error.response ? error.response.data.error : "Something went wrong";
@@ -70,7 +80,9 @@ function Dashboard({ bookingData, getBookings, showNotification }) {
 		fetchDashboardCount();
 	}, [filters]);
 
+	// useefeect to fetch the graphdata when the date changed only for super admin
 	useEffect(() => {
+		if (!auth.admin?.superAdmin) return;
 		async function fetchGraphData() {
 			setGraphLoading(true);
 			const colors = ["#9061F9", "#3F83F8", "#F05252", "#6875F5", "#C27803", "#E74694", "#0E9F6E"];
@@ -92,6 +104,19 @@ function Dashboard({ bookingData, getBookings, showNotification }) {
 		fetchGraphData();
 	}, [filters.fromDate, filters.toDate]);
 
+	// useEffect to fetch the single lcoation for
+	useEffect(() => {
+		if (auth.admin?.superAdmin) return;
+		async function fetchSingleLocation() {
+			try {
+				await getLocation(auth.admin.location);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+		fetchSingleLocation();
+	}, [auth.admin?.location]);
+
 	const getRandomColor = () => {
 		const letters = "0123456789ABCDEF";
 		let color = "#";
@@ -108,30 +133,39 @@ function Dashboard({ bookingData, getBookings, showNotification }) {
 				<DashboardFilters filters={filters} setFilters={setFilters} />
 			</div>
 			<div className="mt-4 flex space-x-3">
-				{graphLoading ? (
-					<div className="min-w-60 border-gray-200 bg-white shadow-sm">
-						<Loader />
-					</div>
+				{auth.admin?.superAdmin ? (
+					graphLoading ? (
+						<div className="min-w-60 border-gray-200 bg-white shadow-sm">
+							<Loader />
+						</div>
+					) : (
+						<div className="graph w-[350px] flex flex-col items-center rounded-2xl border-2 border-gray-200 bg-white p-5 pr-4 shadow-sm">
+							<PiChart locationInfo={locations} />
+							<div>
+								<h5 className="text-center mb-2">Locations & Bookings</h5>
+								<ul className="flex flex-wrap gap-x-3 gap-y-1 justify-between">
+									{locations.map((location, index) => {
+										return (
+											<li key={index} className="flex items-center">
+												<span className="mr-1 block h-3 w-3 rounded-full" style={{ background: location.color }}></span>
+												{location.name}
+												<span className="inline-block text-xs">
+													{location.location}
+													{" ("}
+													{location.percentage}%{") "}
+												</span>
+											</li>
+										);
+									})}
+								</ul>
+							</div>
+						</div>
+					)
 				) : (
-					<div className="graph w-[350px] flex flex-col items-center rounded-2xl border-2 border-gray-200 bg-white p-5 pr-4 shadow-sm">
-						<PiChart locationInfo={locations} />
-						<div>
-							<h5 className="text-center mb-2">Locations & Bookings</h5>
-							<ul className="flex flex-wrap gap-x-3 gap-y-1 justify-between">
-								{locations.map((location, index) => {
-									return (
-										<li key={index} className="flex items-center">
-											<span className="mr-1 block h-3 w-3 rounded-full" style={{ background: location.color }}></span>
-											{location.name}
-											<span className="inline-block text-xs">
-												{location.location}
-												{" ("}
-												{location.percentage}%{") "}
-											</span>
-										</li>
-									);
-								})}
-							</ul>
+					<div className="w-[350px] flex flex-col items-center rounded-2xl border-2 border-gray-200 bg-white p-5 pr-4 shadow-sm relative overflow-hidden">
+						<img className="absolute inset-0 w-full h-full object-cover object-center" src={locationData.location.image} alt={locationData.location?.name} />
+						<div className="absolute inset-0 w-ful h-full bg-gray-900 bg-opacity-30 flex items-end justify-center z-10">
+							<h3 className="text-white pb-4">{locationData.location?.name}</h3>
 						</div>
 					</div>
 				)}
@@ -244,6 +278,8 @@ function IncomeDisplay({ title, value, countLoading, index }) {
 const mapStateToProps = (state) => {
 	return {
 		bookingData: state.bookings,
+		auth: state.auth,
+		locationData: state.locations,
 	};
 };
 
@@ -251,6 +287,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		getBookings: (params) => dispatch(getBookings(params)),
 		showNotification: (message) => dispatch(showNotification(message)),
+		getLocation: (id) => dispatch(getLocation(id)),
 	};
 };
 

@@ -6,7 +6,7 @@ const City = require('../schema/citySchema')
 
 async function getBookings(req, res) {
    try {
-      const { location, search, fromDate, toDate, limit = 10, page = 1, } = req.query;
+      const { location, search, fromDate, toDate, limit = 10, page = 1 } = req.query;
       const skip = ((page - 1) * limit)
 
       let bookingQuery = {};
@@ -161,9 +161,19 @@ async function getDashboardInfo(req, res) {
       ]);
 
       // console.log(totals)
-      const totalCities = await City.countDocuments({ status: true });
-      const totalLocations = await Location.countDocuments({ status: true });
-      const totalScreens = await Screen.countDocuments({ status: true });
+      let totalCities = null
+      let totalLocations = null
+      let totalScreens = 0
+
+      if (req.superAdmin) {
+         totalCities = await City.countDocuments({ status: true });
+         totalLocations = await Location.countDocuments({ status: true });
+         totalScreens = await Screen.countDocuments({ status: true });
+      }
+      else {
+         totalScreens = await Screen.countDocuments({ location: req.location, status: true })
+      }
+
 
       if (!totals) {
          return res.status(200).json({

@@ -2,6 +2,7 @@ import locationTypes from './locationActionTypes';
 
 const initialState = {
    locations: [],
+   location: {},
    loading: false,
    error: null,
 };
@@ -10,6 +11,7 @@ const locationReducer = (state = initialState, action) => {
    switch (action.type) {
       case locationTypes.ADD_LOCATION_REQUEST:
       case locationTypes.GET_LOCATIONS_REQUEST:
+      case locationTypes.GET_LOCATION_REQUEST:
       case locationTypes.UPDATE_LOCATION_REQUEST:
       case locationTypes.DELETE_LOCATION_REQUEST:
          return {
@@ -32,6 +34,13 @@ const locationReducer = (state = initialState, action) => {
             locations: action.payload,
          };
 
+      case locationTypes.GET_LOCATION_SUCCESS:
+         return {
+            ...state,
+            loading: false,
+            location: action.payload
+         }
+
       case locationTypes.UPDATE_LOCATION_SUCCESS:
          return {
             ...state,
@@ -50,6 +59,7 @@ const locationReducer = (state = initialState, action) => {
 
       case locationTypes.ADD_LOCATION_FAILURE:
       case locationTypes.GET_LOCATIONS_FAILURE:
+      case locationTypes.GET_LOCATION_FAILURE:
       case locationTypes.UPDATE_LOCATION_FAILURE:
       case locationTypes.DELETE_LOCATION_FAILURE:
          return {

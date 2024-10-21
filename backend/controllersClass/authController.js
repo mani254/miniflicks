@@ -63,7 +63,7 @@ class AuthController {
             .cookie("authToken", token, {
                httpOnly: true,
                sameSite: 'None',
-               // secure: true,
+               secure: true,
             })
             .json({ message: "Logged in successfully", token, admin: adminDetails });
 
@@ -104,12 +104,12 @@ class AuthController {
             .cookie("authToken", token, {
                httpOnly: true,
                sameSite: 'None',
-               // secure: true,
+               secure: true,
             })
             .json({ message: "Logged in successfully", token, admin: adminDetails });
       } catch (err) {
          if (err.name === 'TokenExpiredError') {
-            return res.status(404).json({ err: 'Token expired, please log in again' });
+            return res.status(404).json({ error: 'Token expired, please log in again' });
          }
 
          return res.status(401).json({ error: 'Invalid token' });

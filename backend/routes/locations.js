@@ -21,6 +21,7 @@ const uploadOptions = {
 // locationRouter.delete('/:id', deleteLocation);
 locationRouter.post('/', createFileUploadMiddleware(uploadOptions), locationController.addLocation)
 locationRouter.get('/', locationController.getLocations)
+locationRouter.get('/:id', locationController.getLocation)
 locationRouter.put('/:id', createFileUploadMiddleware(uploadOptions), locationController.updateLocation)
 locationRouter.put('/status/:id', locationController.changeLocationStatus);
 locationRouter.delete('/:id', locationController.deleteLocation);
