@@ -6,7 +6,7 @@ import { useSearchParams } from "react-router-dom";
 import CustomersFilter from "./CustomersFilter";
 import Pagination from "../Pagination/Pagination";
 
-function Customers({ getCustomers, customerData }) {
+function Customers({ getCustomers, customerData, auth }) {
 	const [params, setParams] = useSearchParams();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [noOfDocuments, setNoOfDocuments] = useState(0);
@@ -27,7 +27,7 @@ function Customers({ getCustomers, customerData }) {
 		<div className="w-full container px-6 mt-3">
 			<div className="flex justify-between pb-2 border-b border-gray-400">
 				<h3>Customers</h3>
-				<CustomersFilter params={params} setParams={setParams} />
+				<CustomersFilter params={params} setParams={setParams} auth={auth} />
 			</div>
 			{customerData.loading ? (
 				<div className="h-96 relative">
@@ -64,6 +64,7 @@ function Customers({ getCustomers, customerData }) {
 const mapStateToProps = (state) => {
 	return {
 		customerData: state.customers,
+		auth: state.auth,
 	};
 };
 

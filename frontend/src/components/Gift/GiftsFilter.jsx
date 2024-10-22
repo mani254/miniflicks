@@ -2,11 +2,10 @@ import React from "react";
 import SearchComponent from "../SearchComponent/SearchComponent";
 import LocationOptions from "../Locations/LocationOptions";
 
-function CustomersFilter({ params, setParams, auth }) {
+function GiftsFilter({ params, setParams, auth }) {
 	const clearFilters = () => {
 		const newParams = new URLSearchParams();
 		setParams(newParams);
-		// setClearFlag(!clearFlag);
 	};
 
 	return (
@@ -20,7 +19,7 @@ function CustomersFilter({ params, setParams, auth }) {
 				</div>
 			)}
 			<div className="mr-6">
-				<button className="px-3 py-[2px]  bg-gray-300 text-sm rounded-md" onClick={clearFilters}>
+				<button className="px-3 py-[2px] bg-gray-300 text-sm rounded-md" onClick={clearFilters}>
 					Clear
 				</button>
 			</div>
@@ -28,4 +27,4 @@ function CustomersFilter({ params, setParams, auth }) {
 	);
 }
 
-export default CustomersFilter;
+export default GiftsFilter;

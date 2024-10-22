@@ -1,34 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
 import { getGifts } from "../../redux/gift/giftActions";
+import { useSearchParams } from "react-router-dom";
 
-function GiftWrapper({ getGifts, giftData }) {
+function GiftWrapper({ getGifts, giftsData }) {
+	const [noOfDocuments, setNoOfDocuments] = useState(0);
+	const [params, setParams] = useSearchParams();
+
 	useEffect(() => {
 		(async () => {
 			try {
-				await getGifts();
+				const data = await getGifts(params);
+				setNoOfDocuments(data.totalDocuments);
 			} catch (err) {
 				console.log(err);
 			}
 		})();
-	}, [getGifts]);
+	}, [params]);
 
 	return (
 		<>
-			<Outlet context={giftData} />
+			<Outlet context={{ giftsData, noOfDocuments, params, setParams }} />
 		</>
 	);
 }
 
 const mapStateToProps = (state) => {
 	return {
-		giftData: state.gifts,
+		giftsData: state.gifts,
 	};
 };
 
 const mapDispatchToProps = (dispatch) => ({
-	getGifts: () => dispatch(getGifts()),
+	getGifts: (params) => dispatch(getGifts(params)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GiftWrapper);

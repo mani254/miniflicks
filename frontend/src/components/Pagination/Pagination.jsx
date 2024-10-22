@@ -40,25 +40,29 @@ const Pagination = ({ noOfDocuments, limit, currentPage, setCurrentPage, params,
 	};
 
 	return (
-		<div className="mt-5 flex items-center justify-center">
-			<div className="flex gap-3">
-				<button onClick={handlePrevPages10} disabled={currentPage <= 10} className="bg-white border border-gray-400 border-opacity-30 shadow-sm px-2 py-1 rounded-md">
-					<FaAnglesLeft />
-				</button>
-				<button onClick={handlePrevPage} disabled={currentPage === 1} className="bg-white border border-gray-400 border-opacity-30 shadow-sm px-2 py-1 rounded-md">
-					<FaAngleLeft />
-				</button>
-				<p className="mx-2">
-					Page {currentPage} of {totalPages}
-				</p>
-				<button onClick={handleNextPage} disabled={currentPage === totalPages} className="bg-white border border-gray-400 border-opacity-30 shadow-sm px-2 py-1 rounded-md">
-					<FaAngleRight />
-				</button>
-				<button onClick={handleNextPages10} disabled={currentPage + 10 > totalPages} className="bg-white border border-gray-400 border-opacity-30 shadow-sm px-2 py-1 rounded-md">
-					<FaAnglesRight />
-				</button>
-			</div>
-		</div>
+		<>
+			{totalPages > 1 && (
+				<div className="mt-5 flex items-center justify-center">
+					<div className="flex gap-3">
+						<button onClick={handlePrevPages10} disabled={currentPage <= 10} className="bg-white border border-gray-400 border-opacity-30 shadow-sm px-2 py-1 rounded-md">
+							<FaAnglesLeft />
+						</button>
+						<button onClick={handlePrevPage} disabled={currentPage === 1} className="bg-white border border-gray-400 border-opacity-30 shadow-sm px-2 py-1 rounded-md">
+							<FaAngleLeft />
+						</button>
+						<p className="mx-2">
+							Page {currentPage} of {totalPages}
+						</p>
+						<button onClick={handleNextPage} disabled={currentPage === totalPages} className="bg-white border border-gray-400 border-opacity-30 shadow-sm px-2 py-1 rounded-md">
+							<FaAngleRight />
+						</button>
+						<button onClick={handleNextPages10} disabled={currentPage + 10 > totalPages} className="bg-white border border-gray-400 border-opacity-30 shadow-sm px-2 py-1 rounded-md">
+							<FaAnglesRight />
+						</button>
+					</div>
+				</div>
+			)}
+		</>
 	);
 };
 

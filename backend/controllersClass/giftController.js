@@ -32,9 +32,43 @@ class GiftController {
    }
 
    async getGifts(req, res) {
+
+      const { search, limit = 10, page = 1, location } = req.query;
+      const skip = (page - 1) * limit;
+
       try {
-         const gifts = await Gift.find().sort({ position: 1 });
-         return res.status(200).json({ message: 'Gifts fetched successfully', gifts });
+         let giftQuery = {};
+
+         if (req.location) {
+            const foundLocation = await Location.findById(req.location).select('gifts');
+            if (!foundLocation) {
+               return res.status(404).json({ error: 'Location not found' });
+            }
+            giftQuery._id = { $in: foundLocation.gifts };
+         } else if (location) {
+            const foundLocation = await Location.findById(location).select('gifts');
+            if (!foundLocation) {
+               return res.status(404).json({ error: 'Location not found' });
+            }
+            giftQuery._id = { $in: foundLocation.gifts };
+         }
+
+         if (search) {
+            giftQuery.name = { $regex: search, $options: 'i' };
+         }
+
+         const gifts = await Gift.find(giftQuery)
+            .sort({ position: 1 })
+            .skip(Number(skip))
+            .limit(Number(limit));
+
+         const totalDocuments = await Gift.countDocuments(giftQuery);
+
+         return res.status(200).json({
+            message: 'Gifts fetched successfully',
+            gifts,
+            totalDocuments,
+         })
       } catch (error) {
          this.handleError(error, res, 'Error getting gifts');
       }

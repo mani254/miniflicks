@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -9,10 +9,30 @@ import { connect } from "react-redux";
 import { showModal } from "../../redux/modal/modalActions";
 import { deleteScreen, changeScreenStatus } from "../../redux/screen/screenActions.js";
 import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
+import LocationOptions from "../Locations/LocationOptions.jsx";
 
-function Screens({ showModal, deleteScreen, changeScreenStatus }) {
+function Screens({ showModal, deleteScreen, changeScreenStatus, auth }) {
 	const navigate = useNavigate();
 	const screensData = useOutletContext();
+
+	const [location, setLocation] = useState(null);
+
+	const [screens, setScreens] = useState([]);
+
+	useEffect(() => {
+		if (!location) {
+			return setScreens(screensData.screens);
+		}
+		const filteredScreens = screensData.screens.filter((screen) => {
+			console.log(screen.location._id, location);
+			return screen.location._id === location;
+		});
+		setScreens(filteredScreens);
+	}, [location, screensData.screens]);
+
+	function handleChange(event) {
+		setLocation(event.target.value);
+	}
 
 	const alertData = {
 		title: "Are You sure?",
@@ -34,9 +54,13 @@ function Screens({ showModal, deleteScreen, changeScreenStatus }) {
 		<div className="w-full container px-6 mt-3">
 			<div className="flex justify-between pb-2 border-b border-gray-400">
 				<h3>Screens</h3>
-				<button className="btn" onClick={() => navigate("/admin/screens/add")}>
-					Add Screen
-				</button>
+
+				<div className="flex filters gap-6">
+					{auth.admin?.superAdmin && <LocationOptions value={location} changeHandler={handleChange} all={true} />}
+					<button className="btn" onClick={() => navigate("/admin/screens/add")}>
+						Add Screen
+					</button>
+				</div>
 			</div>
 			{screensData.loading ? (
 				<div className="h-96 relative">
@@ -57,8 +81,8 @@ function Screens({ showModal, deleteScreen, changeScreenStatus }) {
 							</tr>
 						</thead>
 						<tbody>
-							{screensData.screens.length >= 1 &&
-								screensData.screens.map((screen, index) => (
+							{screens.length >= 1 &&
+								screens.map((screen, index) => (
 									<tr key={screen._id}>
 										<td>{index + 1}</td>
 										<td>{screen.name}</td>
@@ -88,6 +112,12 @@ function Screens({ showModal, deleteScreen, changeScreenStatus }) {
 	);
 }
 
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth,
+	};
+};
+
 const mapDispatchToProps = (dispatch) => {
 	return {
 		showModal: (props, component) => dispatch(showModal(props, component)),
@@ -96,4 +126,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(null, mapDispatchToProps)(Screens);
+export default connect(mapStateToProps, mapDispatchToProps)(Screens);

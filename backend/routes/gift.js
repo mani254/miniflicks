@@ -6,6 +6,8 @@ const path = require('path');
 const giftRouter = express.Router();
 const giftController = new GiftController();
 
+const { authorization } = require('../middleware/authorization')
+
 const uploadOptions = {
    storagePath: path.join(__dirname, '../public/uploads/gifts'),
    fileSize: 1024 * 1024 * 5,
@@ -16,10 +18,10 @@ const uploadOptions = {
 };
 
 // Define routes
-giftRouter.post('/', createFileUploadMiddleware(uploadOptions), giftController.addGift);
-giftRouter.get('/', giftController.getGifts);
-giftRouter.put('/:id', createFileUploadMiddleware(uploadOptions), giftController.updateGift);
-giftRouter.delete('/:id', giftController.deleteGift);
-giftRouter.put('/status/:id', giftController.changeGiftStatus);
+giftRouter.post('/', authorization, createFileUploadMiddleware(uploadOptions), giftController.addGift);
+giftRouter.get('/', authorization, giftController.getGifts);
+giftRouter.put('/:id', authorization, createFileUploadMiddleware(uploadOptions), giftController.updateGift);
+giftRouter.delete('/:id', authorization, giftController.deleteGift);
+giftRouter.put('/status/:id', authorization, giftController.changeGiftStatus);
 
 module.exports = giftRouter;

@@ -5,6 +5,7 @@ const giftSchema = new mongoose.Schema({
       type: String,
       required: [true, 'Name is required'],
       trim: true,
+      unique: [true, "Gift Name is already existed"],
    },
    description: {
       type: String,

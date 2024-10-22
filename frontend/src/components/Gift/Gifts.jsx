@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -7,10 +7,14 @@ import { connect } from "react-redux";
 import { showModal } from "../../redux/modal/modalActions.js";
 import { deleteGift } from "../../redux/gift/giftActions.js";
 import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
+import Pagination from "../Pagination/Pagination.jsx";
+import GiftsFilter from "./GiftsFilter.jsx";
 
-function Gifts({ showModal, deleteGift }) {
+function Gifts({ showModal, deleteGift, auth }) {
+	const [currentPage, setCurrentPage] = useState(1);
+
 	const navigate = useNavigate();
-	const giftsData = useOutletContext();
+	const { giftsData, noOfDocuments, params, setParams } = useOutletContext();
 
 	const alertData = {
 		title: "Are You sure?",
@@ -24,6 +28,9 @@ function Gifts({ showModal, deleteGift }) {
 		<div className="w-full container px-6 mt-3">
 			<div className="flex justify-between pb-2 border-b border-gray-400">
 				<h3>Gifts</h3>
+				<div>
+					<GiftsFilter params={params} setParams={setParams} auth={auth} />
+				</div>
 				<button className="btn" onClick={() => navigate("/admin/gifts/add")}>
 					Add Gift
 				</button>
@@ -72,11 +79,18 @@ function Gifts({ showModal, deleteGift }) {
 								))}
 						</tbody>
 					</table>
+					<Pagination noOfDocuments={noOfDocuments} limit={5} currentPage={currentPage} setCurrentPage={setCurrentPage} params={params} setParams={setParams} />
 				</div>
 			)}
 		</div>
 	);
 }
+
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth,
+	};
+};
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -85,4 +99,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(null, mapDispatchToProps)(Gifts);
+export default connect(mapStateToProps, mapDispatchToProps)(Gifts);

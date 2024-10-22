@@ -47,12 +47,12 @@ const getGiftsFailure = (error) => ({
    payload: error,
 });
 
-export const getGifts = () => async (dispatch) => {
+export const getGifts = (params) => async (dispatch) => {
    dispatch(getGiftsRequest());
    try {
-      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/gifts`);
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/gifts`, { params });
       dispatch(getGiftsSuccess(response.data.gifts));
-      return Promise.resolve();
+      return Promise.resolve({ totalDocuments: response.data.totalDocuments });
    } catch (error) {
       let errMessage = error.response ? error.response.data.error : 'Something went wrong';
       dispatch(getGiftsFailure(errMessage));

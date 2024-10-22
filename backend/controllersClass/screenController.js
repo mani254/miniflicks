@@ -17,6 +17,10 @@ class ScreenController {
       try {
          const screenData = this.parseScreenData(req.body);
 
+         if (req.location && req.location != screenData.location) {
+            return res.status(401).json({ error: 'You are not authorized to access the data' })
+         }
+
          if (!this.validateScreenData(screenData)) {
             return res.status(400).json({ error: 'Required fields are missing or invalid.' });
          }
@@ -37,10 +41,19 @@ class ScreenController {
 
    async getScreens(req, res) {
       try {
-         const screens = await Screen.find()
-            .populate('location', 'name _id')
-            .populate('packages.addons')
-            .populate('slots');
+         let screens = []
+         if (req.location) {
+            screens = await Screen.find({ location: req.location })
+               .populate('location', 'name _id')
+               .populate('packages.addons')
+               .populate('slots');
+         } else {
+            screens = await Screen.find()
+               .populate('location', 'name _id')
+               .populate('packages.addons')
+               .populate('slots');
+         }
+
          return res.status(200).json({ message: 'Screens fetched successfully', screens });
       } catch (error) {
          console.error('Error getting screens:', error);
@@ -52,6 +65,10 @@ class ScreenController {
       try {
          const { id } = req.params;
          const screenData = this.parseScreenData(req.body);
+
+         if (req.location && req.location != screenData.location) {
+            return res.status(401).json({ error: 'You are not authorized to access the data' })
+         }
 
          if (!this.validateScreenData(screenData)) {
             return res.status(400).json({ error: 'Required fields are missing or invalid.' });

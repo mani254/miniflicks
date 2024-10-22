@@ -91,4 +91,7 @@
 	.filters label {
 		@apply whitespace-nowrap;
 	}
+	.filters .input-wrapper {
+		@apply mb-1;
+	}
 }
