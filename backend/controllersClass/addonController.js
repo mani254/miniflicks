@@ -11,6 +11,7 @@ class AddonController {
       this.updateAddon = this.updateAddon.bind(this);
       this.deleteAddon = this.deleteAddon.bind(this);
       this.changeAddonStatus = this.changeAddonStatus.bind(this);
+      this.getAllAddons = this.getAllAddons.bind(this)
    }
 
    async addAddon(req, res) {
@@ -32,9 +33,55 @@ class AddonController {
    }
 
    async getAddons(req, res) {
+      const { search, limit = 10, page = 1, location } = req.query;
+      const skip = (page - 1) * limit;
+
       try {
-         const addons = await Addon.find().sort({ position: 1 });
-         return res.status(200).json({ message: 'Addons fetched successfully', addons });
+         let addonQuery = {};
+         if (req.location) {
+            const foundLocation = await Location.findById(req.location).select('addons');
+            if (!foundLocation) {
+               return res.status(404).json({ error: 'Location not found' });
+            }
+            addonQuery._id = { $in: foundLocation.addons };
+         }
+         else if (location) {
+            const foundLocation = await Location.findById(location).select('addons');
+            if (!foundLocation) {
+               return res.status(404).json({ error: 'Location not found' });
+            }
+            addonQuery._id = { $in: foundLocation.addons };
+         }
+
+         if (search) {
+            addonQuery.name = { $regex: search, $options: 'i' };
+         }
+
+         const addons = await Addon.find(addonQuery)
+            .sort({ position: 1 })
+            .skip(Number(skip))
+            .limit(Number(limit));
+
+         const totalDocuments = await Addon.countDocuments(addonQuery);
+
+         return res.status(200).json({
+            message: 'Addons fetched successfully',
+            addons,
+            totalDocuments,
+         });
+      } catch (error) {
+         this.handleError(error, res, 'Error getting addons');
+      }
+   }
+
+   async getAllAddons(req, res) {
+      try {
+         const addons = await Addon.find().sort({ position: 1 })
+
+         return res.status(200).json({
+            message: 'Addons fetched successfully',
+            addons,
+         });
       } catch (error) {
          this.handleError(error, res, 'Error getting addons');
       }

@@ -10,7 +10,7 @@ import "editorify-dev/css/imageUploader";
 function AddGift({ addGift, update = false, updateGift, showNotification }) {
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const giftsData = useOutletContext();
+	const { giftsData } = useOutletContext();
 	const [loadedImages, setLoadedImages] = useState();
 
 	const [details, setDetails] = useState({
@@ -46,24 +46,24 @@ function AddGift({ addGift, update = false, updateGift, showNotification }) {
 			return;
 		}
 
-		const giftData = new FormData();
-		giftData.append("name", details.name);
-		giftData.append("description", details.description);
-		giftData.append("price", details.price);
-		giftData.append("status", details.status);
-		giftData.append("image", details.image);
-		giftData.append("position", details.position);
+		const giftsData = new FormData();
+		giftsData.append("name", details.name);
+		giftsData.append("description", details.description);
+		giftsData.append("price", details.price);
+		giftsData.append("status", details.status);
+		giftsData.append("image", details.image);
+		giftsData.append("position", details.position);
 
 		if (update) {
 			try {
-				await updateGift(id, giftData);
+				await updateGift(id, giftsData);
 				navigate("/admin/gifts");
 			} catch (error) {
 				console.error(error);
 			}
 		} else {
 			try {
-				await addGift(giftData);
+				await addGift(giftsData);
 				navigate("/admin/gifts");
 			} catch (error) {
 				console.error(error);
@@ -135,7 +135,7 @@ function AddGift({ addGift, update = false, updateGift, showNotification }) {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		addGift: (details) => dispatch(addGift(details)),
-		updateGift: (giftId, giftData) => dispatch(updateGift(giftId, giftData)),
+		updateGift: (giftId, giftsData) => dispatch(updateGift(giftId, giftsData)),
 		showNotification: (message) => dispatch(showNotification(message)),
 	};
 };

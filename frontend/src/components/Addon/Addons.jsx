@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -7,10 +7,14 @@ import { connect } from "react-redux";
 import { showModal } from "../../redux/modal/modalActions.js";
 import { deleteAddon } from "../../redux/addon/addonActions.js";
 import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
+import Pagination from "../Pagination/Pagination.jsx";
+import GiftsFilter from "../Gift/GiftsFilter.jsx";
 
-function Addons({ showModal, deleteAddon }) {
+function Addons({ showModal, deleteAddon, auth }) {
+	const [currentPage, setCurrentPage] = useState(1);
+
 	const navigate = useNavigate();
-	const addonsData = useOutletContext();
+	const { addonData, noOfDocuments, params, setParams } = useOutletContext();
 
 	const alertData = {
 		title: "Are You sure?",
@@ -24,16 +28,19 @@ function Addons({ showModal, deleteAddon }) {
 		<div className="w-full container px-6 mt-3">
 			<div className="flex justify-between pb-2 border-b border-gray-400">
 				<h3>Addons</h3>
+				<div>
+					<GiftsFilter params={params} setParams={setParams} auth={auth} />
+				</div>
 				<button className="btn" onClick={() => navigate("/admin/addons/add")}>
 					Add Addon
 				</button>
 			</div>
-			{addonsData.loading ? (
+			{addonData.loading ? (
 				<div className="h-96 relative">
 					<Loader />
 				</div>
 			) : (
-				<div className="h-96 relative">
+				<div className="relative">
 					<table className="main-table">
 						<thead>
 							<tr>
@@ -42,12 +49,12 @@ function Addons({ showModal, deleteAddon }) {
 								<th>Name</th>
 								<th>Position</th>
 								<th>Price</th>
-								<th>Actions</th>
+								{auth.admin?.superAdmin && <th>Actions</th>}
 							</tr>
 						</thead>
 						<tbody>
-							{addonsData.addons.length >= 1 &&
-								addonsData.addons.map((addon, index) => (
+							{addonData.addons.length >= 1 &&
+								addonData.addons.map((addon, index) => (
 									<tr key={addon._id}>
 										<td>{index + 1}</td>
 										<td>
@@ -58,25 +65,34 @@ function Addons({ showModal, deleteAddon }) {
 										<td>{addon.name}</td>
 										<td>{addon.position}</td>
 										<td>{addon.price}</td>
-										<td>
-											<div className="flex">
-												<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/admin/addons/edit/${addon._id}`)}>
-													<FaEdit className="fill-blue-500" />
-												</span>
-												<span className="cursor-pointer text-2xl" onClick={() => showModal({ ...alertData, id: addon._id }, ConfirmationAlert)}>
-													<MdDelete className="fill-red-500" />
-												</span>
-											</div>
-										</td>
+										{auth.admin?.superAdmin && (
+											<td>
+												<div className="flex">
+													<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/admin/addons/edit/${addon._id}`)}>
+														<FaEdit className="fill-blue-500" />
+													</span>
+													<span className="cursor-pointer text-2xl" onClick={() => showModal({ ...alertData, id: addon._id }, ConfirmationAlert)}>
+														<MdDelete className="fill-red-500" />
+													</span>
+												</div>
+											</td>
+										)}
 									</tr>
 								))}
 						</tbody>
 					</table>
 				</div>
 			)}
+			<Pagination noOfDocuments={noOfDocuments} limit={10} currentPage={currentPage} setCurrentPage={setCurrentPage} params={params} setParams={setParams} />
 		</div>
 	);
 }
+
+const mapStateToProps = (state) => {
+	return {
+		auth: state.auth,
+	};
+};
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -85,4 +101,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(null, mapDispatchToProps)(Addons);
+export default connect(mapStateToProps, mapDispatchToProps)(Addons);

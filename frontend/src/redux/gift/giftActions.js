@@ -61,6 +61,20 @@ export const getGifts = (params) => async (dispatch) => {
    }
 };
 
+export const getAllGifts = () => async (dispatch) => {
+   dispatch(getGiftsRequest());
+   try {
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/gifts/getAllGifts`);
+      dispatch(getGiftsSuccess(response.data.gifts));
+      return Promise.resolve({ totalDocuments: response.data.totalDocuments });
+   } catch (error) {
+      let errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      dispatch(getGiftsFailure(errMessage));
+      dispatch(showNotification(errMessage));
+      return Promise.reject(errMessage);
+   }
+};
+
 // Update Gift Actions
 const updateGiftRequest = () => ({
    type: giftTypes.UPDATE_GIFT_REQUEST,

@@ -11,6 +11,7 @@ class GiftController {
       this.updateGift = this.updateGift.bind(this);
       this.deleteGift = this.deleteGift.bind(this);
       this.changeGiftStatus = this.changeGiftStatus.bind(this);
+      this.getAllGifts = this.getAllGifts.bind(this)
    }
 
    async addGift(req, res) {
@@ -70,6 +71,19 @@ class GiftController {
             totalDocuments,
          })
       } catch (error) {
+         this.handleError(error, res, 'Error getting gifts');
+      }
+   }
+
+   async getAllGifts(req, res) {
+      try {
+         const gifts = await Gift.find({}).sort({ position: 1 })
+         return res.status(200).json({
+            message: 'Gifts fetched successfully',
+            gifts,
+         })
+      }
+      catch (err) {
          this.handleError(error, res, 'Error getting gifts');
       }
    }

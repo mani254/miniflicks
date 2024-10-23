@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { getGifts } from "../../redux/gift/giftActions";
+import { getAllGifts } from "../../redux/gift/giftActions";
 
-const GiftList = React.memo(({ getGifts, giftData, handleChange, checkedValues }) => {
+const GiftList = React.memo(({ getAllGifts, giftData, handleChange, checkedValues }) => {
 	useEffect(() => {
 		(async () => {
 			try {
-				await getGifts();
+				await getAllGifts();
 			} catch (err) {
 				console.log(err);
 			}
 		})();
-	}, [getGifts]);
+	}, [getAllGifts]);
 
 	return (
 		<div className="w-full flex">
@@ -45,7 +45,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-	getGifts: () => dispatch(getGifts()),
+	getAllGifts: () => dispatch(getAllGifts()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GiftList);

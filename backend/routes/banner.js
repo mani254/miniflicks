@@ -3,6 +3,8 @@ const createFileUploadMiddleware = require('../middleware/fileUploadMiddleWare')
 const BannerController = require('../controllersClass/bannerController');
 const path = require('path');
 
+const { superAdminAuth } = require('../middleware/authorization')
+
 const bannerRouter = express.Router();
 
 const uploadOptions = {
@@ -14,10 +16,10 @@ const uploadOptions = {
    allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'],
 };
 
-bannerRouter.post('/', createFileUploadMiddleware(uploadOptions), BannerController.addBanner);
+bannerRouter.post('/', superAdminAuth, createFileUploadMiddleware(uploadOptions), BannerController.addBanner);
 bannerRouter.get('/', BannerController.getBanners);
-bannerRouter.put('/:id', createFileUploadMiddleware(uploadOptions), BannerController.updateBanner);
-bannerRouter.delete('/:id', BannerController.deleteBanner);
-bannerRouter.put('/status/:id', BannerController.changeBannerStatus);
+bannerRouter.put('/:id', superAdminAuth, createFileUploadMiddleware(uploadOptions), BannerController.updateBanner);
+bannerRouter.delete('/:id', superAdminAuth, BannerController.deleteBanner);
+bannerRouter.put('/status/:id', superAdminAuth, BannerController.changeBannerStatus);
 
 module.exports = bannerRouter;

@@ -1,10 +1,10 @@
 const express = require('express');
 const createFileUploadMiddleware = require('../middleware/fileUploadMiddleWare');
-const addonController = require('../controllers/addonController');
+const addonController = require('../controllersClass/addonController');
 const path = require('path');
 
 const addonRouter = express.Router();
-
+const { authorization, superAdminAuth } = require('../middleware/authorization')
 const uploadOptions = {
    storagePath: path.join(__dirname, '../public/uploads/addons'),
    fileSize: 1024 * 1024 * 5,
@@ -14,10 +14,13 @@ const uploadOptions = {
    allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'],
 };
 
-addonRouter.post('/', createFileUploadMiddleware(uploadOptions), addonController.addAddon);
-addonRouter.get('/', addonController.getAddons);
-addonRouter.put('/:id', createFileUploadMiddleware(uploadOptions), addonController.updateAddon);
-addonRouter.delete('/:id', addonController.deleteAddon);
-addonRouter.put('/status/:id', addonController.changeAddonStatus);
+addonRouter.post('/', authorization, createFileUploadMiddleware(uploadOptions), addonController.addAddon);
+addonRouter.get('/', authorization, addonController.getAddons);
+addonRouter.put('/:id', superAdminAuth, createFileUploadMiddleware(uploadOptions), addonController.updateAddon);
+addonRouter.delete('/:id', superAdminAuth, addonController.deleteAddon);
+addonRouter.put('/status/:id', superAdminAuth, addonController.changeAddonStatus);
+
+addonRouter.get('/getAllAddons', addonController.getAllAddons)
+
 
 module.exports = addonRouter;

@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { getAddons } from "../../redux/addon/addonActions";
+import { getAllAddons } from "../../redux/addon/addonActions";
 
-const AddonsList = React.memo(({ getAddons, addonData, handleChange, checkedValues }) => {
+const AddonsList = React.memo(({ getAllAddons, addonData, handleChange, checkedValues }) => {
 	useEffect(() => {
 		(async () => {
 			try {
-				await getAddons();
+				await getAllAddons();
 			} catch (err) {
 				console.log(err);
 			}
@@ -45,7 +45,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-	getAddons: () => dispatch(getAddons()),
+	getAllAddons: () => dispatch(getAllAddons()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddonsList);

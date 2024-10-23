@@ -49,7 +49,7 @@ function Gifts({ showModal, deleteGift, auth }) {
 								<th>Name</th>
 								<th>Position</th>
 								<th>Price</th>
-								<th>Actions</th>
+								{auth.admin?.superAdmin && <th>Actions</th>}
 							</tr>
 						</thead>
 						<tbody>
@@ -65,21 +65,23 @@ function Gifts({ showModal, deleteGift, auth }) {
 										<td>{gift.name}</td>
 										<td>{gift.position}</td>
 										<td>{gift.price}</td>
-										<td>
-											<div className="flex">
-												<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/admin/gifts/edit/${gift._id}`)}>
-													<FaEdit className="fill-blue-500" />
-												</span>
-												<span className="cursor-pointer text-2xl" onClick={() => showModal({ ...alertData, id: gift._id }, ConfirmationAlert)}>
-													<MdDelete className="fill-red-500" />
-												</span>
-											</div>
-										</td>
+										{auth.admin?.superAdmin && (
+											<td>
+												<div className="flex">
+													<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/admin/gifts/edit/${gift._id}`)}>
+														<FaEdit className="fill-blue-500" />
+													</span>
+													<span className="cursor-pointer text-2xl" onClick={() => showModal({ ...alertData, id: gift._id }, ConfirmationAlert)}>
+														<MdDelete className="fill-red-500" />
+													</span>
+												</div>
+											</td>
+										)}
 									</tr>
 								))}
 						</tbody>
 					</table>
-					<Pagination noOfDocuments={noOfDocuments} limit={5} currentPage={currentPage} setCurrentPage={setCurrentPage} params={params} setParams={setParams} />
+					<Pagination noOfDocuments={noOfDocuments} limit={10} currentPage={currentPage} setCurrentPage={setCurrentPage} params={params} setParams={setParams} />
 				</div>
 			)}
 		</div>

@@ -47,10 +47,23 @@ const getAddonsFailure = (error) => ({
    payload: error,
 });
 
-export const getAddons = () => async (dispatch) => {
+export const getAddons = (params) => async (dispatch) => {
    dispatch(getAddonsRequest());
    try {
-      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/addons`);
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/addons`, { params });
+      dispatch(getAddonsSuccess(response.data.addons));
+      return Promise.resolve({ totalDocuments: response.data.totalDocuments });
+   } catch (error) {
+      let errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      dispatch(getAddonsFailure(errMessage));
+      dispatch(showNotification(errMessage));
+      return Promise.reject(errMessage);
+   }
+};
+export const getAllAddons = () => async (dispatch) => {
+   dispatch(getAddonsRequest());
+   try {
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/addons/getAllAddons`);
       dispatch(getAddonsSuccess(response.data.addons));
       return Promise.resolve();
    } catch (error) {

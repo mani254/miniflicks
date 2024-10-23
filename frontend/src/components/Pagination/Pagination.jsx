@@ -4,6 +4,8 @@ import { FaAngleLeft, FaAngleRight, FaAnglesLeft, FaAnglesRight } from "react-ic
 const Pagination = ({ noOfDocuments, limit, currentPage, setCurrentPage, params, setParams }) => {
 	const totalPages = Math.ceil(noOfDocuments / limit);
 
+	console.log(totalPages, currentPage, limit);
+
 	useEffect(() => {
 		const newParams = new URLSearchParams(params);
 		newParams.set("page", currentPage);

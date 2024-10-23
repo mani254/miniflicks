@@ -78,7 +78,7 @@ function App({ modal }) {
 						<Route path="coupons" element={<CouponsWrapper />}>
 							<Route index element={<Coupons />} />
 							<Route path="add" element={<AddCoupons />} />
-							<Route path="edit/:id" element={<AddCoupons />} />
+							<Route path="edit/:id" element={<AddCoupons update={true} />} />
 						</Route>
 						<Route path="banners" element={<BannersWrapper />}>
 							<Route index element={<Banners />} />

@@ -10,7 +10,7 @@ import "editorify-dev/css/imageUploader";
 function AddAddon({ addAddon, update = false, updateAddon, showNotification }) {
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const addonsData = useOutletContext();
+	const { addonData } = useOutletContext();
 	const [loadedImages, setLoadedImages] = useState();
 
 	const [details, setDetails] = useState({
@@ -23,12 +23,12 @@ function AddAddon({ addAddon, update = false, updateAddon, showNotification }) {
 
 	useEffect(() => {
 		if (update) {
-			const currentAddon = addonsData.addons.find((addon) => addon._id === id);
+			const currentAddon = addonData.addons.find((addon) => addon._id === id);
 			if (!currentAddon) return;
 			setDetails(currentAddon);
 			setLoadedImages([currentAddon.image]);
 		}
-	}, [addonsData.addons, update, id]);
+	}, [addonData.addons, update, id]);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
