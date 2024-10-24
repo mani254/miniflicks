@@ -5,6 +5,15 @@
 @layer base {
 	:root {
 		--box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+		--primary-color: rgb(100, 97, 174);
+		--secondary-color: rgb(199, 121, 211);
+		--third-color: rgb(213, 208, 255);
+		--fourth-color: rgb(255, 224, 252);
+
+		--bright-color: #faf8fc;
+		--dark-color: rgb(45, 45, 45);
+
+		--primary-gradient: linear-gradient(to right, rgb(100, 97, 174) 0%, rgb(199, 121, 211) 100%);
 	}
 	* {
 		@apply m-0 p-0 box-border text-sm font-normal font-author text-zinc-800;
@@ -12,8 +21,14 @@
 	h3 {
 		@apply text-lg font-medium;
 	}
+	h2 {
+		@apply text-xl font-medium;
+	}
 	h4 {
 		@apply text-md font-medium;
+	}
+	h5 {
+		@apply text-sm font-medium;
 	}
 	input::placeholder {
 		@apply text-xs;
@@ -93,5 +108,11 @@
 	}
 	.filters .input-wrapper {
 		@apply mb-1;
+	}
+
+	/* css starts frin gere  for the frontend */
+	main {
+		@apply w-full min-h-screen;
+		background: linear-gradient(to right, rgb(213, 208, 255) 0%, rgb(255, 224, 252) 100%);
 	}
 }

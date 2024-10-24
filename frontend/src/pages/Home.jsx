@@ -1,11 +1,7 @@
 import React from "react";
 
 function Home() {
-	return (
-		<div>
-			<h4>This is frotend Home page</h4>
-		</div>
-	);
+	return <h2>This is the main Home page</h2>;
 }
 
 export default Home;

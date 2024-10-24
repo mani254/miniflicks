@@ -1,3 +1,8 @@
+import fingerImage from '../assets/finger.webp'
+import star from '../assets/star.png'
+import mfLogo from '../assets/mf-logo.png';
+
+export { fingerImage, star, mfLogo }
 export function validation(action, value) {
    switch (action) {
       case "name":

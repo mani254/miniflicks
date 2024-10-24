@@ -1,13 +1,15 @@
-import React, { lazy } from "react";
+import React, { lazy, Suspense } from "react";
 import { connect } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
 
-import Home from "./pages/Home";
 import Login from "./pages/Login";
+import UsersLayout from "./layouts/UsersLayout";
+import Home from "./pages/Home";
+import SlotBookingPage from "./pages/SlotBookingPage";
 
-import BackendLayout from "./layouts/BackendLayout";
+const BackendLayout = lazy(() => import("./layouts/BackendLayout"));
 import Dashboard from "./components/Dashboard/Dashboard";
 import Notification from "./components/Notifications/Notifications";
 import Modal from "./components/Modal/Modal";
@@ -46,6 +48,7 @@ import CustomersWrapper from "./components/Customers/CustomersWrapper";
 import Customers from "./components/Customers/Customers";
 
 import axios from "axios";
+import Loader from "./components/Loader/Loader";
 
 function App({ modal }) {
 	axios.defaults.withCredentials = true;
@@ -54,11 +57,25 @@ function App({ modal }) {
 			<div className="bg-zinc-100 min-h-screen">
 				<Notification />
 				<Routes>
-					<Route path="/" element={<Home />} />
+					<Route path="/" element={<UsersLayout />}>
+						<Route index element={<Home />} />
+						<Route path="slot" element={<SlotBookingPage />}></Route>
+					</Route>
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Login />} />
 
-					<Route path="/admin" element={<BackendLayout />}>
+					<Route
+						path="/admin"
+						element={
+							<Suspense
+								fallback={
+									<div className="w-full h-screen">
+										<Loader />
+									</div>
+								}>
+								<BackendLayout />
+							</Suspense>
+						}>
 						<Route path="dashboard" element={<Dashboard />} />
 						<Route path="cities" element={<CitiesWrapper />}>
 							<Route index element={<Cities />} />

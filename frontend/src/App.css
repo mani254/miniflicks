@@ -1,0 +1,142 @@
+/* .swiper-1 {
+	background: red;
+} */
+.swiper-1 .swiper {
+	width: 100%;
+}
+.swiper-1 .swiper-slide {
+	width: 100%;
+	aspect-ratio: 16/8;
+	position: relative;
+	overflow: hidden;
+	border-radius: 30px;
+}
+.swiper-1 .swiper-slide img {
+	position: absolute;
+	object-fit: cover;
+	object-position: center;
+	width: 100%;
+	height: 100%;
+}
+.swiper-1 .pagination {
+}
+.swiper-thumbs .swiper-slide {
+	border-radius: 15px;
+	overflow: hidden;
+}
+@keyframes floating {
+	0% {
+		transform: translateY(0) rotate(178deg);
+	}
+	50% {
+		transform: translateY(5px) rotate(180deg);
+	}
+	100% {
+		transform: translateY(0) rotate(182deg);
+	}
+}
+
+.floating {
+	animation: floating 2s ease-in-out infinite;
+}
+
+.btn-3 {
+	display: flex;
+	padding: 6px 15px;
+	gap: 0.4rem;
+	font-weight: 600;
+	border-radius: 15px;
+	cursor: pointer;
+	text-shadow: 1px 1px 1.5px rgb(136 0 136 / 50%);
+	background: linear-gradient(15deg, rgb(100, 97, 174), rgb(142, 109, 192), rgb(199, 121, 211), rgb(172, 115, 202), rgb(142, 109, 192), rgb(100, 97, 174)) no-repeat;
+	background-size: 300%;
+	background-position: left center;
+	transition: background 0.3s ease;
+	color: #fff;
+}
+
+.btn-3:hover {
+	background-size: 320%;
+	background-position: right center;
+}
+
+.btn-3:hover svg {
+	fill: #fff;
+}
+
+.btn-3 svg {
+	width: 20px;
+	fill: white;
+	transition: 0.3s ease;
+}
+
+/* /css for links hover in header */
+.anm-link a {
+	display: inline-block;
+	position: relative;
+}
+.anm-link a:before,
+.anm-link a:after {
+	content: "";
+	border-bottom: solid 2.5px var(--secondary-color);
+	position: absolute;
+	bottom: 0;
+	width: 0;
+}
+
+.anm-link a:before {
+	left: 0;
+}
+.anm-link a:after {
+	right: 0;
+}
+
+.anm-link a:hover:before,
+.anm-link a:hover:after {
+	width: 50%;
+}
+
+.anm-link a:before,
+.anm-link a:after {
+	-webkit-transition: all 0.2s ease;
+	transition: all 0.3s ease;
+}
+
+/* css for hte hamburget */
+/* From Uiverse.io by talhabangyal */
+.hamburger {
+	cursor: pointer;
+	position: relative;
+	z-index: 100;
+}
+
+.hamburger input {
+	display: none;
+}
+
+.hamburger svg {
+	height: 40px;
+	transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line {
+	fill: none;
+	stroke: var(--dark-color);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2.5px;
+	transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1), stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line-top-bottom {
+	stroke-dasharray: 12 63;
+}
+
+.hamburger input:checked + svg {
+	transform: rotate(-45deg);
+}
+
+.hamburger input:checked + svg .line-top-bottom {
+	stroke-dasharray: 20 300;
+	stroke-dashoffset: -32.42;
+}

@@ -13,6 +13,12 @@ export default {
          },
          colors: {
             logo: ({ opacityValue }) => `rgba(50, 107, 159, ${opacityValue})`,
+            primary: 'rgb(100, 97, 174)',
+            secondary: 'rgb(199, 121, 211)',
+            tertiary: ' rgb(213, 208, 255)',
+            fourth: ' rgb(255, 224, 252)',
+            bright: '#faf8fc',
+            dark: 'rgb(45,45,45)'
          },
          container: {
             center: true,
@@ -29,7 +35,7 @@ export default {
             sm: '17px',
             md: '20px',
             lg: '22px',
-            xl: '32px',
+            xl: '26px',
             '2xl': '48px',
             '3xl': '58px',
             '4xl': '96px'
