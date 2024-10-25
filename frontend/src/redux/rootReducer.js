@@ -12,6 +12,7 @@ import screenReducer from "./screen/screenReducer";
 import bookingReducer from "./booking/bookingReducer";
 import customerReducer from "./customer/customerReducer";
 import authReducer from './auth/authReducer'
+import customerBookingReducer from "./customerBooking/customerBookingReducer";
 
 const rootReducer = combineReducers({
    modal: modalReducer,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
    screens: screenReducer,
    bookings: bookingReducer,
    customers: customerReducer,
-   auth: authReducer
+   auth: authReducer,
+   customerBooking: customerBookingReducer,
 })
 
 export default rootReducer;

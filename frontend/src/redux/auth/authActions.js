@@ -85,13 +85,11 @@ export const initialLogin = (token) => {
       try {
          const res = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/auth/initialLogin`, { token });
          dispatch(initialLoginSuccess(res.data));
-         console.log('promise resolved in try block')
          return Promise.resolve(res.data);
       } catch (err) {
          const errorMessage = err.response ? err.response.data.error : 'Network Error';
          dispatch(initialLoginFailure(errorMessage));
          dispatch(showNotification(errorMessage));
-         console.log('promise rejected in catch block')
          return Promise.reject(err)
       }
    };

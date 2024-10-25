@@ -115,4 +115,7 @@
 		@apply w-full min-h-screen;
 		background: linear-gradient(to right, rgb(213, 208, 255) 0%, rgb(255, 224, 252) 100%);
 	}
+	.bg-gradient-primary {
+		background: var(--primary-gradient);
+	}
 }

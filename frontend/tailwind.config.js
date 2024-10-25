@@ -18,7 +18,8 @@ export default {
             tertiary: ' rgb(213, 208, 255)',
             fourth: ' rgb(255, 224, 252)',
             bright: '#faf8fc',
-            dark: 'rgb(45,45,45)'
+            dark: 'rgb(45,45,45)',
+            "gradient-primary": "linear-gradient(to right, rgb(100, 97, 174) 0%, rgb(199, 121, 211) 100%)"
          },
          container: {
             center: true,

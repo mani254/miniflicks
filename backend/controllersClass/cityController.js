@@ -29,11 +29,15 @@ class CityController {
 
    async getCities(req, res) {
       try {
-
-         const cities = await City.find({}, { name: 1, status: 1, _id: 1 });
-         res.status(200).json(cities);
+         const query = {}
+         if (req.active === true) {
+            query.status = true
+         }
+         const cities = await City.find(query, { name: 1, status: 1, _id: 1 });
+         res.status(200).send(cities);
       } catch (err) {
-         this.handleError(err, res, 'Error while retrieving cities');
+         console.error('Error while Adding City:', err.message);
+         res.status(500).json({ error: 'Internal server error.' });
       }
    }
 

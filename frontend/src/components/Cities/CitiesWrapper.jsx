@@ -18,7 +18,7 @@ function CitiesWrapper({ getCities, citiesData, auth, showNotification }) {
 	}, []);
 
 	useEffect(() => {
-		if (!auth.admin?.superAdmin) {
+		if (auth.admin?.superAdmin === false) {
 			navigate("/login", { replace: true });
 			showNotification("Login in as super Admin to access cities");
 		}

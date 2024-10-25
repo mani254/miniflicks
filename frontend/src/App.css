@@ -140,3 +140,21 @@
 	stroke-dasharray: 20 300;
 	stroke-dashoffset: -32.42;
 }
+
+/* css for the header */
+.header select {
+	border: none;
+	background: none;
+	box-shadow: none;
+	outline: none !important;
+	color: var(--primary-color);
+	font-weight: 500;
+}
+
+.header .input-wrapper {
+	margin: 0;
+	border: none;
+}
+.header .input-wrapper label {
+	display: none;
+}
