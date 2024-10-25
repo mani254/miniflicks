@@ -5,7 +5,7 @@ const locationRouter = express.Router()
 const locationController = require('../controllersClass/locationController')
 const path = require('path');
 
-const { authorization, superAdminAuth } = require('../middleware/authorization')
+const { authorization, superAdminAuth, userAuth } = require('../middleware/authorization')
 
 const uploadOptions = {
    storagePath: path.join(__dirname, '../public/uploads/locations'),
@@ -18,7 +18,7 @@ const uploadOptions = {
 
 
 locationRouter.post('/', superAdminAuth, createFileUploadMiddleware(uploadOptions), locationController.addLocation)
-locationRouter.get('/', authorization, locationController.getLocations)
+locationRouter.get('/', userAuth, locationController.getLocations)
 locationRouter.get('/:id', authorization, locationController.getLocation)
 locationRouter.put('/:id', authorization, createFileUploadMiddleware(uploadOptions), locationController.updateLocation)
 locationRouter.put('/status/:id', authorization, locationController.changeLocationStatus);

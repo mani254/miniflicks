@@ -158,3 +158,12 @@
 .header .input-wrapper label {
 	display: none;
 }
+
+/* location card aniamtion  */
+
+.location-card:hover {
+	transform: scale(1.015);
+	transition: all 0.2s ease-in-out;
+	/* border: 2px solid var(--secondary-color); */
+	box-shadow: var(--box-shadow);
+}

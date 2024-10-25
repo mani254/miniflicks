@@ -10,10 +10,11 @@ import { setBookingCity } from "../../redux/customerBooking/customerBookingActio
 
 function Header({ citiesData }) {
 	const [isMobileNav, setIsMobileNav] = useState(false);
+	const [location, setLocation] = useState("");
 	const dispatch = useDispatch();
 
 	const handleCityChange = (event) => {
-		console.log("hello");
+		setLocation(event.target.value);
 		dispatch(setBookingCity(event.target.value));
 	};
 
@@ -144,7 +145,7 @@ function Header({ citiesData }) {
 								</g>
 							</g>
 						</svg>
-						<CityOptions value="" changeHandler={handleCityChange} />
+						<CityOptions value={location} changeHandler={handleCityChange} />
 					</div>
 					{/* )} */}
 					<div className="book-now-btn hidden md:block">

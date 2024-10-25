@@ -47,10 +47,12 @@ const getLocationsFailure = (error) => ({
    payload: error,
 });
 
-export const getLocations = () => async (dispatch) => {
+export const getLocations = (city) => async (dispatch) => {
    dispatch(getLocationsRequest());
    try {
-      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/locations`);
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/locations`, {
+         params: { city },
+      });
       dispatch(getLocationsSuccess(response.data.locations));
       return Promise.resolve();
    } catch (error) {

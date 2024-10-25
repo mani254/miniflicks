@@ -189,12 +189,12 @@ function AddLocations({ addLocation, update = false, updateLocation, auth, showN
 								{errors.name && <p className="error">{errors.name}</p>}
 							</div>
 							<div className="input-wrapper">
-								<label htmlFor="addressLink">Address</label>
-								<input type="text" id="addressLink" name="addressLink" placeholder="Location Address" value={details.addressLink} onChange={handleChange} required />
+								<label htmlFor="address">Address</label>
+								<input type="text" id="address" name="address" placeholder="Location Address" value={details.address} onChange={handleChange} required />
 							</div>
 							<div className="input-wrapper">
-								<label htmlFor="address">Address map link</label>
-								<input type="text" id="address" name="address" placeholder="Address Map Link" value={details.address} onChange={handleChange} />
+								<label htmlFor="addressLink">Address map link</label>
+								<input type="text" id="addressLink" name="addressLink" placeholder="Address Map Link" value={details.addressLink} onChange={handleChange} />
 							</div>
 						</div>
 						<div className="outer-box">

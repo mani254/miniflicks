@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import UsersLayout from "./layouts/UsersLayout";
 import Home from "./pages/Home";
 import SlotBookingPage from "./pages/SlotBookingPage";
+import UserLocations from "./components/Locations/UserLocations";
 
 const BackendLayout = lazy(() => import("./layouts/BackendLayout"));
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -60,6 +61,7 @@ function App({ modal }) {
 					<Route path="/" element={<UsersLayout />}>
 						<Route index element={<Home />} />
 						<Route path="slot" element={<SlotBookingPage />}></Route>
+						<Route path="locations" element={<UserLocations />}></Route>
 					</Route>
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Login />} />

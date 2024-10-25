@@ -48,12 +48,21 @@ class LocationController {
 
    async getLocations(req, res) {
       try {
+         let query = {}
+         if (req.query.city) {
+            query.city = req.query.city;
+         }
+         if (req.active) {
+            query.status = true
+         }
          let locations = []
+         console.log(req.body)
+         console.log(query)
          if (req.location) {
             locations = await Location.find({ _id: req.location }).populate('city');
          }
          else {
-            locations = await Location.find().populate('city');
+            locations = await Location.find(query).populate('city');
          }
          return res.status(200).json({ message: 'Locations fetched successfully', locations });
       } catch (error) {
