@@ -4,6 +4,8 @@ const initialState = {
    city: '',
    location: '',
    screen: "",
+   date: new Date(new Date().setHours(0, 0, 0, 0)),
+   slot: {},
 };
 
 const customerBookingReducer = (state = initialState, action) => {
@@ -22,6 +24,16 @@ const customerBookingReducer = (state = initialState, action) => {
          return {
             ...state,
             screen: action.payload
+         };
+      case customerBookingActionTypes.SET_BOOKING_DATE:
+         return {
+            ...state,
+            date: action.payload
+         }
+      case customerBookingActionTypes.SET_BOOKING_SLOT:
+         return {
+            ...state,
+            slot: action.payload
          }
       default:
          return state;

@@ -3,7 +3,7 @@ class CalendarLogic {
       this.year = year;
       this.month = month;
       this.unavailable = unavailable;
-      this.selectedDate = selectedDate;
+      this.selectedDate = selectedDate instanceof Date ? selectedDate : null;
    }
 
    daysInMonth() {
@@ -16,7 +16,6 @@ class CalendarLogic {
       const calendar = [];
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-
 
       let date = 1;
       for (let i = 0; i < 6; i++) {
@@ -79,17 +78,10 @@ class CalendarLogic {
       const currentMonth = today.getMonth();
 
       // Prevent moving to a year earlier than the current year
-      if (this.year === currentYear && increment < 0) {
-         return;
-      }
-
-      this.year += increment;
-
-      // Ensure month is not before the current month when changing the year
-      if (this.year === currentYear && this.month < currentMonth) {
-         this.month = currentMonth;
+      if (this.year <= currentYear) {
+         this.year += increment;
       }
    }
 }
 
-export default CalendarLogic
+export default CalendarLogic;

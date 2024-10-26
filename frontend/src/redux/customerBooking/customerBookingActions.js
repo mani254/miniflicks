@@ -22,3 +22,18 @@ export const setBookingScreen = (screen) => {
       payload: screen
    }
 }
+
+export const setBookingDate = (date) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_DATE,
+      payload: date
+   }
+}
+
+export const setBookingSlot = (slot) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_SLOT,
+      payload: slot
+   }
+}
+

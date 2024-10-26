@@ -23,8 +23,6 @@ function UserScreens({ screensData, customerBooking }) {
 		return navigate("/booking/slots");
 	}
 
-	useEffect(() => {}, []);
-
 	useEffect(() => {
 		if (!customerBooking.location) return;
 		async function fetchScreens() {
