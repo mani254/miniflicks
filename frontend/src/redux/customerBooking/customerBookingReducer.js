@@ -3,6 +3,7 @@ import customerBookingActionTypes from './customerBookingActionTypes';
 const initialState = {
    city: '',
    location: '',
+   screen: "",
 };
 
 const customerBookingReducer = (state = initialState, action) => {
@@ -17,6 +18,11 @@ const customerBookingReducer = (state = initialState, action) => {
             ...state,
             location: action.payload,
          };
+      case customerBookingActionTypes.SET_BOOKING_SCREEN:
+         return {
+            ...state,
+            screen: action.payload
+         }
       default:
          return state;
    }

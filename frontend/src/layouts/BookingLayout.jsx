@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
-import Header from "../components/Header/Header";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { connect } from "react-redux";
 import { getLocations } from "../redux/location/locationActions";
@@ -8,29 +7,14 @@ import { setBookingLocation } from "../redux/customerBooking/customerBookingActi
 
 function UsersLayout({ customerBooking }) {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!customerBooking.city) return;
-
-		async function fetchLocations() {
-			try {
-				await dispatch(getLocations(customerBooking.city));
-			} catch (err) {
-				console.log(err);
-			}
+		if (!customerBooking.location) {
+			return navigate("/booking/locations");
 		}
-		fetchLocations();
-		// dispatch(setBookingLocation(""));
-	}, [customerBooking.city]);
-
-	return (
-		<main>
-			<Header />
-			<div className="container m-auto max-w-[1350px]">
-				<Outlet />
-			</div>
-		</main>
-	);
+	}, [customerBooking.location]);
+	return <Outlet />;
 }
 
 const mapStateToProps = (state) => {

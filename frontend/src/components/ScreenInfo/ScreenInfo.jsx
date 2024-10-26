@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs, Autoplay } from "swiper/modules";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+
+import { connect } from "react-redux";
 import { BsFillPeopleFill } from "react-icons/bs";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -18,95 +20,114 @@ const images = [
 	"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5oT8v7ERJLV81vgQhW5f_-kon4CNV9hUexQ&s",
 ];
 
-const screen = {
-	name: "Screen-1",
-	minPeople: "5",
-	capacity: "8",
-	description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer.",
-	specifications: ["This is the specification-1 text of the printing Lorem Ipsum has been the industry", "This is the specification-2 Lorem Ipsum has been the industry's", "this is the third and 4th specification", "This is the specification-2 Lorem Ipsum has been the industry's"],
-	extraPersonPrice: 100,
-};
+// const screen = {
+// 	name: "Screen-1",
+// 	minPeople: "5",
+// 	capacity: "8",
+// 	description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer.",
+// 	specifications: ["This is the specification-1 text of the printing Lorem Ipsum has been the industry", "This is the specification-2 Lorem Ipsum has been the industry's", "this is the third and 4th specification", "This is the specification-2 Lorem Ipsum has been the industry's"],
+// 	extraPersonPrice: 100,
+// };
 
-function ScreenInfo() {
+function ScreenInfo({ customerBooking, screensData }) {
 	const [thumbsSwiper, setThumbsSwiper] = useState(null);
+	const [screen, setScreen] = useState("");
+
+	useEffect(() => {
+		const currentScreen = screensData.screens.find((screen) => screen._id == customerBooking.screen);
+		setScreen(currentScreen);
+	}, []);
 
 	return (
 		<div>
-			<div className="swiper-1 mt-3 w-full m-auto relative">
-				<Swiper
-					spaceBetween={10}
-					slidesPerView={1}
-					navigation={{
-						nextEl: ".custom-next",
-						prevEl: ".custom-prev",
-					}}
-					thumbs={{ swiper: thumbsSwiper }}
-					autoplay={{ delay: 3000, disableOnInteraction: false }}
-					modules={[Navigation, Thumbs, Autoplay]}
-					loop={true}>
-					{images.map((img, index) => (
-						<SwiperSlide key={index}>
-							<img src={img} alt={`Slide ${index + 1}`} className="w-full object-cover" />
-						</SwiperSlide>
-					))}
-				</Swiper>
-				<div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
-					<button className="custom-prev w-9 h-9 bg-bright flex items-center justify-center rounded-full">
-						<div className="icon">
-							<FaAngleLeft className="text-lg" />
+			{screen && (
+				<>
+					<div className="swiper-1 mt-3 w-full m-auto relative">
+						<Swiper
+							spaceBetween={10}
+							slidesPerView={1}
+							navigation={{
+								nextEl: ".custom-next",
+								prevEl: ".custom-prev",
+							}}
+							thumbs={{ swiper: thumbsSwiper }}
+							autoplay={{ delay: 3000, disableOnInteraction: false }}
+							modules={[Navigation, Thumbs, Autoplay]}
+							loop={true}>
+							{screen.images.map((img, index) => (
+								<SwiperSlide key={index}>
+									<img src={img} alt={`Slide ${index + 1}`} className="w-full object-cover" />
+								</SwiperSlide>
+							))}
+						</Swiper>
+						<div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10">
+							<button className="custom-prev w-9 h-9 bg-bright flex items-center justify-center rounded-full">
+								<div className="icon">
+									<FaAngleLeft className="text-lg" />
+								</div>
+							</button>
 						</div>
-					</button>
-				</div>
-				<div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
-					<button className="custom-next w-9 h-9 bg-bright flex items-center justify-center rounded-full">
-						<div className="icon">
-							<FaAngleRight className="text-lg" />
+						<div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10">
+							<button className="custom-next w-9 h-9 bg-bright flex items-center justify-center rounded-full">
+								<div className="icon">
+									<FaAngleRight className="text-lg" />
+								</div>
+							</button>
 						</div>
-					</button>
-				</div>
-			</div>
+					</div>
 
-			<div className="swiper-thumbs mt-2  w-full max-w-[95%] m-auto">
-				<Swiper onSwiper={setThumbsSwiper} spaceBetween={10} slidesPerView={4} freeMode={true} watchSlidesProgress={true} modules={[Thumbs]}>
-					{images.map((img, index) => (
-						<SwiperSlide key={index}>
-							<img src={img} alt={`Thumbnail ${index + 1}`} className="w-full object-cover cursor-pointer" />
-						</SwiperSlide>
-					))}
-				</Swiper>
-			</div>
+					<div className="swiper-thumbs mt-[10px]  w-full max-w-[95%] m-auto relative">
+						<Swiper onSwiper={setThumbsSwiper} spaceBetween={10} slidesPerView={4} freeMode={true} watchSlidesProgress={true} modules={[Thumbs]}>
+							{screen.images.map((img, index) => (
+								<SwiperSlide key={index}>
+									<img src={img} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover cursor-pointer aspect-[16/9]" />
+								</SwiperSlide>
+							))}
+						</Swiper>
+					</div>
 
-			<div className="screen-content mt-4">
-				<div className="flex items-center gap-5">
-					<div className="w-full h-[2px] bg-bright"></div>
-					<h2 className="whitespace-nowrap">{screen.name}</h2>
-					<div className="w-full h-[2px] bg-bright"></div>
-				</div>
-				<p className="mt-3">{screen.description}</p>
-				<div className="flex gap-x-3 items-center mt-3 flex-wrap">
-					<BsFillPeopleFill />
-					<p className="whitespace-nowrap">Capacity: {screen.capacity} people</p>
-					<p>
-						* Additional charge of {screen.extraPersonPrice} per person for any number exceeding {screen.minPeople} people
-					</p>
-				</div>
+					<div className="screen-content mt-4">
+						<div className="flex items-center gap-5">
+							<div className="w-full h-[2px] bg-bright"></div>
+							<h2 className="whitespace-nowrap">{screen.name}</h2>
+							<div className="w-full h-[2px] bg-bright"></div>
+						</div>
+						<div className="flex gap-x-3 items-center mt-3 flex-wrap">
+							<BsFillPeopleFill />
+							<p className="whitespace-nowrap">Capacity: {screen.capacity} people</p>
+							{screen.minPeople != screen.capacity && (
+								<p className="font-light">
+									( * Additional charge of {screen.extraPersonPrice} per person for any number exceeding {screen.minPeople} people)
+								</p>
+							)}
+						</div>
+						<p className="mt-3">{screen.description}</p>
 
-				<div className="mt-3">
-					<h4>Features</h4>
-					<ul className="">
-						{screen.specifications.map((spec, index) => {
-							return (
-								<li key={index} className="flex gap-3 mt-1">
-									<img className="w-6 h-6" src={star} alt="Star Image 3d" />
-									{spec}
-								</li>
-							);
-						})}
-					</ul>
-				</div>
-			</div>
+						<div className="mt-3">
+							<h4>Features</h4>
+							<ul className="">
+								{screen.specifications.map((spec, index) => {
+									return (
+										<li key={index} className="flex gap-3 mt-1">
+											<img className="w-6 h-6" src={star} alt="Star Image 3d" />
+											{spec}
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+					</div>
+				</>
+			)}
 		</div>
 	);
 }
 
-export default ScreenInfo;
+const mapStateToProps = (state) => {
+	return {
+		screensData: state.screens,
+		customerBooking: state.customerBooking,
+	};
+};
+
+export default connect(mapStateToProps, null)(ScreenInfo);

@@ -50,6 +50,8 @@ import Customers from "./components/Customers/Customers";
 
 import axios from "axios";
 import Loader from "./components/Loader/Loader";
+import UserScreens from "./components/Screen/UserScreens";
+import BookingLayout from "./layouts/BookingLayout";
 
 function App({ modal }) {
 	axios.defaults.withCredentials = true;
@@ -60,8 +62,11 @@ function App({ modal }) {
 				<Routes>
 					<Route path="/" element={<UsersLayout />}>
 						<Route index element={<Home />} />
-						<Route path="slot" element={<SlotBookingPage />}></Route>
-						<Route path="locations" element={<UserLocations />}></Route>
+						<Route path="booking" element={<BookingLayout />}>
+							<Route path="slots" element={<SlotBookingPage />}></Route>
+							<Route path="locations" element={<UserLocations />}></Route>
+							<Route path="screens" element={<UserScreens />}></Route>
+						</Route>
 					</Route>
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Login />} />

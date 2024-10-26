@@ -4,7 +4,7 @@ const screenRouter = express.Router();
 const path = require('path');
 const ScreenController = require('../controllersClass/screenController')
 
-const { authorization } = require('../middleware/authorization')
+const { authorization, userAuth } = require('../middleware/authorization')
 
 const uploadOptions = {
    storagePath: path.join(__dirname, '../public/uploads/screens'),
@@ -16,8 +16,8 @@ const uploadOptions = {
 };
 
 screenRouter.post('/', authorization, createFileUploadMiddleware(uploadOptions), ScreenController.addScreen);
-screenRouter.post('/', authorization, ScreenController.addScreen);
-screenRouter.get('/', authorization, ScreenController.getScreens);
+// screenRouter.post('/', authorization, ScreenController.addScreen);
+screenRouter.get('/', userAuth, ScreenController.getScreens);
 screenRouter.put('/:id', authorization, createFileUploadMiddleware(uploadOptions), ScreenController.updateScreen);
 screenRouter.put('/status/:id', authorization, ScreenController.changeScreenStatus);
 screenRouter.delete('/:id', authorization, ScreenController.deleteScreen);

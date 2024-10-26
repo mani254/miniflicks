@@ -41,20 +41,25 @@ class ScreenController {
 
    async getScreens(req, res) {
       try {
-         let screens = []
-         if (req.location) {
-            screens = await Screen.find({ location: req.location })
-               .populate('location', 'name _id')
-               .populate('packages.addons')
-               .populate('slots');
-         } else {
-            screens = await Screen.find()
-               .populate('location', 'name _id')
-               .populate('packages.addons')
-               .populate('slots');
+         const query = {};
+
+         if (req.query.location) {
+            query.location = req.query.location;
+         } else if (req.location) {
+            query.location = req.location;
          }
 
+         if (req.active === true) {
+            query.status = true;
+         }
+
+         const screens = await Screen.find(query)
+            .populate('location', 'name _id')
+            .populate('packages.addons')
+            .populate('slots');
+
          return res.status(200).json({ message: 'Screens fetched successfully', screens });
+
       } catch (error) {
          console.error('Error getting screens:', error);
          return res.status(500).json({ error: error.message });

@@ -56,8 +56,6 @@ class LocationController {
             query.status = true
          }
          let locations = []
-         console.log(req.body)
-         console.log(query)
          if (req.location) {
             locations = await Location.find({ _id: req.location }).populate('city');
          }

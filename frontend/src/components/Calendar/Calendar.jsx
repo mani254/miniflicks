@@ -28,7 +28,7 @@ function Calendar() {
 	const handleDateClick = (date) => {
 		setSelectedDate(date);
 		setCalendarLogic(new CalendarLogic(calendarLogic.year, calendarLogic.month, unavailableDates, date));
-		console.log("Selected date:", date);
+		// console.log("Selected date:", date);
 	};
 
 	const handleMonthChange = (increment) => {
@@ -47,7 +47,7 @@ function Calendar() {
 
 	const calendar = calendarLogic.generateCalendar();
 
-	console.log(calendar);
+	// console.log(calendar);
 
 	return (
 		<div className="w-full max-w-[700px] m-auto calendar">

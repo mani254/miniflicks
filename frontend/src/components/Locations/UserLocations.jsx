@@ -5,20 +5,23 @@ import { IoLocationSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { setBookingLocation } from "../../redux/customerBooking/customerBookingActions";
 
-function UserLocations({ locationsData }) {
+function UserLocations({ locationsData, customerBooking }) {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const cardRefs = useRef([]);
 
 	const handleCardClick = (locationId) => {
-		navigate(`/screens`);
 		dispatch(setBookingLocation(locationId));
+		return navigate(`/booking/screens`);
 	};
 
 	useEffect(() => {
+		console.log(locationsData.locations.length);
 		if (locationsData.locations.length === 1) {
-			navigate("/screens", { replace: true });
+			dispatch(setBookingLocation(locationsData.locations[0]._id));
+			return navigate("/booking/screens", { replace: true });
 		}
+		// dispatch(setBookingLocation(customerBooking.location));
 	}, [locationsData.locations]);
 
 	const handleClick = (event, locationId, index) => {
@@ -51,6 +54,7 @@ function UserLocations({ locationsData }) {
 
 const mapStateToProps = (state) => ({
 	locationsData: state.locations,
+	customerBooking: state.customerBooking,
 });
 
 export default connect(mapStateToProps, null)(UserLocations);

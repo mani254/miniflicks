@@ -15,3 +15,10 @@ export const setBookingLocation = (location) => {
       payload: location,
    };
 };
+
+export const setBookingScreen = (screen) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_SCREEN,
+      payload: screen
+   }
+}

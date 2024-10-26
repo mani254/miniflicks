@@ -47,10 +47,10 @@ const getScreensFailure = (error) => ({
    payload: error,
 });
 
-export const getScreens = () => async (dispatch) => {
+export const getScreens = (location) => async (dispatch) => {
    dispatch(getScreensRequest());
    try {
-      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/screens`);
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/screens`, { params: { location } });
       dispatch(getScreensSuccess(response.data.screens));
       return Promise.resolve();
    } catch (error) {

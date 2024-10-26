@@ -88,7 +88,6 @@ const updateLocation = async (req, res) => {
       if (req.file) {
          const fileName = existingLocation.image.slice(existingLocation.image.lastIndexOf('/') + 1);
          const oldImagePath = path.join(__dirname, '../public/uploads/locations', fileName);
-         console.log(oldImagePath, 'oldimagepath');
          if (fs.existsSync(oldImagePath)) {
             fs.unlinkSync(oldImagePath);
          }

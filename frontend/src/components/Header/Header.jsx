@@ -1,22 +1,37 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { mfLogo } from "../../utils";
 
 import { connect } from "react-redux";
 import { useDispatch } from "react-redux";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import CityOptions from "../Cities/CityOptions";
 import { setBookingCity } from "../../redux/customerBooking/customerBookingActions";
 
 function Header({ citiesData }) {
 	const [isMobileNav, setIsMobileNav] = useState(false);
 	const [location, setLocation] = useState("");
+	const [showCityOptions, setShowCityOptions] = useState(null);
 	const dispatch = useDispatch();
+
+	const locationUrl = useLocation();
 
 	const handleCityChange = (event) => {
 		setLocation(event.target.value);
 		dispatch(setBookingCity(event.target.value));
 	};
+
+	useEffect(() => {
+		const path = locationUrl.pathname;
+
+		if (path.startsWith("/booking/locations")) {
+			return setShowCityOptions(true);
+		}
+		if (path.startsWith("/booking")) {
+			return setShowCityOptions(false);
+		}
+		return setShowCityOptions(true);
+	}, [locationUrl.pathname]);
 
 	return (
 		<header className="bg-white/60 backdrop-blur-md border-b border-white/10 shadow-md sticky top-0 z-50">
@@ -135,18 +150,20 @@ function Header({ citiesData }) {
 
 				<div className="flex gap-3">
 					{/* {(citiesData.cities.length == 0 || citiesData.cities.length > 1) && ( */}
-					<div className={`top-full right-0 header border-2 rounded-full px-2 border-primary flex items-center ${citiesData.cities.length === 0 || citiesData.cities.length > 1 ? "block" : "hidden"}`}>
-						<svg className="w-4 fill-primary" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 395.71 395.71" xmlSpace="preserve">
-							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-							<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-							<g id="SVGRepo_iconCarrier">
-								<g>
-									<path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738 c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388 C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191 c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"></path>{" "}
+					{showCityOptions && (
+						<div className={`top-full right-0 header border-2 rounded-full px-2 border-primary flex items-center ${citiesData.cities.length === 0 || citiesData.cities.length > 1 ? "block" : "hidden"}`}>
+							<svg className="w-4 fill-primary" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 395.71 395.71" xmlSpace="preserve">
+								<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+								<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+								<g id="SVGRepo_iconCarrier">
+									<g>
+										<path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738 c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388 C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191 c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"></path>{" "}
+									</g>
 								</g>
-							</g>
-						</svg>
-						<CityOptions value={location} changeHandler={handleCityChange} />
-					</div>
+							</svg>
+							<CityOptions value={location} changeHandler={handleCityChange} />
+						</div>
+					)}
 					{/* )} */}
 					<div className="book-now-btn hidden md:block">
 						<button className="btn-3">
