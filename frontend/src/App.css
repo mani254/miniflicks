@@ -197,17 +197,43 @@
 }
 
 /* location card aniamtion  */
-.location-card {
+.location-card,
+.selected-1 {
 	transition: all 0.3s ease-in-out;
 }
 .location-card img {
 	transition: all 0.3s ease-in-out;
 }
 
-.location-card:hover {
+.location-card:hover,
+.selected-1:hover {
 	/* transform: translateY(-5px); */
 	box-shadow: 2px 2px 9px #21053043;
 }
 .location-card:hover img {
 	scale: 1.05;
+}
+
+.selected-1.selected {
+	position: relative;
+	overflow: visible;
+	background: var(--primary-gradient);
+	transition: all 0.3s ease-in-out;
+	box-shadow: 2px 2px 9px #21053043;
+}
+
+.selected-1.selected::after {
+	content: url("./assets/tick-mark.svg");
+	padding-top: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	right: -8px;
+	top: -8px;
+	width: 25px;
+	height: 25px;
+	background: var(--primary-gradient);
+	border-radius: 50px;
+	transition: all 0.3s ease-in-out;
 }

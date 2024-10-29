@@ -32,13 +32,14 @@ function Calendar({ customerBooking }) {
 
 	const dispatch = useDispatch();
 
+	// function that will handle when clicked on certain date
 	const handleDateClick = (date) => {
 		setSelectedDate(date);
 		dispatch(setBookingDate(date));
 		setCalendarLogic((prevLogic) => new CalendarLogic(prevLogic.year, prevLogic.month, unavailableDates, date));
 	};
 
-	console.log(selectedDate);
+	//function to handle month change
 	const handleMonthChange = (increment) => {
 		setCalendarLogic((prevLogic) => {
 			const newLogic = new CalendarLogic(prevLogic.year, prevLogic.month, unavailableDates, selectedDate);
@@ -47,17 +48,26 @@ function Calendar({ customerBooking }) {
 		});
 	};
 
+	//useeffect that wil initially set the current date based on the selected date
 	useEffect(() => {
 		const initialDate = new Date();
 		let date = null;
+		console.log(customerBooking.date);
+
 		if (customerBooking.date) {
-			date = customerBooking.date;
+			date = customerBooking.date instanceof Date ? customerBooking.date : new Date(customerBooking.date);
 		} else {
 			date = new Date(initialDate.setHours(0, 0, 0, 0));
 		}
+
+		console.log(date, "---date in initial -setup of calendar-----");
+		console.log(date.getFullYear(), "fullyear");
+
 		setSelectedDate(date);
 		setCalendarLogic(() => new CalendarLogic(date.getFullYear(), date.getMonth(), unavailableDates, date));
-	}, []);
+	}, [customerBooking.date]);
+
+	console.log(selectedDate, "--selected date which is currently selected-----");
 
 	let calendar = calendarLogic.generateCalendar();
 

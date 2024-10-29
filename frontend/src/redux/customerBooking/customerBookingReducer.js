@@ -6,34 +6,49 @@ const initialState = {
    screen: "",
    date: new Date(new Date().setHours(0, 0, 0, 0)),
    slot: {},
+   package: "",
 };
 
 const customerBookingReducer = (state = initialState, action) => {
    switch (action.type) {
+      case customerBookingActionTypes.SET_BOOKING_DATA:
+         return action.payload
+
       case customerBookingActionTypes.SET_BOOKING_CITY:
          return {
-            ...state,
+            ...initialState,
             city: action.payload,
          };
       case customerBookingActionTypes.SET_BOOKING_LOCATION:
          return {
-            ...state,
+            ...initialState,
+            city: state.city,
             location: action.payload,
          };
       case customerBookingActionTypes.SET_BOOKING_SCREEN:
          return {
-            ...state,
+            ...initialState,
+            city: state.city,
+            location: state.location,
             screen: action.payload
          };
       case customerBookingActionTypes.SET_BOOKING_DATE:
          return {
-            ...state,
+            ...initialState,
+            city: state.city,
+            location: state.location,
+            screen: state.screen,
             date: action.payload
          }
       case customerBookingActionTypes.SET_BOOKING_SLOT:
          return {
             ...state,
             slot: action.payload
+         }
+      case customerBookingActionTypes.SET_BOOKING_PACKAGE:
+         return {
+            ...state,
+            package: action.payload
          }
       default:
          return state;

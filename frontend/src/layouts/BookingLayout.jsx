@@ -1,19 +1,37 @@
 import React, { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { connect } from "react-redux";
-import { getLocations } from "../redux/location/locationActions";
-import { setBookingLocation } from "../redux/customerBooking/customerBookingActions";
+import { Outlet } from "react-router-dom";
+
+import { connect, useDispatch } from "react-redux";
+
+import { setBookingFromLocalStorage } from "../redux/customerBooking/customerBookingActions";
+import { getScreens } from "../redux/screen/screenActions";
 
 function UsersLayout({ customerBooking }) {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
+	// useeffect when when reloaded or rendered fetch the data from the local storeage and set in the redux
 	useEffect(() => {
-		if (!customerBooking.location) {
-			return navigate("/booking/locations");
+		const savedBookingData = localStorage.getItem("customerBooking");
+		if (savedBookingData) {
+			const bookingData = JSON.parse(savedBookingData);
+			console.log(bookingData);
+			dispatch(setBookingFromLocalStorage(bookingData));
 		}
+	}, []);
+
+	// useEffect to fetch the screens wheen there is a change in the location
+	useEffect(() => {
+		if (!customerBooking.location) return;
+		async function fetchScreens() {
+			try {
+				await dispatch(getScreens(customerBooking.location));
+			} catch (err) {
+				console.log(err);
+			}
+		}
+		fetchScreens();
 	}, [customerBooking.location]);
+
 	return <Outlet />;
 }
 

@@ -1,5 +1,12 @@
 import customerBookingActionTypes from './customerBookingActionTypes';
 
+export const setBookingFromLocalStorage = (data) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_DATA,
+      payload: data,
+   };
+};
+
 // Action to set booking city
 export const setBookingCity = (city) => {
    return {
@@ -37,3 +44,9 @@ export const setBookingSlot = (slot) => {
    }
 }
 
+export const setBookingPackage = (pack) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_PACKAGE,
+      payload: pack
+   }
+}

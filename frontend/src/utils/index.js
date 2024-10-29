@@ -2,7 +2,13 @@ import fingerImage from '../assets/finger.webp'
 import star from '../assets/star.png'
 import mfLogo from '../assets/mf-logo.png';
 
+import addonAvailable from '../assets/addon-available.svg'
+import addonUnavailable from '../assets/addon-unavailable.svg'
+
 export { fingerImage, star, mfLogo }
+
+export { addonAvailable, addonUnavailable }
+
 export function validation(action, value) {
    switch (action) {
       case "name":

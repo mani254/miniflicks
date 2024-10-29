@@ -12,13 +12,13 @@ export default {
             jokerman: 'Jokerman'
          },
          colors: {
-            logo: ({ opacityValue }) => `rgba(50, 107, 159, ${opacityValue})`,
-            primary: 'rgb(100, 97, 174)',
-            secondary: 'rgb(199, 121, 211)',
-            tertiary: ' rgb(213, 208, 255)',
-            fourth: ' rgb(255, 224, 252)',
-            bright: '#faf8fc',
-            dark: 'rgb(45,45,45)',
+            logo: ({ opacityValue }) => `rgba(50, 107, 159, ${opacityValue || 1})`,
+            primary: ({ opacityValue }) => `rgba(100, 97, 174, ${opacityValue || 1})`,
+            secondary: ({ opacityValue }) => `rgba(199, 121, 211, ${opacityValue || 1})`,
+            tertiary: ({ opacityValue }) => `rgba(213, 208, 255, ${opacityValue || 1})`,
+            fourth: ({ opacityValue }) => `rgba(255, 224, 252, ${opacityValue || 1})`,
+            bright: ({ opacityValue }) => `rgba(250, 248, 252, ${opacityValue || 1})`,
+            dark: ({ opacityValue }) => `rgba(45, 45, 45, ${opacityValue || 1})`,
             "gradient-primary": "linear-gradient(to right, rgb(100, 97, 174) 0%, rgb(199, 121, 211) 100%)"
          },
          container: {

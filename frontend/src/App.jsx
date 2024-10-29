@@ -64,9 +64,9 @@ function App({ modal }) {
 					<Route path="/" element={<UsersLayout />}>
 						<Route index element={<Home />} />
 						<Route path="booking" element={<BookingLayout />}>
-							<Route path="slots" element={<SlotBookingPage />}></Route>
 							<Route path="locations" element={<UserLocations />}></Route>
 							<Route path="screens" element={<UserScreens />}></Route>
+							<Route path="slots" element={<SlotBookingPage />}></Route>
 							<Route path="otherdetails" element={<OtherDetails />} />
 						</Route>
 					</Route>
