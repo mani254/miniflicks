@@ -9,6 +9,12 @@ import UsersLayout from "./layouts/UsersLayout";
 import Home from "./pages/Home";
 import SlotBookingPage from "./pages/SlotBookingPage";
 import UserLocations from "./components/Locations/UserLocations";
+import UserScreens from "./components/Screen/UserScreens";
+import BookingLayout from "./layouts/BookingLayout";
+import OtherDetails from "./components/OtherDetails/OtherDetails";
+
+import axios from "axios";
+import Loader from "./components/Loader/Loader";
 
 const BackendLayout = lazy(() => import("./layouts/BackendLayout"));
 import Dashboard from "./components/Dashboard/Dashboard";
@@ -48,11 +54,9 @@ import Bookings from "./components/Booking/Bookings";
 import CustomersWrapper from "./components/Customers/CustomersWrapper";
 import Customers from "./components/Customers/Customers";
 
-import axios from "axios";
-import Loader from "./components/Loader/Loader";
-import UserScreens from "./components/Screen/UserScreens";
-import BookingLayout from "./layouts/BookingLayout";
-import OtherDetails from "./components/OtherDetails/OtherDetails";
+import OccasionsWrapper from "./components/Occasion/OccasionsWrapper";
+import Occasions from "./components/Occasion/Occasions";
+import AddOccasions from "./components/Occasion/AddOccasions";
 
 function App({ modal }) {
 	axios.defaults.withCredentials = true;
@@ -120,6 +124,11 @@ function App({ modal }) {
 							<Route index element={<Addons />} />
 							<Route path="add" element={<AddAddons />} />
 							<Route path="edit/:id" element={<AddAddons update={true} />} />
+						</Route>
+						<Route path="occasions" element={<OccasionsWrapper />}>
+							<Route index element={<Occasions />} />
+							<Route path="add" element={<AddOccasions />} />
+							<Route path="edit/:id" element={<AddOccasions update={true} />} />
 						</Route>
 						<Route path="bookings" element={<BookingsWrapper />}>
 							<Route index element={<Bookings />} />

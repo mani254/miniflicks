@@ -13,6 +13,7 @@ import bookingReducer from "./booking/bookingReducer";
 import customerReducer from "./customer/customerReducer";
 import authReducer from './auth/authReducer'
 import customerBookingReducer from "./customerBooking/customerBookingReducer";
+import occasionReducer from "./occasion/occasionReducer";
 
 const rootReducer = combineReducers({
    modal: modalReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
    banners: bannerReducer,
    gifts: giftReducer,
    addons: addonReducer,
+   occasions: occasionReducer,
    screens: screenReducer,
    bookings: bookingReducer,
    customers: customerReducer,
