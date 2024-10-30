@@ -57,6 +57,8 @@ import Customers from "./components/Customers/Customers";
 import OccasionsWrapper from "./components/Occasion/OccasionsWrapper";
 import Occasions from "./components/Occasion/Occasions";
 import AddOccasions from "./components/Occasion/AddOccasions";
+import PackagesSection from "./components/OtherDetails/PackagesSection";
+import OccasionsSection from "./components/OtherDetails/OccasionsSection";
 
 function App({ modal }) {
 	axios.defaults.withCredentials = true;
@@ -71,7 +73,10 @@ function App({ modal }) {
 							<Route path="locations" element={<UserLocations />}></Route>
 							<Route path="screens" element={<UserScreens />}></Route>
 							<Route path="slots" element={<SlotBookingPage />}></Route>
-							<Route path="otherdetails" element={<OtherDetails />} />
+							<Route path="otherdetails" element={<OtherDetails />}>
+								<Route path="packages" element={<PackagesSection />} />
+								<Route path="occasions" element={<OccasionsSection />} />
+							</Route>
 						</Route>
 					</Route>
 					<Route path="/login" element={<Login />} />

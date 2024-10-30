@@ -6,12 +6,41 @@ function OrderSummary({ customerBooking }) {
 
 	// function that will exicute everytime the package change to set the package price
 	useEffect(() => {
-		const priceInfo = [];
-		if (customerBooking.package) {
-			priceInfo.push({ title: "Package", amount: getPackagePrice(customerBooking.package) });
+		if (!customerBooking.package) {
+			setPricingInfo((prev) => prev.filter((item) => item.title !== "Package"));
+		} else {
+			setPricingInfo((prev) => {
+				const existingPackageIndex = prev.findIndex((item) => item.title === "Package");
+
+				if (existingPackageIndex !== -1) {
+					const updatedPricingInfo = [...prev];
+					updatedPricingInfo[existingPackageIndex].amount = getPackagePrice(customerBooking.package);
+					return updatedPricingInfo;
+				} else {
+					return [...prev, { title: "Package", amount: getPackagePrice(customerBooking.package) }];
+				}
+			});
 		}
-		setPricingInfo(priceInfo);
 	}, [customerBooking.package]);
+
+	// Manage "Occasion" in pricingInfo based on customerBooking.occasion's existence and value
+	useEffect(() => {
+		if (!customerBooking.occasion) {
+			setPricingInfo((prev) => prev.filter((item) => item.title !== "Occasion"));
+		} else {
+			setPricingInfo((prev) => {
+				const existingOccasionIndex = prev.findIndex((item) => item.title === "Occasion");
+
+				if (existingOccasionIndex !== -1) {
+					const updatedPricingInfo = [...prev];
+					updatedPricingInfo[existingOccasionIndex].amount = customerBooking.occasion.price;
+					return updatedPricingInfo;
+				} else {
+					return [...prev, { title: "Occasion", amount: customerBooking.occasion.price }];
+				}
+			});
+		}
+	}, [customerBooking.occasion]);
 
 	// function to convert slot timing just to show
 	const convertToAMPM = (time) => {

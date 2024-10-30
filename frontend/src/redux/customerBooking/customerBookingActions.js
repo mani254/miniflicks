@@ -50,3 +50,10 @@ export const setBookingPackage = (pack) => {
       payload: pack
    }
 }
+
+export const setBookingOccasion = (occasion) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_OCCASION,
+      payload: occasion
+   }
+}

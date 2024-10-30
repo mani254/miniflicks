@@ -12,6 +12,7 @@ function UsersLayout({ customerBooking }) {
 	// useeffect when when reloaded or rendered fetch the data from the local storeage and set in the redux
 	useEffect(() => {
 		const savedBookingData = localStorage.getItem("customerBooking");
+		console.log(savedBookingData, "savedbookingdata");
 		if (savedBookingData) {
 			const bookingData = JSON.parse(savedBookingData);
 			console.log(bookingData);

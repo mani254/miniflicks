@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 
 const navlinks = [
-	{ title: "Home", to: "/home", image: "https://cdn-icons-png.flaticon.com/512/25/25694.png" },
+	{ title: "Home", to: "/", image: "https://cdn-icons-png.flaticon.com/512/25/25694.png" },
 	{
 		title: "Bookings",
 		to: "/admin/bookings",

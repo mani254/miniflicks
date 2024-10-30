@@ -26,6 +26,7 @@ const occasionReducer = (state = initialState, action) => {
          };
 
       case occasionTypes.GET_OCCASIONS_SUCCESS:
+         console.log(state)
          return {
             ...state,
             loading: false,

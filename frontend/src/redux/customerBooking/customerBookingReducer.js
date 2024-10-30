@@ -7,11 +7,13 @@ const initialState = {
    date: new Date(new Date().setHours(0, 0, 0, 0)),
    slot: {},
    package: "",
+   occasion: null,
 };
 
 const customerBookingReducer = (state = initialState, action) => {
    switch (action.type) {
       case customerBookingActionTypes.SET_BOOKING_DATA:
+         console.log(action.payload, 'in bookinData')
          return action.payload
 
       case customerBookingActionTypes.SET_BOOKING_CITY:
@@ -50,6 +52,12 @@ const customerBookingReducer = (state = initialState, action) => {
             ...state,
             package: action.payload
          }
+      case customerBookingActionTypes.SET_BOOKING_OCCASION:
+         return {
+            ...state,
+            occasion: action.payload
+         }
+
       default:
          return state;
    }
