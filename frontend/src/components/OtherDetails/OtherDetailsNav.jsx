@@ -9,6 +9,14 @@ function OtherDetailsNav({ customerBooking }) {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	// Update navOptions based on the selected package
+	useEffect(() => {
+		if (!customerBooking.package) return;
+		const initialOptions = ["Packages", "Occasions", "Addons", "Cakes", "Gifts"];
+		let newOptions = customerBooking.package?.addons.includes("Cake") ? initialOptions : initialOptions.filter((opt) => opt !== "Cakes");
+		setNavOptions(newOptions);
+	}, [customerBooking.package]);
+
 	// Set the active index based on the current URL path
 	useEffect(() => {
 		const pathSegments = location.pathname.split("/");
@@ -20,23 +28,19 @@ function OtherDetailsNav({ customerBooking }) {
 		}
 	}, [location.pathname, navOptions]);
 
-	// Update navOptions based on the selected package
-	useEffect(() => {
-		if (!customerBooking.package) return;
-		const initialOptions = ["Packages", "Occasions", "Addons", "Cakes", "Gifts"];
-		let newOptions = customerBooking.package?.addons.includes("Cake") ? initialOptions : initialOptions.filter((opt) => opt !== "Cakes");
-		setNavOptions(newOptions);
-	}, [customerBooking.package]);
-
 	// Navigate only when activeIndex changes due to user interaction
 	useEffect(() => {
 		const pathSegments = location.pathname.split("/");
 		const lastSegment = pathSegments[pathSegments.length - 1];
 
+		if (!navOptions[activeIndex]) return;
+
 		if (activeIndex !== null) {
 			if (lastSegment.toLocaleLowerCase === navOptions[activeIndex]) {
 				navigate(`${navOptions[activeIndex].toLowerCase()}`, { replace: true });
 			} else {
+				console.log(navOptions, activeIndex);
+				console.log(navOptions[activeIndex]);
 				navigate(`${navOptions[activeIndex].toLowerCase()}`);
 			}
 		}

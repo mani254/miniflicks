@@ -14,7 +14,7 @@ import BookingLayout from "./layouts/BookingLayout";
 import OtherDetails from "./components/OtherDetails/OtherDetails";
 import PackagesSection from "./components/OtherDetails/PackagesSection";
 import OccasionsSection from "./components/OtherDetails/OccasionsSection";
-import UserAddons from "./components/Addon/UserAddons";
+import UserItems from "./components/Addon/UserAddons";
 
 import axios from "axios";
 import Loader from "./components/Loader/Loader";
@@ -77,7 +77,8 @@ function App({ modal }) {
 							<Route path="otherdetails" element={<OtherDetails />}>
 								<Route path="packages" element={<PackagesSection />} />
 								<Route path="occasions" element={<OccasionsSection />} />
-								<Route path="addons" element={<UserAddons />} />
+								<Route path="addons" element={<UserItems type="addons" />} />
+								<Route path="gifts" element={<UserItems type="gifts" />} />
 							</Route>
 						</Route>
 					</Route>

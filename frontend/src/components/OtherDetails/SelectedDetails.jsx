@@ -2,21 +2,33 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 function SelectedDetails({ customerBooking }) {
-	const [selected, setSelected] = useState([]);
+	const [selectedItems, setSelectedItems] = useState([]);
 
 	useEffect(() => {
-		if (customerBooking.addons.length === 0) return;
+		const { addons, gifts } = customerBooking;
 
-		// Map and set the selected addons directly to avoid duplicates
-		const selectedAddons = customerBooking.addons.map((addon) => ({
-			title: addon.name,
-			count: addon.count,
-			amount: addon.price,
-		}));
-		setSelected(selectedAddons);
-	}, [customerBooking.addons]);
+		// Combine and map addons and gifts
+		const selectedAddons = addons
+			.filter((addon) => addon.count > 0)
+			.map((addon) => ({
+				title: addon.name,
+				count: addon.count,
+				amount: addon.price,
+			}));
 
-	if (selected.length === 0) {
+		const selectedGifts = gifts
+			.filter((gift) => gift.count > 0)
+			.map((gift) => ({
+				title: gift.name,
+				count: gift.count,
+				amount: gift.price,
+			}));
+
+		// Combine both lists
+		setSelectedItems([...selectedAddons, ...selectedGifts]);
+	}, [customerBooking.addons, customerBooking.gifts]);
+
+	if (selectedItems.length === 0) {
 		return null;
 	}
 
@@ -25,11 +37,11 @@ function SelectedDetails({ customerBooking }) {
 			<h3 className="pb-2 border-b border-gray-400">Selected Items</h3>
 
 			<div className="mt-5">
-				{selected.map((single, index) => (
+				{selectedItems.map((item, index) => (
 					<div key={index} className="flex justify-between items-center mt-[6px]">
-						<p className="w-1/2">{single.title}</p>
-						<p>{single.count}</p>
-						<p>{single.count * single.amount}</p>
+						<p className="w-1/2">{item.title}</p>
+						<p>{item.count}</p>
+						<p>{item.count * item.amount}</p>
 					</div>
 				))}
 			</div>

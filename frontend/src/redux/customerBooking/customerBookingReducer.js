@@ -8,7 +8,8 @@ const initialState = {
    slot: {},
    package: "",
    occasion: null,
-   addons: []
+   addons: [],
+   gifts: []
 };
 
 const customerBookingReducer = (state = initialState, action) => {
@@ -62,6 +63,11 @@ const customerBookingReducer = (state = initialState, action) => {
          return {
             ...state,
             addons: action.payload
+         }
+      case customerBookingActionTypes.SET_BOOKING_GIFTS:
+         return {
+            ...state,
+            gifts: action.payload
          }
 
       default:

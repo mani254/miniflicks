@@ -63,3 +63,10 @@ export const setBookingAddons = (addons) => {
       payload: addons
    }
 }
+export const setBookingGifts = (gifts) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_GIFTS,
+      payload: gifts
+   }
+}
+
