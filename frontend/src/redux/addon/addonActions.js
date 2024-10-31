@@ -60,6 +60,7 @@ export const getAddons = (params) => async (dispatch) => {
       return Promise.reject(errMessage);
    }
 };
+
 export const getAllAddons = () => async (dispatch) => {
    dispatch(getAddonsRequest());
    try {

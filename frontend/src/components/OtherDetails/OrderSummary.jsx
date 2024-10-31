@@ -42,6 +42,28 @@ function OrderSummary({ customerBooking }) {
 		}
 	}, [customerBooking.occasion]);
 
+	// Mangage "Addons in pricingInfo based on customerBooking.addons's existence and value"
+	useEffect(() => {
+		if (customerBooking.addons.length == 0) {
+			setPricingInfo((prev) => prev.filter((item) => item.title !== "Addons"));
+		} else {
+			const amount = customerBooking.addons.reduce((acc, addon) => acc + addon.price * addon.count, 0);
+			setPricingInfo((prev) => {
+				const existingAddonsIndex = prev.findIndex((item) => item.title === "Addons");
+
+				if (existingAddonsIndex !== -1) {
+					const updatedPricingInfo = [...prev];
+					updatedPricingInfo[existingAddonsIndex].amount = amount;
+					return updatedPricingInfo;
+				} else {
+					return [...prev, { title: "Addons", amount }];
+				}
+			});
+		}
+	}, [customerBooking.addons]);
+
+   
+
 	// function to convert slot timing just to show
 	const convertToAMPM = (time) => {
 		const [hours, minutes] = time.split(":");
@@ -67,7 +89,7 @@ function OrderSummary({ customerBooking }) {
 			<h3 className="pb-2 border-b border-gray-400">Order Summary</h3>
 			<div className="grid grid-cols-[auto_1fr] gap-1 mt-3">
 				<h5 className="min-w-max">Date :</h5>
-				<p>{customerBooking.date.toLocaleString().split(",")[0]}</p>
+				<p>{new Date(customerBooking.date).toLocaleString().split(",")[0]}</p>
 				<h5 className="min-w-max">Slot :</h5>
 				{customerBooking.slot?.from && customerBooking.slot?.to && (
 					<p>

@@ -3,6 +3,7 @@ import OtherDetailsNav from "./OtherDetailsNav";
 import { Outlet } from "react-router-dom";
 
 import OrderSummary from "./OrderSummary";
+import SelectedDetails from "./SelectedDetails";
 
 function OtherDetails() {
 	return (
@@ -13,6 +14,9 @@ function OtherDetails() {
 			</div>
 			<div className="w-full md:w-1/3 ">
 				<OrderSummary />
+				<div className="mt-4">
+					<SelectedDetails />
+				</div>
 			</div>
 		</section>
 	);

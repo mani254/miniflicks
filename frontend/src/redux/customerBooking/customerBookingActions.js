@@ -57,3 +57,9 @@ export const setBookingOccasion = (occasion) => {
       payload: occasion
    }
 }
+export const setBookingAddons = (addons) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_ADDONS,
+      payload: addons
+   }
+}
