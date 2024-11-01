@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import { setBookingCakes } from "../../redux/customerBooking/customerBookingActions";
 
 function OtherDetailsNav({ customerBooking }) {
 	const [navOptions, setNavOptions] = useState(["Packages", "Occasions", "Addons", "Cakes", "Gifts"]);
 	const [activeIndex, setActiveIndex] = useState(null); // Initialize as null
 	const navigate = useNavigate();
 	const location = useLocation();
+	const dispatch = useDispatch();
 
 	// Update navOptions based on the selected package
 	useEffect(() => {
 		if (!customerBooking.package) return;
 		const initialOptions = ["Packages", "Occasions", "Addons", "Cakes", "Gifts"];
+		if (!customerBooking.package?.addons.includes("Cake")) {
+			dispatch(setBookingCakes([]));
+		}
 		let newOptions = customerBooking.package?.addons.includes("Cake") ? initialOptions : initialOptions.filter((opt) => opt !== "Cakes");
 		setNavOptions(newOptions);
 	}, [customerBooking.package]);
@@ -50,6 +55,8 @@ function OtherDetailsNav({ customerBooking }) {
 	function handleNext() {
 		if (activeIndex < navOptions.length - 1) {
 			setActiveIndex((prev) => prev + 1);
+		} else {
+			navigate("/booking/payment");
 		}
 	}
 

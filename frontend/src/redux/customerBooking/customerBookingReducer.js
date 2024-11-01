@@ -9,7 +9,8 @@ const initialState = {
    package: "",
    occasion: null,
    addons: [],
-   gifts: []
+   gifts: [],
+   cakes: []
 };
 
 const customerBookingReducer = (state = initialState, action) => {
@@ -69,7 +70,11 @@ const customerBookingReducer = (state = initialState, action) => {
             ...state,
             gifts: action.payload
          }
-
+      case customerBookingActionTypes.SET_BOOKING_CAKES:
+         return {
+            ...state,
+            cakes: action.payload
+         }
       default:
          return state;
    }

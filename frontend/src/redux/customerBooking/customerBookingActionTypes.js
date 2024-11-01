@@ -20,6 +20,7 @@ const customerBookingActionTypes = {
 
    SET_BOOKING_GIFTS: "SET_BOOKING_GIFTS",
 
+   SET_BOOKING_CAKES: "SET_BOOKING_CAKES",
 }
 
 export default customerBookingActionTypes

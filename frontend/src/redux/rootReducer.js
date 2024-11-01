@@ -14,6 +14,7 @@ import customerReducer from "./customer/customerReducer";
 import authReducer from './auth/authReducer'
 import customerBookingReducer from "./customerBooking/customerBookingReducer";
 import occasionReducer from "./occasion/occasionReducer";
+import cakeReducer from './cake/cakeReducer'
 
 const rootReducer = combineReducers({
    modal: modalReducer,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
    customers: customerReducer,
    auth: authReducer,
    customerBooking: customerBookingReducer,
+   cakes: cakeReducer
 })
 
 export default rootReducer;

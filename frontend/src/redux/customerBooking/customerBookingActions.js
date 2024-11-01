@@ -70,3 +70,10 @@ export const setBookingGifts = (gifts) => {
    }
 }
 
+export const setBookingCakes = (cakes) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_CAKES,
+      payload: cakes
+   }
+}
+

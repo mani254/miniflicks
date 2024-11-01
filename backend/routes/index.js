@@ -12,6 +12,7 @@ const bookingRouter = require("./booking");
 const customerRouter = require("./customer")
 const authRouter = require('./authRouter');
 const occasionRouter = require("./occasion");
+const cakeRouter = require('./cake')
 
 apiRouter.use('/cities', cityRouter)
 apiRouter.use('/locations', locationRouter)
@@ -24,5 +25,7 @@ apiRouter.use('/bookings', bookingRouter)
 apiRouter.use('/customers', customerRouter)
 apiRouter.use('/auth', authRouter)
 apiRouter.use('/occasions', occasionRouter)
+apiRouter.use("/cakes", cakeRouter)
+
 
 module.exports = apiRouter;

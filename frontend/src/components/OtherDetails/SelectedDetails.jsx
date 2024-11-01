@@ -5,7 +5,7 @@ function SelectedDetails({ customerBooking }) {
 	const [selectedItems, setSelectedItems] = useState([]);
 
 	useEffect(() => {
-		const { addons, gifts } = customerBooking;
+		const { addons, gifts, cakes } = customerBooking;
 
 		// Combine and map addons and gifts
 		const selectedAddons = addons
@@ -24,9 +24,17 @@ function SelectedDetails({ customerBooking }) {
 				amount: gift.price,
 			}));
 
+		const selectedCakes = cakes
+			.filter((cake) => cake.count > 0)
+			.map((gift) => ({
+				title: gift.name,
+				count: gift.count,
+				amount: gift.price,
+			}));
+
 		// Combine both lists
-		setSelectedItems([...selectedAddons, ...selectedGifts]);
-	}, [customerBooking.addons, customerBooking.gifts]);
+		setSelectedItems([...selectedAddons, ...selectedGifts, ...selectedCakes]);
+	}, [customerBooking.addons, customerBooking.gifts, customerBooking.cakes]);
 
 	if (selectedItems.length === 0) {
 		return null;
@@ -39,9 +47,11 @@ function SelectedDetails({ customerBooking }) {
 			<div className="mt-5">
 				{selectedItems.map((item, index) => (
 					<div key={index} className="flex justify-between items-center mt-[6px]">
-						<p className="w-1/2">{item.title}</p>
-						<p>{item.count}</p>
-						<p>{item.count * item.amount}</p>
+						<p className="w-2/3">{item.title}</p>
+						<div className="w-1/2 flex items-center justify-between">
+							<p className="">{item.count}</p>
+							<p>{item.count * item.amount}</p>
+						</div>
 					</div>
 				))}
 			</div>

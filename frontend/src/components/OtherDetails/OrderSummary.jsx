@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
 
 function OrderSummary({ customerBooking }) {
 	const [pricingInfo, setPricingInfo] = useState([]);
+	const [total, setTotal] = useState(0);
+	const navigate = useNavigate();
 
 	// function that will exicute everytime the package change to set the package price
 	useEffect(() => {
@@ -62,7 +66,30 @@ function OrderSummary({ customerBooking }) {
 		}
 	}, [customerBooking.addons]);
 
-   
+	// Mangage "Cakes in pricingInfo based on customerBooking.cake's existence and value"
+	useEffect(() => {
+		if (customerBooking.cakes.length == 0) {
+			setPricingInfo((prev) => prev.filter((item) => item.title !== "Cakes"));
+		} else {
+			const amount = customerBooking.cakes.reduce((acc, addon) => acc + addon.price * addon.count, 0);
+			setPricingInfo((prev) => {
+				const existingCakesIndex = prev.findIndex((item) => item.title === "Cakes");
+
+				if (existingCakesIndex !== -1) {
+					const updatedPricingInfo = [...prev];
+					updatedPricingInfo[existingCakesIndex].amount = amount;
+					return updatedPricingInfo;
+				} else {
+					return [...prev, { title: "Cakes", amount }];
+				}
+			});
+		}
+	}, [customerBooking.cakes]);
+
+	useEffect(() => {
+		const total = pricingInfo.reduce((acc, item) => acc + item.amount, 0);
+		setTotal(total);
+	}, [pricingInfo]);
 
 	// function to convert slot timing just to show
 	const convertToAMPM = (time) => {
@@ -86,7 +113,7 @@ function OrderSummary({ customerBooking }) {
 
 	return (
 		<div className="bg-white p-5 rounded-lg">
-			<h3 className="pb-2 border-b border-gray-400">Order Summary</h3>
+			<h3 className="pb-2 border-b border-gray-300">Order Summary</h3>
 			<div className="grid grid-cols-[auto_1fr] gap-1 mt-3">
 				<h5 className="min-w-max">Date :</h5>
 				<p>{new Date(customerBooking.date).toLocaleString().split(",")[0]}</p>
@@ -98,7 +125,7 @@ function OrderSummary({ customerBooking }) {
 				)}
 			</div>
 			<div className="mt-5">
-				<h4 className="pb-2 border-b border-gray-400 text-opacity-70">Pricing Details</h4>
+				<h4 className="pb-2 border-b border-gray-300 text-opacity-70">Pricing Details</h4>
 				<div className="grid grid-cols-2 gap-1 mt-3">
 					{pricingInfo.map((single, index) => (
 						<React.Fragment key={index}>
@@ -106,6 +133,19 @@ function OrderSummary({ customerBooking }) {
 							<p className="justify-self-end">{single.amount}</p>
 						</React.Fragment>
 					))}
+				</div>
+				<div className="grid grid-cols-2 gap-1 mt-2 border-t border-gray-300 pt-1">
+					<h5>Total</h5>
+					<p className="justify-self-end">{total}</p>
+				</div>
+				<div className="book-now-btn mt-3">
+					<button
+						className="btn-3 text-center flex w-full items-center gap-2 m-auto"
+						onClick={() => {
+							navigate("/booking/payment");
+						}}>
+						Payment <FaArrowRight className="text-xs" />
+					</button>
 				</div>
 			</div>
 		</div>
@@ -117,4 +157,5 @@ const mapStateToProps = (state) => {
 		customerBooking: state.customerBooking,
 	};
 };
+
 export default connect(mapStateToProps, null)(OrderSummary);

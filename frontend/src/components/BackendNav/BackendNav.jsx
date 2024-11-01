@@ -21,6 +21,7 @@ const navlinks = [
 	{ title: "Addons", to: "/admin/addons", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
 	{ title: "Gifts", to: "/admin/gifts", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
 	{ title: "Addons", to: "/admin/addons", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
+	{ title: "Cakes", to: "/admin/cakes", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
 ];
 
 const superAdminLinks = [
@@ -34,7 +35,7 @@ function BackendNav({ auth }) {
 
 	const combinedLinks = auth.admin?.superAdmin ? [...navlinks, ...superAdminLinks] : navlinks;
 
-	const orderedNavLinks = ["Home", "Bookings", "Cities", "Locations", "Screens", "Customers", "Banners", "Coupons", "Occasions", "Addons", "Gifts"];
+	const orderedNavLinks = ["Home", "Bookings", "Cities", "Locations", "Screens", "Customers", "Banners", "Coupons", "Cakes", "Occasions", "Addons", "Gifts"];
 
 	// Sort combinedLinks based on the predefined order
 	const finalNavLinks = orderedNavLinks.map((title) => combinedLinks.find((link) => link.title === title)).filter(Boolean); // To avoid undefined entries if some links don't exist

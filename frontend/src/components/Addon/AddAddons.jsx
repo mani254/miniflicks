@@ -103,7 +103,7 @@ function AddAddon({ addAddon, update = false, updateAddon, showNotification }) {
 							<p className="mb-2">Addon Image</p>
 							{update ? (
 								<ImageUploaderComponent
-									id="location-image"
+									id="addon-image"
 									maxImages={1}
 									onImagesChange={(images) => {
 										setDetails((prev) => ({ ...prev, image: images[0] }));
