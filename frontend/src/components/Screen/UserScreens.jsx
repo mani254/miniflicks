@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from "react";
 import { connect } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getScreens } from "../../redux/screen/screenActions";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { setBookingScreen } from "../../redux/customerBooking/customerBookingActions";
 

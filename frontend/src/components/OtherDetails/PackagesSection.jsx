@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setBookingPackage } from "../../redux/customerBooking/customerBookingActions";
+import { setBookingPackage, setBookingOtherInfo, setBookingCustomer } from "../../redux/customerBooking/customerBookingActions";
 import { addonAvailable, addonUnavailable } from "../../utils";
 
 const packageAddons = ["4k Dolby Theater", "Decoration", "Cake", "Smoke Entry", "Rose Heart On Table", "Rose With Candle Path"];
@@ -28,17 +28,22 @@ function PackagesSection({ screensData, customerBooking }) {
 	}, [screensData.screens]);
 
 	// function that will handle package select updates the state and updates the  redux
-	const handlePackageSelect = useCallback((pack) => {
-		setSelectedPackage(pack);
-		dispatch(setBookingPackage(pack));
-	}, []);
+	const handlePackageSelect = useCallback(
+		(pack) => {
+			setSelectedPackage(pack);
+			dispatch(setBookingPackage(pack));
+
+			const extraPersonsPrice = pack.price * (customerBooking.otherInfo?.numberOfExtraPeople || 0);
+			dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, extraPersonsPrice }));
+		},
+		[customerBooking.otherInfo, dispatch]
+	);
 
 	// function that will get prices by checking the in the customprice
 	const getPackagePrice = (pack) => {
 		const selectedDate = new Date(customerBooking.date).toISOString().split("T")[0];
 		const todayPrice = pack.customPrice.find((custom) => {
 			const customDate = new Date(new Date(custom.date).setHours(0, 0, 0, 0)).toISOString().split("T")[0];
-			console.log(customDate, selectedDate);
 			return customDate === selectedDate;
 		});
 

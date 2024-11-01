@@ -109,6 +109,9 @@
 	.filters .input-wrapper {
 		@apply mb-1;
 	}
+	.customer-details .input-wrapper {
+		@apply mb-2;
+	}
 
 	/* css starts frin gere  for the frontend */
 	main {

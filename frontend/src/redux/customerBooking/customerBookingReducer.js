@@ -10,7 +10,15 @@ const initialState = {
    occasion: null,
    addons: [],
    gifts: [],
-   cakes: []
+   cakes: [],
+   customer: null,
+   otherInfo: {
+      numberOfPeople: 0,
+      numberOfExtraPeople: 0,
+      extraPersonsPrice: 0,
+      nameOnCake: "",
+      ledInfo: ""
+   }
 };
 
 const customerBookingReducer = (state = initialState, action) => {
@@ -75,6 +83,18 @@ const customerBookingReducer = (state = initialState, action) => {
             ...state,
             cakes: action.payload
          }
+      case customerBookingActionTypes.SET_BOOKING_CUSTOMER:
+         return {
+            ...state,
+            customer: action.payload
+         }
+      case customerBookingActionTypes.SET_BOOKING_OTHERINFO:
+         return {
+            ...state,
+            otherInfo: action.payload
+         }
+
+
       default:
          return state;
    }

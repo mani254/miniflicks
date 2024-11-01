@@ -77,3 +77,17 @@ export const setBookingCakes = (cakes) => {
    }
 }
 
+
+export const setBookingCustomer = (customer) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_CUSTOMER,
+      payload: customer
+   }
+}
+
+export const setBookingOtherInfo = (otherInfo) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_OTHERINFO,
+      payload: otherInfo
+   }
+}

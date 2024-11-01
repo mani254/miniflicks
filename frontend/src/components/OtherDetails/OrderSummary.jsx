@@ -66,6 +66,18 @@ function OrderSummary({ customerBooking }) {
 		}
 	}, [customerBooking.addons]);
 
+	useEffect(() => {
+		setPricingInfo((prev) => {
+			const extraPersonsExists = prev.some((item) => item.title === "Extra Persons Amount");
+
+			if (!extraPersonsExists) {
+				return [...prev, { title: "Extra Persons Amount", amount: 0 }];
+			}
+
+			return prev;
+		});
+	}, [customerBooking.otherInfo]);
+
 	// Mangage "Cakes in pricingInfo based on customerBooking.cake's existence and value"
 	useEffect(() => {
 		if (customerBooking.cakes.length == 0) {

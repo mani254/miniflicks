@@ -21,6 +21,10 @@ const customerBookingActionTypes = {
    SET_BOOKING_GIFTS: "SET_BOOKING_GIFTS",
 
    SET_BOOKING_CAKES: "SET_BOOKING_CAKES",
+
+   SET_BOOKING_CUSTOMER: 'SET_BOOKING_CUSTOMER',
+
+   SET_BOOKING_OTHERINFO: 'SET_BOOKING_OTHERINFO'
 }
 
 export default customerBookingActionTypes

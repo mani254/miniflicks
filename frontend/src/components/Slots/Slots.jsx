@@ -74,7 +74,7 @@ function Slots({ customerBooking, screensData }) {
 	};
 
 	function handleNext() {
-		navigate("/booking/otherdetails");
+		navigate("/booking/customerdetails");
 	}
 	return (
 		<div className="mt-5">
