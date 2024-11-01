@@ -67,14 +67,18 @@ function OrderSummary({ customerBooking }) {
 	}, [customerBooking.addons]);
 
 	useEffect(() => {
+		let amount = customerBooking?.otherInfo.extraPersonsPrice || 0;
+
 		setPricingInfo((prev) => {
-			const extraPersonsExists = prev.some((item) => item.title === "Extra Persons Amount");
+			const existingIndex = prev.findIndex((item) => item.title === "Extra Persons Amount");
 
-			if (!extraPersonsExists) {
-				return [...prev, { title: "Extra Persons Amount", amount: 0 }];
+			if (existingIndex !== -1) {
+				const updatedPricingInfo = [...prev];
+				updatedPricingInfo[existingIndex].amount = amount;
+				return updatedPricingInfo;
+			} else {
+				return [...prev, { title: "Extra Persons Amount", amount }];
 			}
-
-			return prev;
 		});
 	}, [customerBooking.otherInfo]);
 

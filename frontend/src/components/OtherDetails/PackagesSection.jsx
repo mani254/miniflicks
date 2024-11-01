@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setBookingPackage, setBookingOtherInfo, setBookingCustomer } from "../../redux/customerBooking/customerBookingActions";
+import { setBookingPackage, setBookingOtherInfo } from "../../redux/customerBooking/customerBookingActions";
 import { addonAvailable, addonUnavailable } from "../../utils";
 
 const packageAddons = ["4k Dolby Theater", "Decoration", "Cake", "Smoke Entry", "Rose Heart On Table", "Rose With Candle Path"];
@@ -32,9 +32,6 @@ function PackagesSection({ screensData, customerBooking }) {
 		(pack) => {
 			setSelectedPackage(pack);
 			dispatch(setBookingPackage(pack));
-
-			const extraPersonsPrice = pack.price * (customerBooking.otherInfo?.numberOfExtraPeople || 0);
-			dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, extraPersonsPrice }));
 		},
 		[customerBooking.otherInfo, dispatch]
 	);

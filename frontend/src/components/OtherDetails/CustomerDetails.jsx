@@ -4,6 +4,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { connect, useDispatch } from "react-redux";
 import { setBookingCustomer, setBookingOtherInfo } from "../../redux/customerBooking/customerBookingActions";
 import { useNavigate } from "react-router-dom";
+import OtherDetails from "./OtherDetails";
 
 function CustomerDetails({ customerBooking, screensData }) {
 	const dispatch = useDispatch();
@@ -22,7 +23,7 @@ function CustomerDetails({ customerBooking, screensData }) {
 
 	// useEffect that will fetch and set all the data
 	useEffect(() => {
-		if (!customerBooking.customer) return;
+		if (!customerBooking.customer || !customerBooking.otherInfo) return;
 		const details = { ...customerBooking.customer, numberOfPeople: customerBooking.otherInfo.numberOfPeople, termsAccepted: true };
 		setDetails(details);
 	}, [customerBooking]);
@@ -42,7 +43,17 @@ function CustomerDetails({ customerBooking, screensData }) {
 		setScreen(currentScreen);
 	}, [customerBooking.screen, screensData.screens]);
 
-	// useEffect that will noOfpeople options and fetch todays price
+	function getTodayPrice(pack) {
+		const selectedDate = new Date(customerBooking.date).toISOString().split("T")[0];
+
+		const todayPrice = pack.customPrice.find((custom) => {
+			const customDate = new Date(custom.date).toISOString().split("T")[0];
+			return customDate === selectedDate;
+		});
+
+		return todayPrice ? todayPrice.price : pack.price;
+	}
+
 	useEffect(() => {
 		if (!screen?.minPeople || !screen?.capacity) return;
 
@@ -54,34 +65,28 @@ function CustomerDetails({ customerBooking, screensData }) {
 		}
 
 		if (screen?.packages?.length) {
-			const pack = screen.packages[0];
-			const selectedDate = new Date(customerBooking.date).toISOString().split("T")[0];
-
-			const todayPrice = pack.customPrice.find((custom) => {
-				const customDate = new Date(custom.date).toISOString().split("T")[0];
-				return customDate === selectedDate;
-			});
-
-			setTodayPrice(todayPrice ? todayPrice.price : pack.price);
+			let pack = screen.packages[0];
+			let price = getTodayPrice(pack);
+			setTodayPrice(price);
 		}
 	}, [customerBooking.screen, screen]);
 
-	// useEffect that will set the extraPersonPrice
-	useEffect(() => {
-		if (details.numberOfPeople === 0) return;
-		dispatch(
-			setBookingOtherInfo({
-				...customerBooking.otherInfo,
-				numberOfPeople: (details.details.numberOfPeople - screen?.minPeople) * screen?.extraPersonPrice,
-			})
-		);
-	}, [details.numberOfPeople]);
-
-	// function that will handle the submit
+	// function to handle form submission
 	function handleSubmit(e) {
 		e.preventDefault();
 		dispatch(setBookingCustomer({ name: details.name, email: details.email, number: details.number }));
-		dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, numberOfPeople: details.numberOfPeople }));
+
+		const numberOfExtraPeople = details.numberOfPeople - screen?.minPeople;
+		const extraPersonsPrice = numberOfExtraPeople * screen.extraPersonPrice;
+		dispatch(
+			setBookingOtherInfo({
+				...customerBooking.otherInfo,
+				numberOfPeople: details.numberOfPeople,
+				numberOfExtraPeople,
+				extraPersonsPrice,
+			})
+		);
+
 		navigate("/booking/otherdetails/packages");
 	}
 
