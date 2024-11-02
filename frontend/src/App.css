@@ -325,3 +325,26 @@
 	transition-duration: 0.3s;
 }
 
+/* css for custom scroll bar  */
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background-color: #ccc;
+	border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background-color: #555;
+}
+
+.rating .star {
+	clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+	background: #f7b704;
+}

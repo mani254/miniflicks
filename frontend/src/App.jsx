@@ -16,6 +16,7 @@ import PackagesSection from "./components/OtherDetails/PackagesSection";
 import OccasionsSection from "./components/OtherDetails/OccasionsSection";
 import UserItems from "./components/Addon/UserAddons";
 import CustomerDetails from "./components/OtherDetails/CustomerDetails";
+import TestimonialsPage from "./pages/TestimonialsPage";
 
 import axios from "axios";
 import Loader from "./components/Loader/Loader";
@@ -75,6 +76,7 @@ function App({ modal }) {
 				<Routes>
 					<Route path="/" element={<UsersLayout />}>
 						<Route index element={<Home />} />
+						<Route path="testimonials" element={<TestimonialsPage />} />
 						<Route path="booking" element={<BookingLayout />}>
 							<Route path="locations" element={<UserLocations />}></Route>
 							<Route path="screens" element={<UserScreens />}></Route>

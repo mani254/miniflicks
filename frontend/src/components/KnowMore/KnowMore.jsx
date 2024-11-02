@@ -11,17 +11,13 @@ function KnowMore({ title, info, hideModal }) {
 
 	function handleClickOutside(event) {
 		if (modalRef.current && !modalRef.current.contains(event.target)) {
-			console.log("hello outside");
-			console.log(hideModal);
 			hideModal();
 		}
 	}
 
 	return (
 		<div className="w-full h-screen relative flex justify-center" onClick={handleClickOutside}>
-			<div
-				ref={modalRef} // Attach ref to the modal container
-				className={`card bg-white p-6 rounded-lg w-full max-w-xs absolute transition-all duration-500 ease-out ${visible ? "opacity-100 translate-y-20" : "opacity-0 -translate-y-10"}`}>
+			<div ref={modalRef} className={`card bg-white p-6 rounded-lg w-full max-w-xs absolute transition-all duration-500 ease-out ${visible ? "opacity-100 translate-y-20" : "opacity-0 -translate-y-10"}`}>
 				<div>
 					<p className="text-lg font-medium mb-2">{title}</p>
 					<p className="text-xs mb-5">{info}</p>

@@ -4,9 +4,14 @@ import { FaArrowRight } from "react-icons/fa";
 import { connect, useDispatch } from "react-redux";
 import { setBookingCustomer, setBookingOtherInfo } from "../../redux/customerBooking/customerBookingActions";
 import { useNavigate } from "react-router-dom";
-import OtherDetails from "./OtherDetails";
 
-function CustomerDetails({ customerBooking, screensData }) {
+import termsAndConditions from "../../utils/termsAndConditions";
+import refundPolicy from "../../utils/refundPolicy";
+
+import { showModal } from "../../redux/modal/modalActions";
+import Popupts from "../popupts/Popupts";
+
+function CustomerDetails({ customerBooking, screensData, showModal }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate(null);
 
@@ -90,6 +95,11 @@ function CustomerDetails({ customerBooking, screensData }) {
 		navigate("/booking/otherdetails/packages");
 	}
 
+	function showPopUP(title, array) {
+		console.log(title, array);
+		showModal({ title, array }, Popupts);
+	}
+
 	return (
 		<div style={{ height: "calc(100vh - 60px)" }} className="w-full flex items-center justify-center">
 			{customerBooking && (
@@ -127,7 +137,14 @@ function CustomerDetails({ customerBooking, screensData }) {
 					<div className="input-wrapper flex mt-6">
 						<input type="checkbox" id="terms" name="termsAccepted" checked={details.termsAccepted} onChange={handleChange} required />
 						<label className="ml-2 -mt-1 text-xs">
-							I accept the <span className="text-primary cursor-pointer text-xs">terms and conditions</span> and the <span className="text-primary cursor-pointer text-xs">refund policy</span>
+							I accept the{" "}
+							<span className="text-primary cursor-pointer text-xs" onClick={() => showPopUP("Terms And Conditions", termsAndConditions)}>
+								terms and conditions
+							</span>{" "}
+							and the{" "}
+							<span onClick={() => showPopUP("Refund Policy", refundPolicy)} className="text-primary cursor-pointer text-xs">
+								refund policy
+							</span>
 						</label>
 					</div>
 
@@ -152,4 +169,10 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, null)(CustomerDetails);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		showModal: (props, component) => dispatch(showModal(props, component)),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerDetails);
