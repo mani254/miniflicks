@@ -70,11 +70,11 @@ function OccasionsSection({ OccasionsData, getAllOccasions, customerBooking }) {
 		<section className="option-section pt-6 mt-4 border-t border-white">
 			<div className="w-full">
 				{OccasionsData.occasions.length > 0 ? (
-					<div className="flex w-full flex-wrap gap-5">
+					<div className="grid w-full gap-3 lg:gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
 						{OccasionsData.occasions.map((occasion, index) => {
 							let isSelected = selected?._id === occasion._id;
 							return (
-								<div className={`p-[1.5px] rounded-lg cursor-pointer selected-1 ${isSelected ? "selected" : ""} min-w-[170px]`} key={index} onClick={() => handleSelect(occasion)}>
+								<div className={`p-[1.5px] rounded-lg cursor-pointer selected-1 ${isSelected ? "selected" : ""}`} key={index} onClick={() => handleSelect(occasion)}>
 									<div className="p-2 rounded-lg bg-bright">
 										<div className="w-full aspect-[16/12] relative overflow-hidden rounded-md">
 											<img className="absolute object-cover w-full h-full" src={occasion.image} alt={occasion.name} />
@@ -102,7 +102,7 @@ function OccasionsSection({ OccasionsData, getAllOccasions, customerBooking }) {
 					</div>
 				)}
 			</div>
-			<div className="w-auto max-w-[300px] mt-3  m-auto">
+			<div className="w-full md:max-w-[300px] mt-5  m-auto">
 				<div className="input-wrapper ">
 					<label htmlFor="celebrantName" className="whitespace-nowrap font-medium">
 						Celebrant's Name:

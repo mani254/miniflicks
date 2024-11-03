@@ -78,17 +78,17 @@ function Slots({ customerBooking, screensData }) {
 	}
 	return (
 		<div className="mt-5">
-			{screen && (
-				<>
-					<div className="flex items-center gap-3">
-						<div className="h-[2px] w-full bg-bright rounded-full"></div>
-						<div className="min-w-[130px] flex flex-col items-center">
-							<h5 className="text-center"> Select Your Slot</h5>
-							<p>{customerBooking.date.toLocaleString().split(",")[0]}</p>
-							<img className="rotate-180 w-9 floating" src={fingerImage} alt="finger 3d icon" />
-						</div>
-						<div className="h-[2px] w-full bg-bright rounded-full"></div>
+			<>
+				<div className="flex items-center gap-3">
+					<div className="h-[2px] w-full bg-bright rounded-full"></div>
+					<div className="min-w-[130px] flex flex-col items-center">
+						<h5 className="text-center"> Select Your Slot</h5>
+						<p>{new Date(customerBooking.date).toLocaleString().split(",")[0]}</p>
+						<img className="rotate-180 w-9 floating" src={fingerImage} alt="finger 3d icon" />
 					</div>
+					<div className="h-[2px] w-full bg-bright rounded-full"></div>
+				</div>
+				{screen ? (
 					<div className="flex gap-2 md:gap-4 flex-wrap items-center mt-4 justify-evenly md:justify-center">
 						{screen.slots.map((slot, index) => {
 							const isUnavailable = unavailableSlots.some((unavailableSlot) => unavailableSlot.from === slot.from);
@@ -101,20 +101,30 @@ function Slots({ customerBooking, screensData }) {
 							);
 						})}
 					</div>
+				) : (
+					<div className="flex gap-2 md:gap-4 flex-wrap items-center mt-4 justify-evenly md:justify-center">
+						{Array.from({ length: 5 }, () => "1:00 AM - 2:00 PM").map((value, index) => {
+							return (
+								<div className={`slot px-3 py-1 sm:px-5 sm:py-1 border bg-gray-500 bg-opacity-10 rounded-full border-opacity-80`} key={index}>
+									<p className="whitespace-nowrap relative z-10 text-xs sm:text-sm opacity-10">{value}</p>
+								</div>
+							);
+						})}
+					</div>
+				)}
 
-					{selectedSlot.from && selectedSlot.to && (
-						<div className="book-now-btn mt-4">
-							<button
-								className="btn-3 text-center flex w-[200px] items-center gap-2 m-auto"
-								onClick={() => {
-									handleNext();
-								}}>
-								Next <FaArrowRight />
-							</button>
-						</div>
-					)}
-				</>
-			)}
+				{selectedSlot.from && selectedSlot.to && (
+					<div className="book-now-btn mt-4">
+						<button
+							className="btn-3 text-center flex w-[200px] items-center gap-2 m-auto"
+							onClick={() => {
+								handleNext();
+							}}>
+							Next <FaArrowRight />
+						</button>
+					</div>
+				)}
+			</>
 		</div>
 	);
 }

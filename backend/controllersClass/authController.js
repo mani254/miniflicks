@@ -62,8 +62,9 @@ class AuthController {
          res.status(200)
             .cookie("authToken", token, {
                httpOnly: true,
-               sameSite: 'None',
-               secure: true,
+               // sameSite: 'None',
+               sameSite: "Lax",
+               // secure: true,
             })
             .json({ message: "Logged in successfully", token, admin: adminDetails });
 
@@ -103,8 +104,9 @@ class AuthController {
          res.status(200)
             .cookie("authToken", token, {
                httpOnly: true,
-               sameSite: 'None',
-               secure: true,
+               // sameSite: 'None',
+               sameSite: "Lax",
+               // secure: true,
             })
             .json({ message: "Logged in successfully", token, admin: adminDetails });
       } catch (err) {

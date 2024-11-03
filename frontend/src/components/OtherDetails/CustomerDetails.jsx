@@ -116,9 +116,10 @@ function CustomerDetails({ customerBooking, screensData, showModal }) {
 						<label htmlFor="number">Phone Number</label>
 						<input type="tel" id="number" name="number" placeholder="Your Phone Number" value={details.number} onChange={handleChange} required minLength={10} maxLength={10} pattern="\d{10}" title="Please enter a 10-digit phone number" inputMode="numeric" />
 					</div>
-					<div className="input-wrapper">
-						<label htmlFor="numberOfPeople">Number Of People</label>
-						{options.length > 1 && (
+					{options.length > 1 && (
+						<div className="input-wrapper">
+							<label htmlFor="numberOfPeople">Number Of People</label>
+
 							<select id="numberOfPeople" name="numberOfPeople" value={details.numberOfPeople} onChange={handleChange} required>
 								{options.map((option) => (
 									<option key={option} value={option}>
@@ -126,8 +127,8 @@ function CustomerDetails({ customerBooking, screensData, showModal }) {
 									</option>
 								))}
 							</select>
-						)}
-					</div>
+						</div>
+					)}
 					{screen?.minPeople != screen?.capacity && (
 						<p className="font-light">
 							Additional charge of {screen?.extraPersonPrice} per person for any number exceeding {screen?.minPeople} people

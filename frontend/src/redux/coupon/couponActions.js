@@ -147,3 +147,14 @@ export const changeCouponStatus = (couponId, status) => async (dispatch) => {
       return Promise.reject(errMessage);
    }
 };
+
+
+export const validateCoupon = async (code) => {
+   try {
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/coupons/validate`, { code });
+      return Promise.resolve(response.data);
+   } catch (error) {
+      const errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      return Promise.reject(errMessage);
+   }
+};

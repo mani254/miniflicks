@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { IoLocationSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { setBookingLocation } from "../../redux/customerBooking/customerBookingActions";
+import Loader from "../Loader/Loader";
 
 function UserLocations({ locationsData, customerBooking }) {
 	const navigate = useNavigate();
@@ -31,26 +32,32 @@ function UserLocations({ locationsData, customerBooking }) {
 	};
 
 	return (
-		<section className="py-14 w-full">
+		<section className="py-8 md:py-14 w-full">
 			<h2 className="text-xl font-medium mb-6 text-center">Choose Your Location</h2>
-			<div className="flex w-full justify-center gap-6 flex-wrap">
-				{locationsData.locations.map((location, index) => {
-					let selected = customerBooking.location == location._id;
-					return (
-						<div key={index} ref={(el) => (cardRefs.current[index] = el)} className={`location-card w-full max-w-[300px] p-3 bg-bright rounded-xl  space-y-4 cursor-pointer ${selected ? "border-2 border-primary shadow-md shadow-primary-400" : ""}`} onClick={(event) => handleClick(event, location._id, index)}>
-							<div className="relative h-[170px] overflow-hidden rounded-lg">
-								<img className="w-full h-full object-cover object-center" src={location.image} alt={location.name} />
+			{locationsData.loading ? (
+				<div className="h-96 relative">
+					<Loader />
+				</div>
+			) : (
+				<div className="flex w-full justify-center gap-6 flex-wrap">
+					{locationsData.locations.map((location, index) => {
+						let selected = customerBooking.location == location._id;
+						return (
+							<div key={index} ref={(el) => (cardRefs.current[index] = el)} className={`location-card w-full max-w-[300px] p-3 bg-bright rounded-xl  space-y-4 cursor-pointer ${selected ? "border-2 border-primary shadow-md shadow-primary-400" : ""}`} onClick={(event) => handleClick(event, location._id, index)}>
+								<div className="relative h-[170px] overflow-hidden rounded-lg">
+									<img className="w-full h-full object-cover object-center" src={location.image} alt={location.name} />
+								</div>
+								<h3 className="text-center text-lg font-medium">{location.name}</h3>
+								<div className="map-link text-center px-3 py-1 border rounded-lg bg-gray-300">
+									<a href={`${import.meta.env.VITE_APP_FRONTENDURI}/${location.addressLink}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+										<IoLocationSharp /> See Location
+									</a>
+								</div>
 							</div>
-							<h3 className="text-center text-lg font-medium">{location.name}</h3>
-							<div className="map-link text-center px-3 py-1 border rounded-lg bg-gray-300">
-								<a href={`${import.meta.env.VITE_APP_FRONTENDURI}/${location.addressLink}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-									<IoLocationSharp /> See Location
-								</a>
-							</div>
-						</div>
-					);
-				})}
-			</div>
+						);
+					})}
+				</div>
+			)}
 		</section>
 	);
 }

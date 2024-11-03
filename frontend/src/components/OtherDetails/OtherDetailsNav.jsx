@@ -50,7 +50,6 @@ function OtherDetailsNav({ customerBooking }) {
 			}
 		}
 	}, [activeIndex, navOptions]);
-	console.log(activeIndex, navOptions);
 
 	function handleNext() {
 		if (activeIndex < navOptions.length - 1) {
@@ -65,7 +64,7 @@ function OtherDetailsNav({ customerBooking }) {
 	}
 
 	return (
-		<div className="flex items-center gap-5">
+		<div className="flex items-center gap-2 flex-wrap justify-center md:justify-start md:gap-5">
 			{navOptions.map((option, index) => (
 				<div key={index} className={`px-4 py-[3px] border border-primary rounded-full cursor-pointer option transition-all ${index === activeIndex ? "active bg-primary text-white" : "hover:bg-primary hover:bg-opacity-15"}`} onClick={() => handleOptionClick(index)}>
 					{option}

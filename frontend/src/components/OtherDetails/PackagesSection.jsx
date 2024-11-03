@@ -49,7 +49,7 @@ function PackagesSection({ screensData, customerBooking }) {
 
 	return (
 		<section className="option-section pt-6 mt-4 border-t border-white">
-			<div className="grid grid-cols-3 gap-4">
+			<div className="grid grid-cols-1 sm:grid-cold-2 md:grid-cols-3 gap-2 md:gap-4">
 				{screen?.packages &&
 					screen.packages.map((pack, index) => {
 						const selected = pack.name === selectedPackage.name;

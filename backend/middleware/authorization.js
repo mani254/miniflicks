@@ -42,7 +42,7 @@ const superAdminAuth = async (req, res, next) => {
 
 
    if (!token) {
-      return res.status(401).json({ error: 'No token provided in cookies' });
+      return res.status(401).json({ error: 'UnAuthorized access' });
    }
 
    try {

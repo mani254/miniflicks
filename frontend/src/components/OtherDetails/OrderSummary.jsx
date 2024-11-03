@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
+import CouponComponent from "./CouponComponent";
 
 function OrderSummary({ customerBooking }) {
 	const [pricingInfo, setPricingInfo] = useState([]);
@@ -102,6 +103,26 @@ function OrderSummary({ customerBooking }) {
 		}
 	}, [customerBooking.cakes]);
 
+	// Manage "Gifts" in pricingInfo based on customerBooking.gifts' existence and value
+	useEffect(() => {
+		if (customerBooking.gifts.length === 0) {
+			setPricingInfo((prev) => prev.filter((item) => item.title !== "Gifts"));
+		} else {
+			const amount = customerBooking.gifts.reduce((acc, gift) => acc + gift.price * gift.count, 0);
+			setPricingInfo((prev) => {
+				const existingGiftsIndex = prev.findIndex((item) => item.title === "Gifts");
+
+				if (existingGiftsIndex !== -1) {
+					const updatedPricingInfo = [...prev];
+					updatedPricingInfo[existingGiftsIndex].amount = amount;
+					return updatedPricingInfo;
+				} else {
+					return [...prev, { title: "Gifts", amount }];
+				}
+			});
+		}
+	}, [customerBooking.gifts]);
+
 	useEffect(() => {
 		const total = pricingInfo.reduce((acc, item) => acc + item.amount, 0);
 		setTotal(total);
@@ -163,6 +184,7 @@ function OrderSummary({ customerBooking }) {
 						Payment <FaArrowRight className="text-xs" />
 					</button>
 				</div>
+				<CouponComponent pricingInfo={pricingInfo} setPricingInfo={setPricingInfo} />
 			</div>
 		</div>
 	);

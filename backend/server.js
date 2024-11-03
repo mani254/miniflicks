@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const multer = require('multer')
 require('dotenv').config();
 
 const app = express();
@@ -22,9 +23,20 @@ mongoose.connect(process.env.MONGODB_URI)
 app.use('/api', require('./routes/index.js'));
 
 app.use((err, req, res, next) => {
-   console.error(err.stack);
-   res.status(500).send('Something went wrong!');
+   if (err instanceof multer.MulterError) {
+      // Handle multer-specific errors (like file size exceeded)
+      return res.status(400).json({ error: err.message });
+   } else if (err.message.includes('Invalid file type')) {
+      // Handle custom file type errors
+      return res.status(400).json({ error: err.message });
+   } else if (err) {
+      // Handle any other general errors
+      return res.status(400).json({ error: err.message });
+   }
+   next();
 });
+
+
 
 const PORT = process.env.PORT || 8080;
 

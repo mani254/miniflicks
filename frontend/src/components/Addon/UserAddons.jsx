@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
 import { connect, useDispatch } from "react-redux";
-import { setBookingAddons, setBookingGifts, setBookingCakes } from "../../redux/customerBooking/customerBookingActions";
+import { setBookingAddons, setBookingGifts, setBookingCakes, setBookingOtherInfo } from "../../redux/customerBooking/customerBookingActions";
 import { getAllAddons } from "../../redux/addon/addonActions";
 import { getAllGifts } from "../../redux/gift/giftActions";
 import { getAllCakes } from "../../redux/cake/cakeActions";
 
 function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) {
 	const [selected, setSelected] = useState([]);
+	const [ledInfo, setLedInfo] = useState("");
+	const [nameOnCake, setNameOnCake] = useState("");
 	const dispatch = useDispatch();
 
 	const normalCakes = useRef(null);
 	const specialCakes = useRef(null);
+
 	// Configuration for different item types
 	const config = {
 		addons: {
@@ -83,10 +86,36 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 		}
 	}
 
+	useEffect(() => {
+		if (!customerBooking.otherInfo) return;
+		if (customerBooking.otherInfo) {
+			setLedInfo(customerBooking.otherInfo.ledInfo);
+			setNameOnCake(customerBooking.otherInfo.nameOnCake);
+		}
+	}, [customerBooking.otherInfo]);
+
+	function handleOtherInfo(e) {
+		if (type === "addons") {
+			setLedInfo(e.target.value);
+		}
+		if (type === "cakes") {
+			setNameOnCake(e.target.value);
+		}
+	}
+
+	function handleBlur() {
+		dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, ledInfo, nameOnCake }));
+	}
+
+	function handleKeyPress(e) {
+		if (e.key === "Enter") {
+			handleBlur();
+		}
+	}
 	// Function to render each item card
 	function ItemCard({ item, isSelected, isFree = false }) {
 		return (
-			<div className={`p-[1.5px] rounded-lg cursor-pointer selected-1 ${isSelected ? "selected" : ""}  relative min-w-[170px]`} key={item._id} onClick={() => handleSelect(item)}>
+			<div className={`p-[1.5px] rounded-lg cursor-pointer selected-1 ${isSelected ? "selected" : ""}  relative w-full`} key={item._id} onClick={() => handleSelect(item)}>
 				<div className="p-2 rounded-lg bg-bright">
 					<div className="w-full aspect-[16/12] relative overflow-hidden rounded-md">
 						<img className="absolute object-cover w-full h-full" src={item.image} alt={item.name} />
@@ -139,7 +168,7 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 							<div>
 								<h3 className="mb-3">Normal Cakes</h3>
 
-								<div className="flex w-full flex-wrap gap-5">
+								<div className="grid w-full gap-3 lg:gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
 									{normalCakes.current.map((item) => {
 										return <ItemCard item={item} key={item._id} isSelected={selected.find((current) => current._id === item._id)} isFree={selected.some((current) => current?.free == true && current._id === item._id)} />;
 									})}
@@ -151,7 +180,7 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 						{specialCakes.current.length > 0 && (
 							<div className="mt-6">
 								<h3 className="mb-3">Special Cakes</h3>
-								<div className="flex w-full flex-wrap gap-5">
+								<div className="grid w-full gap-3 lg:gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
 									{specialCakes.current.map((item) => {
 										return <ItemCard item={item} key={item._id} isSelected={selected.find((current) => current._id === item._id)} isFree={selected.some((current) => current?.free == true && current._id === item._id)} />;
 									})}
@@ -161,7 +190,7 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 					</>
 				) : (
 					// Render items for addons or gifts
-					<div className="flex w-full flex-wrap gap-5">
+					<div className="grid w-full gap-3 lg:gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
 						{stateData?.length > 0 ? (
 							stateData.map((item) => <ItemCard item={item} key={item._id} isSelected={selected.find((current) => current._id === item._id)} />)
 						) : (
@@ -169,6 +198,26 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 								<h3 className="text-gray-500 text-center">No Items Available</h3>
 							</div>
 						)}
+					</div>
+				)}
+				{type === "addons" && selected.some((addon) => addon.name.toLowerCase().includes("led")) && (
+					<div className="w-full md:max-w-[300px] mt-5 m-auto">
+						<div className="input-wrapper ">
+							<label htmlFor="ledInfo" className="whitespace-nowrap font-medium">
+								Led Name or Number
+							</label>
+							<input type="text" placeholder="Led Name / Led Number" id="ledInfo" name="ledInfo" value={ledInfo} onChange={handleOtherInfo} onBlur={handleBlur} onKeyPress={handleKeyPress} />
+						</div>
+					</div>
+				)}
+				{type === "cakes" && selected.length > 0 && (
+					<div className="w-full md:max-w-[300px] mt-5 m-auto">
+						<div className="input-wrapper ">
+							<label htmlFor="nameOnCake" className="whitespace-nowrap font-medium">
+								Name On Cake
+							</label>
+							<input type="text" placeholder="Name On Cake" id="nameOnCake" name="nameOnCake" value={nameOnCake} onChange={handleOtherInfo} onBlur={handleBlur} onKeyPress={handleKeyPress} />
+						</div>
 					</div>
 				)}
 			</div>

@@ -7,6 +7,7 @@ class CouponController {
       this.getCoupons = this.getCoupons.bind(this);
       this.deleteCoupon = this.deleteCoupon.bind(this);
       this.updateCoupon = this.updateCoupon.bind(this);
+      this.validateCoupon = this.validateCoupon.bind(this);
    }
 
    async addCoupon(req, res) {
@@ -84,6 +85,32 @@ class CouponController {
          this.handleError(res, err, 'Error while updating coupon');
       }
    }
+
+   async validateCoupon(req, res) {
+      try {
+         const { code } = req.body;
+
+         const coupon = await Coupon.findOne({ code: code.toUpperCase() });
+
+         if (!coupon) {
+            return res.status(404).json({ error: "Invalid coupon: Coupon does not exist" });
+         }
+
+         if (!coupon.status) {
+            return res.status(400).json({ error: "Invalid coupon: Coupon is not active" });
+         }
+
+         const currentDate = new Date();
+         if (currentDate > coupon.expireDate) {
+            return res.status(400).json({ error: "Coupon expired: The coupon has already expired" });
+         }
+
+         return res.status(200).json({ message: 'Coupon is valid', coupon });
+      } catch (err) {
+         this.handleError(res, err, 'Error while validating coupon');
+      }
+   }
+
 
    isValidId(id) {
       return ObjectId.isValid(id);

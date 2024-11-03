@@ -9,7 +9,7 @@
 	aspect-ratio: 16/8;
 	position: relative;
 	overflow: hidden;
-	border-radius: 30px;
+	border-radius: 15px;
 }
 .swiper-1 .swiper-slide img {
 	position: absolute;
@@ -20,7 +20,7 @@
 }
 
 .swiper-thumbs .swiper-slide {
-	border-radius: 15px;
+	border-radius: 10px;
 	overflow: hidden;
 }
 

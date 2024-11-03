@@ -18,7 +18,7 @@ const createFileUploadMiddleware = (options) => {
       if (allowedTypes && allowedTypes.length > 0) {
          const mimeType = file.mimetype;
          if (!allowedTypes.includes(mimeType)) {
-            return cb(new Error('Invalid file type. Allowed types: ' + allowedTypes.join(', ')), false);
+            return cb(new Error(`Invalid file type. Allowed types are: ${allowedTypes.join(', ')}`), false);
          }
       }
       cb(null, true);

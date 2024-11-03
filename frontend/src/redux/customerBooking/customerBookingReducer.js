@@ -17,7 +17,8 @@ const initialState = {
       numberOfExtraPeople: 0,
       extraPersonsPrice: 0,
       nameOnCake: "",
-      ledInfo: ""
+      ledInfo: "",
+      couponCode: "",
    }
 };
 
@@ -93,8 +94,6 @@ const customerBookingReducer = (state = initialState, action) => {
             ...state,
             otherInfo: action.payload
          }
-
-
       default:
          return state;
    }

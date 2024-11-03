@@ -84,7 +84,7 @@ function Login({ login, registerSuperAdmin }) {
 				</div>
 
 				<button type="submit" className="btn btn-1 mt-3">
-					Login
+					{reg ? "Register" : "Login"}
 				</button>
 			</form>
 		</div>

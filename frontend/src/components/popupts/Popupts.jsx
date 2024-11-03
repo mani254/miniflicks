@@ -21,8 +21,8 @@ function Popupts({ title, array, hideModal }) {
 	}
 
 	return (
-		<div className="w-full h-screen relative flex justify-center items-center" onClick={handleClickOutside}>
-			<div ref={modalRef} className={`card bg-white px-3 py-5 rounded-lg w-full max-w-[500px]   absolute transition-all duration-500 ease-out ${visible ? "opacity-100" : "opacity-0"}`}>
+		<div className="w-full h-screen relative flex justify-center items-center mx-4" onClick={handleClickOutside}>
+			<div ref={modalRef} className={`card bg-white px-3 py-5 rounded-lg w-full max-w-[500px] absolute transition-all duration-500 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}`}>
 				<h3 className="text-center">{title}</h3>
 
 				<div className="max-h-[500px] overflow-y-scroll custom-scrollbar">
