@@ -32,7 +32,7 @@ const DetailedBooking = ({ bookingData }) => {
 		return 0;
 	};
 
-	if (!bookingData.location) return null;
+	if (!bookingData) return <h2 className="text-center mt-5">Invalid booking Id</h2>;
 
 	return (
 		<div className="bg-gray-100 p-8 invoice w-[800px] mx-auto">
@@ -246,22 +246,33 @@ const DetailedBooking = ({ bookingData }) => {
 						Other Details
 					</h4>
 					<div className="flex flex-wrap justify-around"></div>
-					<div className="flex gap-2 w-auto">
-						<div className="font-medium">Name On Cake:</div>
-						<div>{bookingData.nameOnCake}</div>
-					</div>
-					<div className="flex gap-2 w-auto">
-						<div className="font-medium">Led Info:</div>
-						<div>{bookingData.ledInfo}</div>
-					</div>
-					<div className="flex gap-2 w-auto">
-						<div className="font-medium">Celebrant Name:</div>
-						<div>{bookingData.occasion.celebrantName}</div>
-					</div>
-					<div className="flex gap-2 w-auto">
-						<div className="font-medium">Number Of People:</div>
-						<div>{bookingData.numberOfPeople}</div>
-					</div>
+					{bookingData?.nameOnCake && (
+						<div className="flex gap-2 w-auto">
+							<div className="font-medium">Name On Cake:</div>
+							<div>{bookingData.nameOnCake}</div>
+						</div>
+					)}
+
+					{bookingData?.ledInfo && (
+						<div className="flex gap-2 w-auto">
+							<div className="font-medium">Led Info:</div>
+							<div>{bookingData.ledInfo}</div>
+						</div>
+					)}
+
+					{bookingData?.occasion?.celebrantName && (
+						<div className="flex gap-2 w-auto">
+							<div className="font-medium">Celebrant Name:</div>
+							<div>{bookingData.occasion.celebrantName}</div>
+						</div>
+					)}
+
+					{bookingData?.numberOfPeople && (
+						<div className="flex gap-2 w-auto">
+							<div className="font-medium">Number Of People:</div>
+							<div>{bookingData.numberOfPeople}</div>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

@@ -67,6 +67,7 @@ import AddOccasions from "./components/Occasion/AddOccasions";
 import Cakes from "./components/Cake/Cakes";
 import CakesWrapper from "./components/Cake/CakesWrapper";
 import AddCakes from "./components/Cake/AddCakes";
+import DetailedView from "./components/Booking/DetailedView";
 
 function App({ modal }) {
 	axios.defaults.withCredentials = true;
@@ -156,6 +157,7 @@ function App({ modal }) {
 						</Route>
 						<Route path="bookings" element={<BookingsWrapper />}>
 							<Route index element={<Bookings />} />
+							<Route path="view/:id" element={<DetailedView />} />
 						</Route>
 						<Route path="customers" element={<CustomersWrapper />}>
 							<Route index element={<Customers />} />

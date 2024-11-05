@@ -315,6 +315,25 @@ async function createBooking(req, res) {
    }
 }
 
+async function getBooking(req, res) {
+   try {
+      const { id } = req.params;
+
+      const bookedData = await Booking.findById(id).populate({ path: 'location', select: 'name _id' }).populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice', });
+      if (bookedData) {
+         return res.status(200).json({ message: 'Successfully fetched booking', booking: bookedData });
+      } else {
+         return res.status(500).json({ error: 'Failed to save booking data.' });
+      }
 
 
-module.exports = { getBookings, getDashboardInfo, getGraphData, createBooking }
+   } catch (error) {
+      console.error('Error:', error);
+      const statusCode = error.code === 11000 ? 400 : 500;
+      return res.status(statusCode).json({ error: error.message || 'An unknown error occurred.' });
+   }
+}
+
+
+
+module.exports = { getBookings, getDashboardInfo, getGraphData, createBooking, getBooking }

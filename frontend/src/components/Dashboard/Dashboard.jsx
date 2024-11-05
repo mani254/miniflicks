@@ -8,6 +8,7 @@ import axios from "axios";
 import { showNotification } from "../../redux/notification/notificationActions";
 import DashboardFilters from "./DashboardFilters";
 import { getLocation } from "../../redux/location/locationActions";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard({ bookingData, getBookings, showNotification, auth, getLocation, locationData }) {
 	const [locations, setLocations] = useState([]);
@@ -31,6 +32,8 @@ function Dashboard({ bookingData, getBookings, showNotification, auth, getLocati
 
 	const [graphLoading, setGraphLoading] = useState(false);
 	const [countLoading, setCountLoading] = useState(false);
+
+	const navigate = useNavigate();
 
 	// useeffect to fetch the upcomming bookings when filter location changed
 	useEffect(() => {
@@ -206,14 +209,14 @@ function Dashboard({ bookingData, getBookings, showNotification, auth, getLocati
 						<tbody>
 							{bookingData.bookings.length > 0 ? (
 								bookingData.bookings.map((booking, index) => (
-									<tr key={booking._id}>
+									<tr key={booking._id} className="cursor-pointer hover:bg-slate-200" onClick={() => navigate(`/admin/bookings/view/${booking._id}`)}>
 										<td>{index + 1}</td>
 										<td>{booking.customer?.name}</td>
 										<td>{booking.customer?.number}</td>
 										<td className={booking.screen?.name ? "" : "text-gray-500"}>{booking.screen?.name || "undefined"}</td>
 										<td className={booking.location?.name ? "" : "text-gray-500"}>{booking.location?.name || "undefined"}</td>
-										<td>{new Date(booking.bookingDate).toLocaleString().split(",")[0]}</td>
-										<td>{`${booking.bookingSlot.from}-${booking.bookingSlot.to}`}</td>
+										<td>{new Date(booking.date).toLocaleString().split(",")[0]}</td>
+										<td>{`${booking.slot.from}-${booking.slot.to}`}</td>
 										<td>{booking.totalPrice}</td>
 										<td>{booking.advancePrice}</td>
 										<td>{booking.remainingAmount}</td>

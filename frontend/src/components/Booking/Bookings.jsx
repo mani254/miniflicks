@@ -4,7 +4,7 @@ import Loader from "../Loader/Loader";
 
 import { connect } from "react-redux";
 import { getBookings } from "../../redux/booking/bookingActions";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import BookingsFilter from "./BookingsFilter";
 import Pagination from "../Pagination/Pagination";
 
@@ -12,6 +12,7 @@ function Bookings({ getBookings, bookingData }) {
 	const [params, setParams] = useSearchParams();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [noOfDocuments, setNoOfDocuments] = useState(0);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		(async () => {
@@ -57,7 +58,7 @@ function Bookings({ getBookings, bookingData }) {
 						<tbody>
 							{bookingData.bookings.length >= 1 &&
 								bookingData.bookings.map((booking, index) => (
-									<tr key={booking._id}>
+									<tr key={booking._id} className="cursor-pointer hover:bg-slate-200" onClick={() => navigate(`/admin/bookings/view/${booking._id}`)}>
 										<td>{index + 1}</td>
 										<td>{booking.customer.name}</td>
 										<td>{booking.customer.number}</td>
