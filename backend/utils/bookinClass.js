@@ -33,7 +33,6 @@ class BookingClass {
       this.remainingAmount = 0;
    }
 
-
    async fetchCityAndLocation() {
       this.city = await City.findById(this.bookingData.city);
       this.location = await Location.findById(this.bookingData.location).populate('screens');
@@ -64,8 +63,6 @@ class BookingClass {
 
    async slotValidation(date = this.date, slot = this.slot, screen = this.screen) {
 
-
-
       const thatDayBookings = await Booking.find({ date })
       const requestedFrom = new Date(date).setHours(slot.from.split(":")[0], slot.from.split(":")[1], 0, 0);
       const requestedTo = new Date(date).setHours(slot.to.split(":")[0], slot.to.split(":")[1], 0, 0);
@@ -88,8 +85,6 @@ class BookingClass {
          }
       })
    }
-
-
 
    async fetchOccasion() {
       if (!this.bookingData.occasion?._id) return
@@ -242,6 +237,7 @@ class BookingClass {
       const bookedData = await Booking.create(bookingDetails);
       return bookedData
    }
+
 }
 
 

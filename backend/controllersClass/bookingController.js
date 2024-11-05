@@ -5,6 +5,8 @@ const Screen = require('../schema/screenSchema')
 const City = require('../schema/citySchema')
 
 const BookingClass = require('../utils/bookinClass')
+const generateBookingHTML = require('../utils/generateInvoice')
+const sendMail = require('../utils/sendMail')
 
 async function getBookings(req, res) {
    try {
@@ -296,17 +298,16 @@ async function createBooking(req, res) {
       }
 
       booking.calculateTotalPrice();
-
       const currentBooking = await booking.saveBooking();
-
-      const bookedData = await Booking.findById(currentBooking._id).populate({ path: 'location', select: 'name _id' }).populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice', });
+      const bookedData = await Booking.findById(currentBooking._id).populate({ path: 'location', select: 'name _id addressLink' }).populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice', });
 
       if (bookedData) {
+         const html = generateBookingHTML(bookedData)
+         sendMail({ to: booking.customer.email, subject: 'Miniflicks Theator Booking Confirmation', html });
          return res.status(200).json({ message: 'Booking successful', booking: bookedData });
       } else {
          return res.status(500).json({ error: 'Failed to save booking data.' });
       }
-
 
    } catch (error) {
       console.error('Error:', error);

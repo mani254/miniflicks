@@ -6,7 +6,6 @@ import Loader from "../Loader/Loader";
 import DetailedBooking from "./DetailedBooking";
 
 function DetailedView({ bookingsData, getBooking }) {
-	console.log(bookingsData);
 	const { id } = useParams();
 
 	useEffect(() => {
@@ -22,12 +21,13 @@ function DetailedView({ bookingsData, getBooking }) {
 
 	return (
 		<div>
-			{bookingsData.loading && (
+			{bookingsData.loading ? (
 				<div className="h-96">
 					<Loader />
 				</div>
+			) : (
+				<DetailedBooking bookingData={bookingsData.booking} />
 			)}
-			{bookingsData?.booking ? <DetailedBooking bookingData={bookingsData.booking} /> : <DetailedBooking />}
 		</div>
 	);
 }
