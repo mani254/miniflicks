@@ -17,6 +17,7 @@ import OccasionsSection from "./components/OtherDetails/OccasionsSection";
 import UserItems from "./components/Addon/UserAddons";
 import CustomerDetails from "./components/OtherDetails/CustomerDetails";
 import TestimonialsPage from "./pages/TestimonialsPage";
+import PaymentPage from "./pages/PaymentPage";
 
 import axios from "axios";
 import Loader from "./components/Loader/Loader";
@@ -89,6 +90,7 @@ function App({ modal }) {
 								<Route path="gifts" element={<UserItems type="gifts" />} />
 								<Route path="cakes" element={<UserItems type="cakes" />} />
 							</Route>
+							<Route path="payment" element={<PaymentPage />}></Route>
 						</Route>
 					</Route>
 					<Route path="/login" element={<Login />} />

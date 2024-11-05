@@ -57,3 +57,31 @@ export const getBooking = (id) => async (dispatch) => {
       return Promise.reject(errMessage);
    }
 };
+
+const createBookingRequest = (bookingData) => ({
+   type: bookingTypes.CREATE_BOOKING_REQUEST,
+});
+
+const createBookingSuccess = (booking) => ({
+   type: bookingTypes.CREATE_BOOKING_SUCCESS,
+   payload: booking,
+});
+
+const createBookingFailure = (error) => ({
+   type: bookingTypes.CREATE_BOOKING_FAILURE,
+   payload: error,
+});
+
+export const createBooking = (bookingData) => async (dispatch) => {
+   dispatch(createBookingRequest());
+   try {
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings`, bookingData);
+      dispatch(createBookingSuccess(response.data.booking));
+      return Promise.resolve();
+   } catch (error) {
+      let errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      dispatch(createBookingFailure(errMessage));
+      dispatch(showNotification(errMessage));
+      return Promise.reject(errMessage);
+   }
+};

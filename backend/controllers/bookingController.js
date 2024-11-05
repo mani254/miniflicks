@@ -28,7 +28,7 @@ async function getBookings(req, res) {
          const startDate = fromDate ? new Date(fromDate) : new Date('1970-01-01');
          const endDate = toDate ? new Date(toDate) : new Date();
          endDate.setHours(23, 59, 59, 999);
-         bookingQuery.bookingDate = {
+         bookingQuery.date = {
             $gte: startDate,
             $lt: endDate
          };
@@ -121,7 +121,7 @@ async function getDashboardInfo(req, res) {
          const startDate = fromDate ? new Date(fromDate) : new Date('1970-01-01');
          const endDate = toDate ? new Date(toDate) : new Date();
          endDate.setHours(23, 59, 59, 999);
-         bookingQuery.bookingDate = {
+         bookingQuery.date = {
             $gte: startDate,
             $lt: endDate
          };
@@ -146,8 +146,8 @@ async function getDashboardInfo(req, res) {
                      $cond: [
                         {
                            $and: [
-                              { $gte: ["$bookingDate", todayStart] },
-                              { $lte: ["$bookingDate", todayEnd] }
+                              { $gte: ["$date", todayStart] },
+                              { $lte: ["$date", todayEnd] }
                            ]
                         },
                         1,

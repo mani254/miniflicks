@@ -6,7 +6,7 @@ import { setBookingCakes } from "../../redux/customerBooking/customerBookingActi
 
 function OtherDetailsNav({ customerBooking }) {
 	const [navOptions, setNavOptions] = useState(["Packages", "Occasions", "Addons", "Cakes", "Gifts"]);
-	const [activeIndex, setActiveIndex] = useState(null); // Initialize as null
+	const [activeIndex, setActiveIndex] = useState(0); // Initialize as null
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
@@ -29,31 +29,33 @@ function OtherDetailsNav({ customerBooking }) {
 
 		const initialActiveIndex = navOptions.findIndex((option) => option.toLowerCase() === lastSegment);
 		if (initialActiveIndex !== -1) {
-			setActiveIndex(initialActiveIndex);
+			if (activeIndex !== initialActiveIndex) {
+				setActiveIndex(initialActiveIndex);
+			}
 		}
 	}, [location.pathname, navOptions]);
 
 	// Navigate only when activeIndex changes due to user interaction
-	useEffect(() => {
-		const pathSegments = location.pathname.split("/");
-		const lastSegment = pathSegments[pathSegments.length - 1];
+	// useEffect(() => {
+	// 	const pathSegments = location.pathname.split("/");
+	// 	const lastSegment = pathSegments[pathSegments.length - 1];
 
-		if (!navOptions[activeIndex]) return;
+	// 	if (!navOptions[activeIndex]) return;
 
-		if (activeIndex !== null) {
-			if (lastSegment.toLocaleLowerCase === navOptions[activeIndex]) {
-				navigate(`${navOptions[activeIndex].toLowerCase()}`, { replace: true });
-			} else {
-				console.log(navOptions, activeIndex);
-				console.log(navOptions[activeIndex]);
-				navigate(`${navOptions[activeIndex].toLowerCase()}`);
-			}
-		}
-	}, [activeIndex, navOptions]);
+	// 	if (activeIndex !== null) {
+	// 		if (lastSegment.toLocaleLowerCase === navOptions[activeIndex]) {
+	// 			// navigate(`${navOptions[activeIndex].toLowerCase()}`, { replace: true });
+	// 			return;
+	// 		} else {
+	// 			navigate(`${navOptions[activeIndex].toLowerCase()}`);
+	// 		}
+	// 	}
+	// }, [activeIndex, navOptions]);
 
 	function handleNext() {
 		if (activeIndex < navOptions.length - 1) {
 			setActiveIndex((prev) => prev + 1);
+			navigate(`${navOptions[activeIndex + 1].toLowerCase()}`);
 		} else {
 			navigate("/booking/payment");
 		}
@@ -61,6 +63,7 @@ function OtherDetailsNav({ customerBooking }) {
 
 	function handleOptionClick(index) {
 		setActiveIndex(index);
+		navigate(`${navOptions[index].toLowerCase()}`);
 	}
 
 	return (

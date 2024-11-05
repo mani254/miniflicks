@@ -1,5 +1,5 @@
 const Customer = require('../schema/customerSchema')
-const Booking = require('../schema/BookingSchema')
+const Booking = require('../schema/bookingSchema')
 
 class CustomerController {
    constructor() {

@@ -2,7 +2,7 @@ import bookingTypes from "./bookingActionTypes";
 
 const initialState = {
    bookings: [],
-   booking: null, // Initialize booking state
+   booking: null,
    loading: false,
    error: null
 };
@@ -11,6 +11,7 @@ const bookingReducer = (state = initialState, action) => {
    switch (action.type) {
       case bookingTypes.GET_BOOKINGS_REQUEST:
       case bookingTypes.GET_BOOKING_REQUEST:
+      case bookingTypes.CREATE_BOOKING_REQUEST:
          return {
             ...state,
             loading: true,
@@ -23,6 +24,7 @@ const bookingReducer = (state = initialState, action) => {
             bookings: action.payload,
          };
       case bookingTypes.GET_BOOKING_SUCCESS:
+      case bookingTypes.CREATE_BOOKING_SUCCESS:
          return {
             ...state,
             loading: false,
