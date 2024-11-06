@@ -19,7 +19,10 @@ const initialState = {
       nameOnCake: "",
       ledInfo: "",
       couponCode: "",
-   }
+   },
+   advance: 0,
+   note: "",
+   total: 0,
 };
 
 const customerBookingReducer = (state = initialState, action) => {
@@ -93,6 +96,21 @@ const customerBookingReducer = (state = initialState, action) => {
          return {
             ...state,
             otherInfo: action.payload
+         }
+      case customerBookingActionTypes.SET_BOOKING_ADVANCE:
+         return {
+            ...state,
+            advance: action.payload
+         }
+      case customerBookingActionTypes.SET_BOOKING_NOTE:
+         return {
+            ...state,
+            note: action.payload
+         }
+      case customerBookingActionTypes.SET_BOOKING_TOTAL:
+         return {
+            ...state,
+            total: action.payload
          }
       default:
          return state;

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import CouponComponent from "./CouponComponent";
+import { setBookingTotal } from "../../redux/customerBooking/customerBookingActions";
 
 function OrderSummary({ customerBooking }) {
 	const [pricingInfo, setPricingInfo] = useState([]);
 	const [total, setTotal] = useState(0);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	// function that will exicute everytime the package change to set the package price
 	useEffect(() => {
@@ -126,6 +128,7 @@ function OrderSummary({ customerBooking }) {
 	useEffect(() => {
 		const total = pricingInfo.reduce((acc, item) => acc + item.amount, 0);
 		setTotal(total);
+		dispatch(setBookingTotal(total));
 	}, [pricingInfo]);
 
 	// function to convert slot timing just to show

@@ -28,9 +28,9 @@ class BookingClass {
       this.ledInfo = bookingData.otherInfo.ledInfo || "";
       this.note = bookingData.note || '';
       this.status = 'pending';
-      this.advancePrice = 0;
       this.totalPrice = 0;
       this.remainingAmount = 0;
+      this.advancePrice = bookingData.advance || 999
    }
 
    async fetchCityAndLocation() {
@@ -63,14 +63,13 @@ class BookingClass {
 
    async slotValidation(date = this.date, slot = this.slot, screen = this.screen) {
 
-      const thatDayBookings = await Booking.find({ date })
+      const thatDayBookings = await Booking.find({ date, screen, status: { $ne: "confirmed" } })
       const requestedFrom = new Date(date).setHours(slot.from.split(":")[0], slot.from.split(":")[1], 0, 0);
       const requestedTo = new Date(date).setHours(slot.to.split(":")[0], slot.to.split(":")[1], 0, 0);
 
       thatDayBookings.forEach((booking) => {
 
          if (this.screen._id != booking.screen) {
-            console.log(this.screen._id, booking.screen)
             return
          }
          const from = new Date(date).setHours(booking.slot.from.split(":")[0], booking.slot.from.split(":")[1], 0, 0)
@@ -170,7 +169,6 @@ class BookingClass {
 
    calculateTotalPrice() {
       this.totalPrice = this.calculatePackagePrice() + this.calculateOccasionPrice() + this.calculateAddonsPrice() + this.calculateCakesPrice() + this.calculateGiftsPrice() + this.calculatePeoplePrice();
-      this.advancePrice = 999;
       this.remainingAmount = this.totalPrice - this.advancePrice;
    }
 

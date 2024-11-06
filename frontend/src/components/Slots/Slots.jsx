@@ -6,23 +6,15 @@ import { FaArrowRight } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
 import { setBookingSlot } from "../../redux/customerBooking/customerBookingActions";
+import { getBookedSlots } from "../../redux/booking/bookingActions";
 
-function Slots({ customerBooking, screensData }) {
+function Slots({ customerBooking, screensData, getBookedSlots }) {
 	const [screen, setScreen] = useState(null);
 	const [unavailableSlots, setUnavailableSlots] = useState([]);
 	const [selectedSlot, setSelectedSlot] = useState({ from: "", to: "" });
-	const [currentTime, setCurrentTime] = useState("");
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
-	// Set the current time in 'HH:mm' format
-	useEffect(() => {
-		const now = new Date();
-		const hours = String(now.getHours()).padStart(2, "0");
-		const minutes = String(now.getMinutes()).padStart(2, "0");
-		setCurrentTime(`${hours}:${minutes}`);
-	}, []);
 
 	// Handle slot selection
 	const handleSlotSelection = useCallback((slot) => {
@@ -41,30 +33,44 @@ function Slots({ customerBooking, screensData }) {
 	}, []);
 
 	useEffect(() => {
-		// Set current screen
 		const currentScreen = screensData.screens.find((screen) => screen._id === customerBooking.screen);
 		if (currentScreen) {
 			setScreen(currentScreen);
+		}
+	}, [customerBooking.screen, screensData.screens]);
 
-			let currentDate = new Date().setHours(0, 0, 0, 0);
+	useEffect(() => {
+		if (!screen) return;
+
+		async function fetchUnavailableSlots() {
+			let unavailableSlots = [];
+
 			const bookingDate = new Date(customerBooking.date).setHours(0, 0, 0, 0);
-			if (currentDate !== bookingDate) {
-				return setUnavailableSlots([]);
+			const currentDate = new Date().setHours(0, 0, 0, 0);
+
+			if (currentDate === bookingDate) {
+				const now = new Date();
+				const currentHour = now.getHours();
+				const currentMinute = now.getMinutes();
+
+				unavailableSlots = screen.slots.filter((slot) => {
+					const [slotHour, slotMinute] = slot.from.split(":").map(Number);
+					return slotHour < currentHour || (slotHour === currentHour && slotMinute < currentMinute);
+				});
 			}
 
-			// Populate unavailable slots based on current time
-			const now = new Date();
-			const currentHour = now.getHours();
-			const currentMinute = now.getMinutes();
-
-			const unavailable = currentScreen.slots.filter((slot) => {
-				const [slotHour, slotMinute] = slot.from.split(":").map(Number);
-				return slotHour < currentHour || (slotHour === currentHour && slotMinute < currentMinute);
-			});
-
-			setUnavailableSlots(unavailable);
+			try {
+				const filledSlots = await getBookedSlots({ screenId: screen._id, currentDate: customerBooking.date });
+				if (filledSlots.length > 0) {
+					unavailableSlots = unavailableSlots.concat(filledSlots);
+				}
+			} catch (err) {
+				console.error(err);
+			}
+			setUnavailableSlots(unavailableSlots);
 		}
-	}, [customerBooking.screen, screensData.screens, customerBooking.date]);
+		fetchUnavailableSlots();
+	}, [customerBooking.date, screen]);
 
 	const convertToAMPM = (time) => {
 		const [hours, minutes] = time.split(":");
@@ -136,4 +142,10 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, null)(Slots);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		getBookedSlots: (currentDate, screenId) => dispatch(getBookedSlots(currentDate, screenId)),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Slots);

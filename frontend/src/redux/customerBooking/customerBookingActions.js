@@ -7,7 +7,7 @@ export const setBookingFromLocalStorage = (data) => {
    };
 };
 
-// Action to set booking city
+// Action to set booking cityP
 export const setBookingCity = (city) => {
    return {
       type: customerBookingActionTypes.SET_BOOKING_CITY,
@@ -91,3 +91,24 @@ export const setBookingOtherInfo = (otherInfo) => {
       payload: otherInfo
    }
 }
+
+export const setBookingAdvance = (advance) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_ADVANCE,
+      payload: advance
+   }
+}
+
+export const setBookingNote = (note) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_NOTE,
+      payload: note
+   }
+}
+export const setBookingTotal = (total) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_TOTAL,
+      payload: total
+   }
+}
+

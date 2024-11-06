@@ -252,6 +252,11 @@ async function createBooking(req, res) {
    try {
       const bookingData = req.body;
 
+      if (req.location) {
+         if (bookingData.location != req.location) return res.status(401).json({ error: 'unauthorized to book' })
+      }
+
+
       const booking = new BookingClass(bookingData);
 
       await booking.fetchCityAndLocation();
@@ -326,8 +331,6 @@ async function getBooking(req, res) {
       } else {
          return res.status(500).json({ error: 'Failed to save booking data.' });
       }
-
-
    } catch (error) {
       console.error('Error:', error);
       const statusCode = error.code === 11000 ? 400 : 500;
@@ -335,6 +338,25 @@ async function getBooking(req, res) {
    }
 }
 
+async function getBookedSlots(req, res) {
+   try {
+      const { currentDate, screenId } = req.body;
+      if (!currentDate, !screenId) {
+         return res.status(200).json([]);
+      }
+
+      let date = new Date(currentDate);
+      date.setHours(0, 0, 0, 0);
+
+      const bookings = await Booking.find({ date, screen: screenId, status: { $ne: 'confirmed' } });
+      const bookedSlots = bookings.map((booking) => booking.slot);
+
+      return res.status(200).json(bookedSlots);
+   } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ error: error.message || 'An unknown error occurred' });
+   }
+}
 
 
-module.exports = { getBookings, getDashboardInfo, getGraphData, createBooking, getBooking }
+module.exports = { getBookings, getDashboardInfo, getGraphData, createBooking, getBooking, getBookedSlots }

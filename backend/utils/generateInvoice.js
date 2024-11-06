@@ -239,7 +239,7 @@ const generateBookingHTML = (bookingData) => {
          <tr>
             <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: center;">
                <span style="font-weight: 500; color: #2d3748;">Advance:</span>
-               <span style="color: #4a5568;">₹999</span>
+               <span style="color: #4a5568;">${bookingData.advancePrice}</span>
             </td>
             <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: center;">
                <span style="font-weight: 500; color: #2d3748;">Total:</span>

@@ -95,4 +95,6 @@ const userAuth = async (req, res, next) => {
    }
 }
 
+
+
 module.exports = { authorization, superAdminAuth, userAuth };

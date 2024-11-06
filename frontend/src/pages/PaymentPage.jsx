@@ -1,107 +1,81 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { connect, useDispatch } from "react-redux";
 import { createBooking } from "../redux/booking/bookingActions";
-import BookingDetails from "../components/Booking/DetailedBooking";
+import { useNavigate } from "react-router-dom";
+import { setBookingAdvance, setBookingNote } from "../redux/customerBooking/customerBookingActions";
 
-const bookingData = {
-	slot: {
-		from: "14:00",
-		to: "17:00",
-	},
-	package: {
-		name: "Standard",
-		price: 2597,
-		addons: ["4k Dolby Theater", "Decoration", "Cake"],
-	},
-	occasion: {
-		_id: "67270a56928651118f670466",
-		name: "Birthday",
-		price: 1,
-		celebrantName: "prasad",
-	},
-	_id: "6729a737f59cef82b7763a03",
-	city: "672634271792c3cd2fd97e29",
-	location: {
-		_id: "672635a31792c3cd2fd97e33",
-		name: "Marathahalli",
-	},
-	screen: {
-		_id: "672670231792c3cd2fd97ea3",
-		name: "Family Theatre",
-		minPeople: 4,
-		extraPersonPrice: 200,
-	},
-	date: "2024-11-08T18:30:00.000Z",
-	addons: [
-		{
-			_id: "6727199b2ff1a10080e8f40e",
-			name: "Popcorn",
-			price: 50,
-			count: 1,
-		},
-		{
-			_id: "672717f22ff1a10080e8f3b2",
-			name: "LED NAME",
-			price: 150,
-			count: 1,
-		},
-	],
-	gifts: [
-		{
-			_id: "67271af22ff1a10080e8f45e",
-			name: "Roses - bouquet",
-			price: 699,
-			count: 1,
-		},
-	],
-	cakes: [
-		{
-			_id: "672704b7928651118f67038d",
-			name: "Black Forest",
-			price: 0,
-		},
-		{
-			_id: "672702a5928651118f670350",
-			name: "Fresh Fruit",
-			price: 499,
-		},
-	],
-	customer: "6729226e9b8e105824422025",
-	numberOfPeople: 8,
-	nameOnCake: "hbd prasad",
-	ledInfo: "hbd",
-	status: "pending",
-	note: "",
-	advancePrice: 999,
-	totalPrice: 4796,
-	remainingAmount: 3797,
-	createdAt: "2024-11-05T05:03:51.167Z",
-	updatedAt: "2024-11-05T05:03:51.167Z",
-	__v: 0,
-};
+function paymentPage({ customerBooking, createBooking, auth }) {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
-function paymentPage({ customerBooking, createBooking }) {
+	const [details, setDetails] = useState({
+		advance: 0,
+		note: "",
+		total: 0,
+	});
+
+	useEffect(() => {
+		if (!customerBooking) return;
+		setDetails({ advance: customerBooking.advance, note: customerBooking.note, total: customerBooking.total });
+	}, [customerBooking]);
+
+	useEffect(() => {
+		if (auth.isLoggedIn) return;
+		if (localStorage.getItem("authToken")) return;
+		navigate("/paymentgateway", { replace: true });
+	}, []);
+
+	function handleChange(e) {
+		const { name, value } = e.target;
+		setDetails((prev) => ({ ...prev, [name]: value }));
+
+		if (name === "advance") {
+			dispatch(setBookingAdvance(value));
+		}
+		if (name === "note") {
+			dispatch(setBookingNote(value));
+		}
+	}
+
 	async function handleBooking() {
 		try {
 			const res = await createBooking(customerBooking);
+
 			if (res) {
 				console.log(res);
+				navigate("/bookingConfirmation", { replace: true });
 			}
 		} catch (err) {
 			console.log(err);
 		}
 	}
 
-	return (
-		<div>
-			<p>{JSON.stringify(customerBooking, null, 2)}</p>
-			<button className="btn btn-1" onClick={handleBooking}>
-				check backend
-			</button>
+	function handleSubmit(e) {
+		e.preventDefault();
+		handleBooking();
+	}
 
-			<div className="mt-10">
-				<BookingDetails bookingData={bookingData} />
-			</div>
+	return (
+		<div style={{ height: "calc(100vh - 60px)" }} className="w-full flex flex-col items-center justify-center">
+			{customerBooking && (
+				<form className="w-full max-w-[400px] bg-white p-5 rounded-lg shadow-md customer-details" onSubmit={handleSubmit}>
+					<div className="input-wrapper">
+						<label htmlFor="advance">Advance</label>
+						<input type="number" id="advance" name="advance" placeholder="Enter Advance Amount" value={details.advance} onChange={handleChange} required />
+					</div>
+
+					<div className="input-wrapper">
+						<label htmlFor="note">Note</label>
+						<textarea id="note" name="note" placeholder="Add any special notes" value={details.note} onChange={handleChange} />
+					</div>
+
+					<div className="book-now-btn w-full">
+						<button className="btn-3 text-center w-full items-center gap-2 m-auto" type="submit">
+							Book Slot
+						</button>
+					</div>
+				</form>
+			)}
 		</div>
 	);
 }
@@ -109,6 +83,7 @@ function paymentPage({ customerBooking, createBooking }) {
 const mapStateToProps = (state) => {
 	return {
 		customerBooking: state.customerBooking,
+		auth: state.auth,
 	};
 };
 
