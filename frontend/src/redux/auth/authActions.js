@@ -89,7 +89,7 @@ export const initialLogin = (token) => {
       } catch (err) {
          const errorMessage = err.response ? err.response.data.error : 'Network Error';
          dispatch(initialLoginFailure(errorMessage));
-         dispatch(showNotification(errorMessage));
+         // dispatch(showNotification(errorMessage));
          return Promise.reject(err)
       }
    };

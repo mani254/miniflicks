@@ -358,5 +358,29 @@ async function getBookedSlots(req, res) {
    }
 }
 
+async function yesterdayBookingCustomers(req, res) {
+   const today = new Date();
 
-module.exports = { getBookings, getDashboardInfo, getGraphData, createBooking, getBooking, getBookedSlots }
+   const yesterdayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+   yesterdayStart.setHours(0, 0, 0, 0);
+
+   const yesterdayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+   yesterdayEnd.setHours(23, 59, 59, 999);
+
+   try {
+
+      const bookings = await Booking.find(
+         { date: { $gte: yesterdayStart, $lte: yesterdayEnd } },
+         "_id"
+      ).populate('customer');
+
+      const customers = [...new Set(bookings.map((booking) => booking.customer.email))];
+      return customers;
+   } catch (error) {
+      console.error(error);
+   }
+}
+
+
+
+module.exports = { getBookings, getDashboardInfo, getGraphData, createBooking, getBooking, getBookedSlots, yesterdayBookingCustomers }

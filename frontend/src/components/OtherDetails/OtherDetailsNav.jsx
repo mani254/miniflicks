@@ -14,7 +14,7 @@ function OtherDetailsNav({ customerBooking }) {
 	// Update navOptions based on the selected package
 	useEffect(() => {
 		if (!customerBooking.package) return;
-		const initialOptions = ["Packages", "Occasions", "Addons", "Cakes", "Gifts"];
+		const initialOptions = ["Packages", "Occasions", "Cakes", "Addons", "Gifts"];
 		if (!customerBooking.package?.addons.includes("Cake")) {
 			dispatch(setBookingCakes([]));
 		}

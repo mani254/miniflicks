@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 
 const navlinks = [
-	{ title: "Home", to: "/", image: "https://cdn-icons-png.flaticon.com/512/25/25694.png" },
+	{ title: "Dashboard", to: "/admin/dashboard", image: "https://cdn-icons-png.flaticon.com/512/25/25694.png" },
 	{
 		title: "Bookings",
 		to: "/admin/bookings",
@@ -35,7 +35,7 @@ function BackendNav({ auth }) {
 
 	const combinedLinks = auth.admin?.superAdmin ? [...navlinks, ...superAdminLinks] : navlinks;
 
-	const orderedNavLinks = ["Home", "Bookings", "Cities", "Locations", "Screens", "Customers", "Banners", "Coupons", "Cakes", "Occasions", "Addons", "Gifts"];
+	const orderedNavLinks = ["Dashboard", "Bookings", "Cities", "Locations", "Screens", "Customers", "Banners", "Coupons", "Cakes", "Occasions", "Addons", "Gifts"];
 
 	// Sort combinedLinks based on the predefined order
 	const finalNavLinks = orderedNavLinks.map((title) => combinedLinks.find((link) => link.title === title)).filter(Boolean); // To avoid undefined entries if some links don't exist

@@ -18,6 +18,8 @@ import UserItems from "./components/Addon/UserAddons";
 import CustomerDetails from "./components/OtherDetails/CustomerDetails";
 import TestimonialsPage from "./pages/TestimonialsPage";
 import PaymentPage from "./pages/PaymentPage";
+import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
+import RefundPolicyPage from "./pages/RefundPolicyPage";
 
 import axios from "axios";
 import Loader from "./components/Loader/Loader";
@@ -69,6 +71,7 @@ import CakesWrapper from "./components/Cake/CakesWrapper";
 import AddCakes from "./components/Cake/AddCakes";
 import DetailedView from "./components/Booking/DetailedView";
 import BookingConfirmation from "./components/Booking/BookingConfirmation";
+import Paymentgateway from "./pages/Paymentgateway";
 
 function App({ modal }) {
 	axios.defaults.withCredentials = true;
@@ -79,8 +82,11 @@ function App({ modal }) {
 				<Routes>
 					<Route path="/" element={<UsersLayout />}>
 						<Route index element={<Home />} />
+						<Route path="termsandconditions" element={<TermsAndConditionsPage />} />
+						<Route path="refundPolicy" element={<RefundPolicyPage />} />
 						<Route path="testimonials" element={<TestimonialsPage />} />
 						<Route path="bookingConfirmation" element={<BookingConfirmation />} />
+						<Route path="paymentgateway" element={<Paymentgateway />} />
 						<Route path="booking" element={<BookingLayout />}>
 							<Route path="locations" element={<UserLocations />}></Route>
 							<Route path="screens" element={<UserScreens />}></Route>

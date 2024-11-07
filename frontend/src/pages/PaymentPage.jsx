@@ -69,6 +69,15 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 						<textarea id="note" name="note" placeholder="Add any special notes" value={details.note} onChange={handleChange} />
 					</div>
 
+					<div className="flex mb-3 items-center justify-between">
+						<h4>
+							Total: <span className="text-gray-600 text-md">₹ {details.total}</span>{" "}
+						</h4>
+						<h4>
+							Remaining: <span className="text-gray-600 text-md">₹ {details.total - details.advance}</span>
+						</h4>
+					</div>
+
 					<div className="book-now-btn w-full">
 						<button className="btn-3 text-center w-full items-center gap-2 m-auto" type="submit">
 							Book Slot
