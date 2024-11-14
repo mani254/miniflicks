@@ -3,10 +3,90 @@ const mongoose = require('mongoose')
 const Location = require('../schema/locationSchema')
 const Screen = require('../schema/screenSchema')
 const City = require('../schema/citySchema')
+const crypto = require('crypto')
+
+require('dotenv').config()
+
+const Razorpay = require('razorpay');
+const razorpayInstance = new Razorpay({
+   key_id: process.env.RAZORPAY_KEY_ID,
+   key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 const BookingClass = require('../utils/bookinClass')
 const generateBookingHTML = require('../utils/generateInvoice')
 const sendMail = require('../utils/sendMail')
+// const { verify } = require('jsonwebtoken')
+
+async function saveBooking(req, res, status = "pending") {
+
+   const bookingData = req.body;
+
+   if (req.location) {
+      if (bookingData.location != req.location) return res.status(401).json({ error: 'unauthorized to book' })
+   }
+
+
+   const booking = new BookingClass(bookingData);
+
+   await booking.fetchCityAndLocation();
+   if (!booking.city || !booking.location) {
+      res.status(400).json({ error: 'Invalid city or location provided.' });
+      return null
+   }
+
+   await booking.fetchScreen();
+   if (!booking.screen) {
+      res.status(400).json({ error: 'Invalid screen provided.' });
+      return null
+   }
+
+   await booking.fetchPackage();
+   if (!booking.package) {
+      res.status(400).json({ error: 'Invalid package selection.' });
+      return null
+   }
+
+   await booking.slotValidation()
+
+   await booking.fetchOccasion();
+   if (!booking.occasion) {
+      res.status(400).json({ error: 'Invalid occasion selection.' });
+      return null
+   }
+
+   await booking.fetchAddons();
+   // if (booking.addons.length !== bookingData.addons.length) {
+   //    return res.status(400).json({ error: 'Some selected add-ons are invalid.' });
+   // }
+
+   await booking.fetchCakes();
+   // if (booking.cakes.length !== bookingData.cakes.length) {
+   //    return res.status(400).json({ error: 'Some selected cakes are invalid.' });
+   // }
+
+   await booking.fetchGifts();
+   // if (booking.gifts.length !== bookingData.gifts.length) {
+   //    return res.status(400).json({ error: 'Some selected gifts are invalid.' });
+   // }
+
+   await booking.saveCustomer();
+
+   if (!booking.customer) {
+      res.status(500).json({ error: 'Failed to save customer details.' });
+      return null
+   }
+
+   booking.calculateTotalPrice();
+   const currentBooking = await booking.saveBooking(status);
+   if (currentBooking) {
+      return currentBooking
+   }
+   else {
+      return null
+   }
+}
+
 
 async function getBookings(req, res) {
    try {
@@ -248,72 +328,76 @@ async function getGraphData(req, res) {
    }
 }
 
-async function createBooking(req, res) {
+async function createAdminBooking(req, res) {
    try {
-      const bookingData = req.body;
+      const currentBooking = await saveBooking(req, res, 'booked');
 
-      if (req.location) {
-         if (bookingData.location != req.location) return res.status(401).json({ error: 'unauthorized to book' })
-      }
-
-
-      const booking = new BookingClass(bookingData);
-
-      await booking.fetchCityAndLocation();
-      if (!booking.city || !booking.location) {
-         return res.status(400).json({ error: 'Invalid city or location provided.' });
-      }
-
-      await booking.fetchScreen();
-      if (!booking.screen) {
-         return res.status(400).json({ error: 'Invalid screen provided.' });
-      }
-
-      await booking.fetchPackage();
-      if (!booking.package) {
-         return res.status(400).json({ error: 'Invalid package selection.' });
-      }
-
-      await booking.slotValidation()
-
-      await booking.fetchOccasion();
-      if (!booking.occasion) {
-         return res.status(400).json({ error: 'Invalid occasion selection.' });
-      }
-
-      await booking.fetchAddons();
-      if (booking.addons.length !== bookingData.addons.length) {
-         return res.status(400).json({ error: 'Some selected add-ons are invalid.' });
-      }
-
-      await booking.fetchCakes();
-      if (booking.cakes.length !== bookingData.cakes.length) {
-         return res.status(400).json({ error: 'Some selected cakes are invalid.' });
-      }
-
-      await booking.fetchGifts();
-      if (booking.gifts.length !== bookingData.gifts.length) {
-         return res.status(400).json({ error: 'Some selected gifts are invalid.' });
-      }
-
-      await booking.saveCustomer();
-
-      if (!booking.customer) {
-         return res.status(500).json({ error: 'Failed to save customer details.' });
-      }
-
-      booking.calculateTotalPrice();
-      const currentBooking = await booking.saveBooking();
-      const bookedData = await Booking.findById(currentBooking._id).populate({ path: 'location', select: 'name _id addressLink' }).populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice', });
+      const bookedData = await Booking.findById(currentBooking._id)
+         .populate({ path: 'location', select: 'name _id addressLink' })
+         .populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice' });
 
       if (bookedData) {
-         const html = generateBookingHTML(bookedData)
-         sendMail({ to: booking.customer.email, subject: 'Miniflicks Theator Booking Confirmation', html });
+         const html = generateBookingHTML(bookedData);
+         sendMail({ to: currentBooking.customer.email, subject: 'Miniflicks Theater Booking Confirmation', html });
          return res.status(200).json({ message: 'Booking successful', booking: bookedData });
       } else {
          return res.status(500).json({ error: 'Failed to save booking data.' });
       }
 
+   } catch (error) {
+      console.error('Error:', error);
+      const statusCode = error.code === 11000 ? 400 : 500;
+      return res.status(statusCode).json({ error: error.message || 'An unknown error occurred.' });
+   }
+}
+
+async function createCustomerBooking(req, res) {
+   try {
+      // Step 1: Save the booking with a "pending" status
+      const currentBooking = await saveBooking(req, res, 'pending');
+
+      if (!currentBooking) return
+
+      // Step 2: Ensure that the price is correctly calculated
+      if (currentBooking.totalPrice <= 0) {
+         return res.status(400).json({ error: 'Total price for the booking is invalid.' });
+      }
+
+      // Step 3: Create Razorpay order with additional checks for currency, amount, etc.
+      const razorpayOrderOptions = {
+         amount: currentBooking.totalPrice * 100,
+         currency: 'INR',
+         receipt: `order_rcptid_${currentBooking._id}`,
+         partial_payment: true,
+         first_payment_min_amount: 999 * 100,
+         notes: {
+            customer_id: currentBooking.customer,
+            booking_id: currentBooking._id,
+         }
+      };
+
+      // Step 4: Create the order in Razorpay
+      const razorpayOrder = await razorpayInstance.orders.create(razorpayOrderOptions);
+
+      // Step 5: Handle order creation failure
+      if (!razorpayOrder || !razorpayOrder.id) {
+         return res.status(500).json({ error: 'Failed to create Razorpay order.' });
+      }
+
+      // Step 6: Save the Razorpay order ID in the current booking
+      const bookedData = await currentBooking.updateOne({ razorpayOrderId: razorpayOrder.id });
+
+
+      // Step 8: Return the booking details along with Razorpay order ID
+      if (bookedData) {
+         return res.status(200).json({
+            message: 'Booking successful, proceed to payment.',
+            booking: bookedData,
+            razorpayOrderId: razorpayOrder.id,
+         });
+      } else {
+         return res.status(500).json({ error: 'Failed to retrieve complete booking data.' });
+      }
    } catch (error) {
       console.error('Error:', error);
       const statusCode = error.code === 11000 ? 400 : 500;
@@ -358,6 +442,44 @@ async function getBookedSlots(req, res) {
    }
 }
 
+async function verifyPayment(req, res) {
+   const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
+
+   const order = await razorpayInstance.orders.fetch(razorpay_order_id)
+
+
+   const body = razorpay_order_id + "|" + razorpay_payment_id;
+   const generated_signature = crypto
+      .createHmac("sha256", razorpayInstance.key_secret)
+      .update(body)
+      .digest("hex");
+
+   if (generated_signature === razorpay_signature) {
+      // Payment is valid, proceed with booking status update
+      try {
+         // Update booking status to 'paid' or 'completed'
+         const booking = await Booking.findOne({ razorpayOrderId: razorpay_order_id })
+         if (!booking) {
+            return res.status(404).json({ error: 'Booking Not Found' })
+         }
+         booking.status = 'booked'
+         booking.razorpayPaymentId = razorpay_payment_id
+         console.log(order.amount_paid, '-----paid amount--------')
+         booking.advancePrice = order.amount_paid / 100
+         booking.remainingAmount = booking.totalPrice - (order.amount_paid / 100)
+
+         await booking.save()
+
+         return res.status(200).json({ success: true, message: "Payment verified", booking: updatedBooking });
+      } catch (error) {
+         console.error("Error updating booking status", error);
+         return res.status(500).json({ success: false, error: "Failed to update booking status" });
+      }
+   } else {
+      return res.status(400).json({ success: false, message: "Payment verification failed" });
+   }
+}
+
 async function yesterdayBookingCustomers(req, res) {
    const today = new Date();
 
@@ -381,6 +503,4 @@ async function yesterdayBookingCustomers(req, res) {
    }
 }
 
-
-
-module.exports = { getBookings, getDashboardInfo, getGraphData, createBooking, getBooking, getBookedSlots, yesterdayBookingCustomers }
+module.exports = { getBookings, getDashboardInfo, getGraphData, createAdminBooking, getBooking, getBookedSlots, yesterdayBookingCustomers, createCustomerBooking, verifyPayment }

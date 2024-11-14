@@ -99,6 +99,7 @@ function App({ modal }) {
 								<Route path="gifts" element={<UserItems type="gifts" />} />
 								<Route path="cakes" element={<UserItems type="cakes" />} />
 							</Route>
+                     
 							<Route path="payment" element={<PaymentPage />}></Route>
 						</Route>
 					</Route>

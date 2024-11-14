@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import CouponComponent from "./CouponComponent";
 import { setBookingTotal } from "../../redux/customerBooking/customerBookingActions";
+import axios from "axios";
+import { showNotification } from "../../redux/notification/notificationActions";
 
 function OrderSummary({ customerBooking }) {
 	const [pricingInfo, setPricingInfo] = useState([]);
@@ -11,6 +13,98 @@ function OrderSummary({ customerBooking }) {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
+	async function handlePayment() {
+		// Check if user is authenticated
+		if (localStorage.getItem("authToken")) {
+			navigate("/booking/payment");
+			return;
+		}
+
+		try {
+			// Step 1: Create the customer booking via backend API
+			const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/customerBooking`, customerBooking);
+
+			if (response.data) {
+				// Step 2: Call Razorpay payment initiation function
+				startRazorpayPayment({
+					booking: response.data.booking,
+					razorpayOrderId: response.data.razorpayOrderId,
+				});
+			} else {
+				console.log("Error: No response data received");
+			}
+		} catch (error) {
+			const errMessage = error.response ? error.response.data.error : "Something went wrong";
+			console.log(errMessage);
+			dispatch(showNotification(errMessage));
+		}
+	}
+
+	function startRazorpayPayment({ booking, razorpayOrderId }) {
+		if (typeof Razorpay === "undefined") {
+			console.error("Razorpay SDK not loaded");
+			return;
+		}
+
+		const options = {
+			key_id: import.meta.env.VITE_RAZORPAY_KEY_ID,
+			amount: booking.totalPrice * 100,
+			currency: "INR",
+			name: "Miniflicks Theater",
+			description: "Booking Payment",
+			order_id: razorpayOrderId,
+			timeout: 20 * 60,
+			handler: function (paymentResponse) {
+				console.log("Payment successful!", paymentResponse);
+
+				// Send payment details to the backend for verification
+				verifyPayment(paymentResponse);
+			},
+			prefill: {
+				name: customerBooking.customer.name,
+				email: customerBooking.customer.email,
+				contact: customerBooking.customer.number,
+			},
+		};
+
+		try {
+			const rzp = new Razorpay(options);
+			rzp.on("payment.failed", function (response) {
+				handlePaymentFailure(response);
+			});
+			rzp.open();
+		} catch (error) {
+			console.error("Error initializing Razorpay:", error);
+		}
+	}
+
+	function verifyPayment(paymentResponse) {
+		// Send the payment details to the backend for verification
+		axios
+			.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/verifyPayment`, {
+				razorpay_payment_id: paymentResponse.razorpay_payment_id,
+				razorpay_order_id: paymentResponse.razorpay_order_id,
+				razorpay_signature: paymentResponse.razorpay_signature,
+			})
+			.then((response) => {
+				if (response.data.success) {
+					alert("Payment verified successfully!");
+					// Optionally, navigate to success page
+				} else {
+					alert("Payment verification failed!");
+				}
+			})
+			.catch((error) => {
+				console.error("Error verifying payment:", error);
+				alert("Error during payment verification.");
+			});
+	}
+
+	function handlePaymentFailure(response) {
+		console.error("Payment failed", response.error);
+
+		alert(`Payment failed: ${response.error.description}`);
+	}
 	// function that will exicute everytime the package change to set the package price
 	useEffect(() => {
 		if (!customerBooking.package) {
@@ -179,11 +273,7 @@ function OrderSummary({ customerBooking }) {
 					<p className="justify-self-end">{total}</p>
 				</div>
 				<div className="book-now-btn mt-3">
-					<button
-						className="btn-3 text-center flex w-full items-center gap-2 m-auto"
-						onClick={() => {
-							navigate("/booking/payment");
-						}}>
+					<button className="btn-3 text-center flex w-full items-center gap-2 m-auto" onClick={handlePayment}>
 						Payment <FaArrowRight className="text-xs" />
 					</button>
 				</div>

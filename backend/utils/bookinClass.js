@@ -27,7 +27,7 @@ class BookingClass {
       this.nameOnCake = bookingData.otherInfo.nameOnCake || "";
       this.ledInfo = bookingData.otherInfo.ledInfo || "";
       this.note = bookingData.note || '';
-      this.status = 'pending';
+      // this.status = 'pending';
       this.totalPrice = 0;
       this.remainingAmount = 0;
       this.advancePrice = bookingData.advance || 999
@@ -63,22 +63,25 @@ class BookingClass {
 
    async slotValidation(date = this.date, slot = this.slot, screen = this.screen) {
 
-      const thatDayBookings = await Booking.find({ date, screen, status: { $ne: "confirmed" } })
+      const thatDayBookings = await Booking.find({ date, screen, status: { $ne: "canceled" } })
       const requestedFrom = new Date(date).setHours(slot.from.split(":")[0], slot.from.split(":")[1], 0, 0);
       const requestedTo = new Date(date).setHours(slot.to.split(":")[0], slot.to.split(":")[1], 0, 0);
 
       thatDayBookings.forEach((booking) => {
 
-         if (this.screen._id != booking.screen) {
-            return
-         }
          const from = new Date(date).setHours(booking.slot.from.split(":")[0], booking.slot.from.split(":")[1], 0, 0)
          const to = new Date(date).setHours(booking.slot.to.split(":")[0], booking.slot.to.split(":")[1], 0, 0)
 
+         // console.log(thatDayBookings.length)
+         // console.log(from, requestedFrom)
+         // console.log(to, requestedTo)
+         // console.log((requestedFrom >= from && requestedFrom < to),
+         //    (requestedTo > from && requestedTo <= to),
+         //    (requestedFrom <= from && requestedTo >= to))
          if (
             (requestedFrom >= from && requestedFrom < to) ||
-            (requestedTo > from && requestedTo <= to) ||
-            (requestedFrom <= from && requestedTo >= to)
+            (requestedTo > from && requestedTo <= to)
+            // (requestedFrom <= from && requestedTo >= to)
          ) {
             throw new Error("Requested slot is already booked on the selected date.");
          }
@@ -209,7 +212,7 @@ class BookingClass {
       return 0;
    }
 
-   async saveBooking() {
+   async saveBooking(status = 'pending') {
       const bookingDetails = {
          city: this.city._id,
          location: this.location._id,
@@ -226,7 +229,7 @@ class BookingClass {
          nameOnCake: this.nameOnCake,
          ledInfo: this.ledInfo,
          note: this.note,
-         status: this.status,
+         status: status,
          advancePrice: this.advancePrice,
          totalPrice: this.totalPrice,
          remainingAmount: this.remainingAmount,

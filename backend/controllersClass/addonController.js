@@ -129,10 +129,12 @@ class AddonController {
          }
 
          await this.removeAddonFromLocations(id);
-         const fileName = existingAddon.image.slice(existingAddon.image.lastIndexOf('/') + 1);
-         const oldImagePath = path.join(__dirname, '../public/uploads/addons', fileName);
-         if (fs.existsSync(oldImagePath)) {
-            fs.unlinkSync(oldImagePath);
+         if (existingAddon.image) {
+            const fileName = existingAddon.image.slice(existingAddon.image.lastIndexOf('/') + 1);
+            const oldImagePath = path.join(__dirname, '../public/uploads/addons', fileName);
+            if (fs.existsSync(oldImagePath)) {
+               fs.unlinkSync(oldImagePath);
+            }
          }
 
          await Addon.findByIdAndDelete(id);

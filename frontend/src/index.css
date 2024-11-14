@@ -18,11 +18,12 @@
 	* {
 		@apply m-0 p-0 box-border text-sm font-normal font-author text-zinc-800;
 	}
-	h3 {
-		@apply text-lg font-medium;
-	}
+
 	h2 {
-		@apply text-xl font-medium;
+		@apply text-xl font-medium font-ks;
+	}
+	h3 {
+		@apply text-lg font-medium font-ks;
 	}
 	h4 {
 		@apply text-md font-medium;
@@ -112,6 +113,9 @@
 	.customer-details .input-wrapper {
 		@apply mb-2;
 	}
+	footer * {
+		@apply text-white;
+	}
 
 	/* css starts frin gere  for the frontend */
 	main {
@@ -120,5 +124,17 @@
 	}
 	.bg-gradient-primary {
 		background: var(--primary-gradient);
+	}
+
+	/* // css for the home page */
+	.home {
+		background: white;
+	}
+	.home .mySwiper .swiper-wrapper {
+		/* background: red; */
+		padding: 20px 0px;
+	}
+	.services-section * {
+      
 	}
 }

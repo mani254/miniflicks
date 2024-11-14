@@ -8,6 +8,8 @@ import SmoothScroll from "../components/SmoothScroll/SmoothScroll";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Footer from "../components/Footer/Footer";
+
 gsap.registerPlugin(ScrollTrigger);
 
 function UsersLayout({ customerBooking }) {
@@ -36,9 +38,10 @@ function UsersLayout({ customerBooking }) {
 		<SmoothScroll>
 			<main>
 				<Header />
-				<div className="container m-auto max-w-[1350px]">
-					<Outlet />
-				</div>
+
+				<Outlet />
+
+				<Footer />
 			</main>
 		</SmoothScroll>
 	);

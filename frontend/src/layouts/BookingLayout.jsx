@@ -50,7 +50,11 @@ function UsersLayout({ customerBooking, auth, initialLogin }) {
 		fetchScreens();
 	}, [customerBooking.location]);
 
-	return <Outlet />;
+	return (
+		<div className="container m-auto max-w-[1350px]">
+			<Outlet />
+		</div>
+	);
 }
 
 const mapStateToProps = (state) => {

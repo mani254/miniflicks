@@ -5,9 +5,30 @@ import mfLogo from '../assets/mf-logo.png';
 import addonAvailable from '../assets/addon-available.svg'
 import addonUnavailable from '../assets/addon-unavailable.svg'
 
+import instagramColoured from '../assets/icons/instagram-coloured.svg'
+import facebookColoured from '../assets/icons/facebook-coloured.svg'
+import twitterColoured from '../assets/icons/twitter-coloured.svg'
+import youtbeColoured from '../assets/icons/youtube-coloured.svg'
+import whatsappColoured from '../assets/icons/whatsapp-coloured.svg'
+
+
+import cake from '../assets/services/cake.webp';
+import candlePath from '../assets/services/candle-path-2.webp';
+import coolDrink from '../assets/services/cool-drink.webp'
+import decoration from '../assets/services/decoration.webp'
+import gift from '../assets/services/gifts.webp'
+import ledName from '../assets/services/led-name.webp'
+import boquet from '../assets/services/boquet.webp'
+
 export { fingerImage, star, mfLogo }
 
 export { addonAvailable, addonUnavailable }
+
+export { instagramColoured, facebookColoured, twitterColoured, youtbeColoured, whatsappColoured }
+
+export { cake, candlePath, coolDrink, decoration, gift, ledName, boquet }
+
+
 
 export function validation(action, value) {
    switch (action) {

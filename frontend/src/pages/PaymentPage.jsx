@@ -19,11 +19,11 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 		setDetails({ advance: customerBooking.advance, note: customerBooking.note, total: customerBooking.total });
 	}, [customerBooking]);
 
-	useEffect(() => {
-		if (auth.isLoggedIn) return;
-		if (localStorage.getItem("authToken")) return;
-		navigate("/paymentgateway", { replace: true });
-	}, []);
+	// useEffect(() => {
+	// 	if (auth.isLoggedIn) return;
+	// 	if (localStorage.getItem("authToken")) return;
+	// 	navigate("/paymentgateway", { replace: true });
+	// }, []);
 
 	function handleChange(e) {
 		const { name, value } = e.target;

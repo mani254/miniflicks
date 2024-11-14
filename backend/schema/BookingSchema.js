@@ -139,7 +139,7 @@ const bookingSchema = new Schema({
    },
    status: {
       type: String,
-      enum: ['pending', 'confirmed', 'canceled'],
+      enum: ['pending', 'booked', 'canceled'],
       default: 'pending'
    },
    note: {
@@ -161,6 +161,11 @@ const bookingSchema = new Schema({
       required: true,
       min: 0
    },
+   razorpayOrderId: {
+      type: String,
+      required: false,
+   },
+   
 
 }, { timestamps: true });
 

@@ -7,9 +7,10 @@ export default {
    theme: {
       extend: {
          fontFamily: {
-            manrope: 'Manrope',
             author: 'Author',
-            jokerman: 'Jokerman'
+            jokerman: 'Jokerman',
+            ks: 'Kaushan_Script',
+            js: 'Josefin_Sans'
          },
          colors: {
             logo: ({ opacityValue }) => `rgba(50, 107, 159, ${opacityValue || 1})`,
