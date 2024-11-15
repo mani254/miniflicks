@@ -417,3 +417,74 @@
 		stroke-dasharray: 135, 0;
 	}
 }
+
+/* front end button design  */
+
+.btn-4 {
+	padding: 7px 32px;
+	cursor: pointer;
+	transition: all 0.5s ease-in-out;
+	border-radius: 40px;
+	color: #333;
+	position: relative;
+	overflow: hidden;
+	z-index: 1;
+}
+
+.btn-dark {
+	background: transparent;
+	border: 1px solid #333;
+	color: #333;
+	position: relative;
+	overflow: hidden;
+}
+
+.btn-white {
+	background: transparent;
+	border: 1px solid #fff;
+	color: #fff;
+	position: relative;
+	overflow: hidden;
+}
+
+.btn-dark::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0;
+	height: 100%;
+	background-color: #333;
+	transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+	z-index: -1;
+	border-radius: 40px;
+}
+.btn-white::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0;
+	height: 100%;
+	background-color: #fff;
+	transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+	z-index: -1;
+	border-radius: 40px;
+}
+
+.btn-dark:hover::before {
+	width: 100%;
+	right: auto;
+	left: 0;
+}
+.btn-white:hover::before {
+	width: 100%;
+	right: auto;
+	left: 0;
+}
+.btn-white:hover {
+	color: #333;
+}
+.btn-dark:hover {
+	color: #fff;
+}

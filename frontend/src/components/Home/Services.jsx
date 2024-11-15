@@ -46,8 +46,8 @@ const services = [
 
 const Services = () => {
 	return (
-		<section className="services-section bg-gray-100 py-16">
-			<div className="container mx-auto px-4">
+		<section className="services-section bg-gray-100 py-14">
+			<div className="container mx-auto">
 				<h2 className="text-xl font-semibold text-center mb-8">Services We Provide</h2>
 				{/* Swiper Component */}
 				<Swiper
@@ -85,13 +85,13 @@ const Services = () => {
 					{services.map((service, index) => (
 						<SwiperSlide key={index} className="relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ">
 							<img src={service.img} alt={service.title} className="w-full h-52 rounded-2xl  object-cover transform  transition-all duration-300" />
-							<h3 className="font-medium text-center py-3 font-author">{service.title}</h3>
+							<h4 className="font-medium text-center py-3 font-author">{service.title}</h4>
 						</SwiperSlide>
 					))}
 				</Swiper>
 
 				{/* Custom Navigation Buttons */}
-				<div className="flex justify-between mt-6">
+				<div className="flex justify-between mt-4">
 					<button className="swiper-button-p px-4 py-2 bg-dark text-white rounded-full  cursor-pointer">
 						<FaArrowLeftLong className="fill-white" />
 					</button>

@@ -73,7 +73,11 @@ import DetailedView from "./components/Booking/DetailedView";
 import BookingConfirmation from "./components/Booking/BookingConfirmation";
 import Paymentgateway from "./pages/Paymentgateway";
 
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 function App({ modal }) {
+	gsap.registerPlugin(ScrollTrigger);
 	axios.defaults.withCredentials = true;
 	return (
 		<React.Fragment>
@@ -99,7 +103,7 @@ function App({ modal }) {
 								<Route path="gifts" element={<UserItems type="gifts" />} />
 								<Route path="cakes" element={<UserItems type="cakes" />} />
 							</Route>
-                     
+
 							<Route path="payment" element={<PaymentPage />}></Route>
 						</Route>
 					</Route>

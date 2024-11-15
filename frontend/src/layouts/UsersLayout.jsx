@@ -6,21 +6,24 @@ import { connect } from "react-redux";
 import { getLocations } from "../redux/location/locationActions";
 import SmoothScroll from "../components/SmoothScroll/SmoothScroll";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "../components/Footer/Footer";
 
-gsap.registerPlugin(ScrollTrigger);
+import { getBanners } from "../redux/banner/bannerActions";
 
-function UsersLayout({ customerBooking }) {
+function UsersLayout({ customerBooking, getBanners }) {
 	const dispatch = useDispatch();
 
-	// // useEffect to start the freshbooking by removing the data form localStrorage
-	// useEffect(() => {
+	useEffect(() => {
+		async function fetchBanners() {
+			try {
+				await getBanners();
+			} catch (err) {
+				console.log(err);
+			}
+		}
+		fetchBanners();
+	}, []);
 
-	// }, []);
-
-	//useEffect that will  fetch screens when there is a change in the city
 	useEffect(() => {
 		if (!customerBooking.city) return;
 
@@ -53,4 +56,10 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, null)(UsersLayout);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		getBanners: () => dispatch(getBanners()),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UsersLayout);

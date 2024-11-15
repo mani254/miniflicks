@@ -134,7 +134,7 @@
 		/* background: red; */
 		padding: 20px 0px;
 	}
-	.services-section * {
-      
+	.container {
+		max-width: 1350px !important;
 	}
 }

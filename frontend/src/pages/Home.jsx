@@ -2,13 +2,18 @@ import React from "react";
 
 import { NavLink } from "react-router-dom";
 import Services from "../components/Home/Services";
+import About from "../components/Home/About";
+import Cta from "../components/Home/Cta-1";
+import VideoSection from "../components/Home/VideoSection";
+import Banners from "../components/Home/Banners";
 
 function Home() {
 	return (
 		<div className="home">
-			<h2>
-				This is the main Home page <NavLink to="/booking/locations">book now</NavLink>
-			</h2>
+			<Banners />
+			<About />
+			<Cta />
+			<VideoSection />
 			<Services />
 		</div>
 	);

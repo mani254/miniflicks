@@ -22,7 +22,7 @@ function TestimonialsPage() {
 	}, []);
 
 	return (
-		<section className="testimonials-section py-10">
+		<section className="container testimonials-section py-10">
 			<div className="mb-10 md:flex items-center justify-between">
 				<h1 className="text-center text-xl font-medium">Cherished Experiences from Our Guests</h1>
 
