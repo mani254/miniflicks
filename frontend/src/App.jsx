@@ -21,6 +21,8 @@ import PaymentPage from "./pages/PaymentPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import RefundPolicyPage from "./pages/RefundPolicyPage";
 import ContactPage from "./pages/ContactPage";
+import GalleryPage from "./pages/GalleryPage";
+import AboutPage from "./pages/AboutPage";
 
 import axios from "axios";
 import Loader from "./components/Loader/Loader";
@@ -76,7 +78,6 @@ import Paymentgateway from "./pages/Paymentgateway";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import GalleryPage from "./pages/GalleryPage";
 
 function App({ modal }) {
 	gsap.registerPlugin(ScrollTrigger);
@@ -95,6 +96,7 @@ function App({ modal }) {
 						<Route path="gallery" element={<GalleryPage />} />
 						<Route path="bookingConfirmation" element={<BookingConfirmation />} />
 						<Route path="paymentgateway" element={<Paymentgateway />} />
+						<Route path="about" element={<AboutPage />} />
 						<Route path="booking" element={<BookingLayout />}>
 							<Route path="locations" element={<UserLocations />}></Route>
 							<Route path="screens" element={<UserScreens />}></Route>

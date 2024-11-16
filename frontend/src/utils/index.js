@@ -11,6 +11,7 @@ import twitterColoured from '../assets/icons/twitter-coloured.svg'
 import youtbeColoured from '../assets/icons/youtube-coloured.svg'
 import whatsappColoured from '../assets/icons/whatsapp-coloured.svg'
 
+import aboutEdited from '../assets/about-edited.png'
 
 import cake from '../assets/services/cake.webp';
 import candlePath from '../assets/services/candle-path-2.webp';
@@ -23,6 +24,8 @@ import boquet from '../assets/services/boquet.webp'
 import contactBalloon from '../assets/contact-balloon.webp'
 import contactBreadcrumb from '../assets/contact-breadcrumb.jpg'
 
+import aboutBreadcrumb from '../assets/miniflicks-about-image.webp'
+
 export { fingerImage, star, mfLogo }
 
 export { addonAvailable, addonUnavailable }
@@ -32,6 +35,8 @@ export { instagramColoured, facebookColoured, twitterColoured, youtbeColoured, w
 export { cake, candlePath, coolDrink, decoration, gift, ledName, boquet }
 
 export { contactBalloon, contactBreadcrumb }
+
+export { aboutBreadcrumb, aboutEdited }
 
 
 
@@ -80,4 +85,4 @@ const socialMediaLinks = [
    { href: "https://wa.me/miniflicks", title: "WhatsApp", src: whatsappColoured, alt: "WhatsApp" },
 ];
 
-export {socialMediaLinks}
+export { socialMediaLinks }

@@ -92,14 +92,13 @@ function ContactPage() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		console.log("Form Data:", formData);
-		// Add form submission logic here
 	};
 
 	return (
 		<div>
 			<div className="relative overflow-hidden">
 				<section ref={breadcrumbRef} className="breadcrumb overflow-hidden relative">
-					<div className="absolute w-full h-full inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
+					<div className="absolute w-full h-full inset-0 bg-gradient-to-r from-black/70 to-transparent z-[2]"></div>
 					<img className="absolute w-full h-full top-0 right-0 object-center object-cover" src={contactBreadcrumb} alt="Contact breadcrumb" />
 
 					<div className="container relative z-[2] flex flex-col gap-5 min-h-[350px] pt-10">
@@ -112,7 +111,7 @@ function ContactPage() {
 					</div>
 				</section>
 
-				<svg width="1896" height="75" viewBox="0 0 1896 75" className="absolute -bottom-2 left-1/2 -translate-x-1/2" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<svg width="1896" height="75" viewBox="0 0 1896 75" className="absolute -bottom-2 left-1/2 -translate-x-1/2 z-[3]" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<path d="M1896 71.0298L0 74.5301C500.5 -69.4708 1896 39.5297 1896 39.5297V71.0298Z" className="fill-gray-100" />
 				</svg>
 			</div>

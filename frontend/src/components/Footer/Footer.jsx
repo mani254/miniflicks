@@ -80,7 +80,6 @@ const Footer = () => {
 		// Cleanup animations and ScrollTriggers on unmount
 		return () => {
 			timelines.forEach((timeline) => timeline.kill());
-			// ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 		};
 	}, []);
 
