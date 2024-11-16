@@ -137,4 +137,7 @@
 	.container {
 		max-width: 1350px !important;
 	}
+	.contact-side {
+		background: linear-gradient(to right, rgb(213, 208, 255) 0%, rgb(255, 224, 252) 100%);
+	}
 }

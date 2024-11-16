@@ -20,6 +20,9 @@ import gift from '../assets/services/gifts.webp'
 import ledName from '../assets/services/led-name.webp'
 import boquet from '../assets/services/boquet.webp'
 
+import contactBalloon from '../assets/contact-balloon.webp'
+import contactBreadcrumb from '../assets/contact-breadcrumb.jpg'
+
 export { fingerImage, star, mfLogo }
 
 export { addonAvailable, addonUnavailable }
@@ -27,6 +30,8 @@ export { addonAvailable, addonUnavailable }
 export { instagramColoured, facebookColoured, twitterColoured, youtbeColoured, whatsappColoured }
 
 export { cake, candlePath, coolDrink, decoration, gift, ledName, boquet }
+
+export { contactBalloon, contactBreadcrumb }
 
 
 
@@ -66,3 +71,13 @@ export function validation(action, value) {
          return "";
    }
 }
+
+
+const socialMediaLinks = [
+   { href: "https://instagram.com/miniflicks", title: "Instagram", src: instagramColoured, alt: "Instagram" },
+   { href: "https://youtube.com/miniflicks", title: "YouTube", src: youtbeColoured, alt: "YouTube" },
+   { href: "https://facebook.com/miniflicks", title: "Facebook", src: facebookColoured, alt: "Facebook" },
+   { href: "https://wa.me/miniflicks", title: "WhatsApp", src: whatsappColoured, alt: "WhatsApp" },
+];
+
+export {socialMediaLinks}

@@ -1,16 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
-import { mfLogo, instagramColoured, facebookColoured, twitterColoured, youtbeColoured, whatsappColoured } from "../../utils";
+import { mfLogo } from "../../utils";
+import { socialMediaLinks } from "../../utils";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoMail, IoLocationSharp } from "react-icons/io5";
 import gsap from "gsap";
-
-const socialMediaLinks = [
-	{ href: "https://instagram.com/miniflicks", title: "Instagram", src: instagramColoured, alt: "Instagram" },
-	{ href: "https://youtube.com/miniflicks", title: "YouTube", src: youtbeColoured, alt: "YouTube" },
-	{ href: "https://facebook.com/miniflicks", title: "Facebook", src: facebookColoured, alt: "Facebook" },
-	{ href: "https://wa.me/miniflicks", title: "WhatsApp", src: whatsappColoured, alt: "WhatsApp" },
-];
 
 const quickLinks = [
 	{ href: "/", label: "Home" },

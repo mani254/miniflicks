@@ -20,6 +20,7 @@ import TestimonialsPage from "./pages/TestimonialsPage";
 import PaymentPage from "./pages/PaymentPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import RefundPolicyPage from "./pages/RefundPolicyPage";
+import ContactPage from "./pages/ContactPage";
 
 import axios from "axios";
 import Loader from "./components/Loader/Loader";
@@ -89,6 +90,7 @@ function App({ modal }) {
 						<Route path="termsandconditions" element={<TermsAndConditionsPage />} />
 						<Route path="refundPolicy" element={<RefundPolicyPage />} />
 						<Route path="testimonials" element={<TestimonialsPage />} />
+						<Route path="contact" element={<ContactPage />} />
 						<Route path="bookingConfirmation" element={<BookingConfirmation />} />
 						<Route path="paymentgateway" element={<Paymentgateway />} />
 						<Route path="booking" element={<BookingLayout />}>
