@@ -24,7 +24,7 @@ function TestimonialsPage() {
 	return (
 		<section className="container testimonials-section py-10">
 			<div className="mb-10 md:flex items-center justify-between">
-				<h1 className="text-center text-xl font-medium">Cherished Experiences from Our Guests</h1>
+				<h1 className="text-center text-xl font-medium font-ks">Cherished Experiences from Our Guests</h1>
 
 				<div className="book-now-btn mt-3 md:mt-0">
 					<NavLink
@@ -41,6 +41,14 @@ function TestimonialsPage() {
 						<SingleTestimonial body={body} author={author} />
 					</div>
 				))}
+			</div>
+			<div className="book-now-btn mt-3 md:mt-0">
+				<NavLink
+					target="_blank"
+					to="https://www.google.com/search?q=google+reviews+miniflicks+bangalore&sca_esv=68041e448ebf4032&sca_upv=1&rlz=1C5CHFA_enIN966IN967&sxsrf=ADLYWIL02G252tgnDSn1xjqQwlY9ZxUvdg%3A1719863970531&ei=ogqDZsuQIOmY4-EP3Y-x-AY&oq=google+reviews+miniflicks+&gs_lp=Egxnd3Mtd2l6LXNlcnAiGmdvb2dsZSByZXZpZXdzIG1pbmlmbGlja3MgKgIIADIFECEYoAEyBRAhGKABMgUQIRifBUiQClCcAVicAXABeACQAQCYAYYBoAGGAaoBAzAuMbgBAcgBAPgBAZgCAaACiwGYAwCIBgGSBwMwLjGgB74D&sclient=gws-wiz-serp#lrd=0x3bae131e0d1e4479:0xcba4ab3250d34b75,1,,,,"
+					className="btn-3 text-center flex w-[200px] items-center gap-2 m-auto">
+					See All Google Reviews
+				</NavLink>
 			</div>
 		</section>
 	);

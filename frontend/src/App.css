@@ -488,3 +488,9 @@
 .btn-dark:hover {
 	color: #fff;
 }
+
+/* css for the gallery */
+
+.fancybox__toolbar .fancybox__toolbar__column.is-right .f-button {
+	background: rgba(255, 255, 255, 0.6) !important;
+}

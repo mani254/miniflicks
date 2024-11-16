@@ -75,7 +75,7 @@ function Header({ citiesData }) {
 					<NavLink to="/about" className="hover:text-zinc-600">
 						About
 					</NavLink>
-					<NavLink to="/services" className="hover:text-zinc-600">
+					<NavLink to="/gallery" className="hover:text-zinc-600">
 						Gallery
 					</NavLink>
 					<NavLink to="/testimonials" className="hover:text-zinc-600">
@@ -111,7 +111,7 @@ function Header({ citiesData }) {
 							About
 						</NavLink>
 						<NavLink
-							to="/services"
+							to="/gallery"
 							className="hover:text-zinc-600 py-2 px-3 hover:bg-gray-200 rounded-lg"
 							ref={(el) => {
 								navLinksRef.current[2] = el;

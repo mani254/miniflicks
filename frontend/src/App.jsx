@@ -76,6 +76,7 @@ import Paymentgateway from "./pages/Paymentgateway";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import GalleryPage from "./pages/GalleryPage";
 
 function App({ modal }) {
 	gsap.registerPlugin(ScrollTrigger);
@@ -91,6 +92,7 @@ function App({ modal }) {
 						<Route path="refundPolicy" element={<RefundPolicyPage />} />
 						<Route path="testimonials" element={<TestimonialsPage />} />
 						<Route path="contact" element={<ContactPage />} />
+						<Route path="gallery" element={<GalleryPage />} />
 						<Route path="bookingConfirmation" element={<BookingConfirmation />} />
 						<Route path="paymentgateway" element={<Paymentgateway />} />
 						<Route path="booking" element={<BookingLayout />}>
