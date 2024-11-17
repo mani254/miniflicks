@@ -10,8 +10,11 @@ function Amenities() {
 
 	useEffect(() => {
 		if (cardRefs.length <= 0) return;
+
 		const ctx = gsap.context(() => {
-			cardRefs.current.forEach((card, index) => {
+			cardRefs.current.forEach((card) => {
+				if (!card) return;
+
 				gsap.fromTo(
 					card,
 					{ opacity: 0, y: 30 },
@@ -19,10 +22,9 @@ function Amenities() {
 						opacity: 1,
 						y: 0,
 						duration: 0.6,
-						delay: index * 0.2,
 						scrollTrigger: {
 							trigger: card,
-							start: "top 90%",
+							start: "top 85%",
 							toggleActions: "play none none reverse",
 						},
 					}
@@ -30,8 +32,9 @@ function Amenities() {
 			});
 		});
 
+		// Cleanup on unmount
 		return () => ctx.revert();
-	}, [cardRefs.current]);
+	}, [cardRefs]);
 
 	return (
 		<section className="py-14 px-4 bg-secondary bg-opacity-10">
@@ -43,7 +46,7 @@ function Amenities() {
 							key={index}
 							ref={(el) => {
 								if (el && !cardRefs.current.includes(el)) {
-									cardRefs.current.push(el); // Add card to refs array if not already present
+									cardRefs.current.push(el);
 								}
 							}}
 							className="rounded-2xl relative px-7 py-10 bg-white overflow-hidden">

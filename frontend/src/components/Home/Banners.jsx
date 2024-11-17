@@ -38,7 +38,7 @@ function Banners({ bannersData }) {
 		<section className="banner">
 			<div className="swiper-3">
 				{bannersData.loading ? (
-					<div className="h-96 relative">
+					<div className="h-screen max-h-[760px]relative">
 						<Loader />
 					</div>
 				) : (

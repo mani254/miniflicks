@@ -34,6 +34,11 @@ import contactBreadcrumb from '../assets/contact-breadcrumb.jpg'
 
 import aboutBreadcrumb from '../assets/miniflicks-about-image.webp'
 
+import paperEffectImage from '../assets/home-about-image-1.png'
+
+import googleReview from '../assets/icons/google-reviews.png'
+import celebration from '../assets/icons/celebration.webp'
+
 export { fingerImage, star, mfLogo }
 
 export { addonAvailable, addonUnavailable }
@@ -47,6 +52,10 @@ export { contactBalloon, contactBreadcrumb }
 export { aboutBreadcrumb, aboutEdited }
 
 export { dolby, screen, lighting, reception, sofa, wifi }
+
+export { paperEffectImage }
+
+export { googleReview, celebration }
 
 
 export function validation(action, value) {
