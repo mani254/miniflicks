@@ -2,13 +2,10 @@ import React, { useEffect, useRef } from "react";
 import { paperEffectImage } from "../../utils";
 import { googleReview, celebration } from "../../utils";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { NavLink } from "react-router-dom";
 
 function About() {
 	const contentRef = useRef(null);
-
 	const floatRef = useRef([]);
 
 	useEffect(() => {
@@ -19,11 +16,12 @@ function About() {
 		const contentAnimation = gsap.from(contentChildren, {
 			opacity: 0,
 			y: 20,
-			stagger: 0.1,
+			stagger: 0.2,
 			scrollTrigger: {
 				trigger: contentRef.current,
-				start: "top 75%",
+				start: "top 70%",
 				toggleActions: "play none none reverse",
+				// markers: true,
 			},
 		});
 
@@ -53,7 +51,7 @@ function About() {
 
 	return (
 		<section className="py-14 container">
-			<div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center px-4 md:px-8 gap-8 py-6">
+			<div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center  md:px-8 gap-8 py-6">
 				{/* Image Section */}
 				<div className="w-full md:w-1/2 relative">
 					<div className="flex items-center min-w-[150px] absolute -top-3 md:top-10 gap-5 bg-white shadow-lg px-3 py-1 rounded-xl" ref={(el) => (floatRef.current[0] = el)}>
@@ -83,7 +81,9 @@ function About() {
 					<p className="text-gray-700 text-md text-justify">You can check available slots and book the theater from this website. For more details you can contact us on +91 8688014415</p>
 					<div className="div-1 my-2 h-[1px] bg-gray-100"></div>
 					<div>
-						<button className="btn-4 btn-dark text-sm"> Know More</button>
+						<NavLink to="/about">
+							<button className="btn-4 btn-dark text-sm"> Know More</button>
+						</NavLink>
 					</div>
 				</div>
 			</div>

@@ -108,6 +108,7 @@
 	display: inline-block;
 	position: relative;
 }
+
 .anm-link a:before,
 .anm-link a:after {
 	content: "";
@@ -133,6 +134,10 @@
 .anm-link a:after {
 	-webkit-transition: all 0.2s ease;
 	transition: all 0.3s ease;
+}
+.anm-link a.active:before,
+.anm-link a.active:after {
+	width: 50% !important;
 }
 
 /* css for hte hamburget */

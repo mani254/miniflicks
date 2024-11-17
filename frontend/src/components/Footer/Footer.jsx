@@ -40,7 +40,7 @@ const Footer = () => {
 					scrollTrigger: {
 						trigger: footerRef.current,
 						start: "top 90%",
-						toggleActions: "play pause resume reset",
+						toggleActions: "play none none reverse",
 					},
 				}
 			);
@@ -56,7 +56,7 @@ const Footer = () => {
 					scrollTrigger: {
 						trigger: footerRef.current,
 						start: "top 90%",
-						toggleActions: "play pause resume reset",
+						toggleActions: "play none none reverse",
 					},
 				}
 			);
@@ -72,7 +72,7 @@ const Footer = () => {
 					scrollTrigger: {
 						trigger: footerRef.current,
 						start: "top 90%",
-						toggleActions: "play pause resume reset",
+						toggleActions: "play none none reverse",
 					},
 				}
 			);
@@ -88,7 +88,7 @@ const Footer = () => {
 					scrollTrigger: {
 						trigger: footerRef.current,
 						start: "top 90%",
-						toggleActions: "play pause resume reset",
+						toggleActions: "play none none reverse",
 					},
 				}
 			);
@@ -112,13 +112,17 @@ const Footer = () => {
 				{/* Main Footer Content */}
 				<div className="flex flex-col md:flex-row justify-between text-center md:text-left">
 					{/* Logo and Description */}
+
 					<div className="mb-6 md:mb-0 md:w-1/3 md:border-r border-gray-500 px-2 md:px-6">
-						<div className="flex items-center gap-2 justify-center md:justify-start">
-							<div ref={logoRef} className="bg-dark w-11 h-11 rounded-full flex items-center justify-center p-1">
-								<img src={mfLogo} alt="miniflicks logo" className="w-12" />
+						<NavLink to="/">
+							<div className="flex items-center gap-2 justify-center md:justify-start">
+								<div ref={logoRef} className="bg-dark w-11 h-11 rounded-full flex items-center justify-center p-1">
+									<img src={mfLogo} alt="miniflicks logo" className="w-12" />
+								</div>
+								<h3 className="font-jokerman text-white">Miniflicks</h3>
 							</div>
-							<h3 className="font-jokerman text-white">Miniflicks</h3>
-						</div>
+						</NavLink>
+
 						<p ref={textRef} className="mt-2">
 							Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam quod aliquid sint possimus quidem. Minus, sit voluptatum aut dolorem mollitia commodi voluptates hic dolor facere, facilis quo voluptate nisi pariatur?
 						</p>
@@ -148,7 +152,10 @@ const Footer = () => {
 									contactInfoRef.current.push(el);
 								}
 							}}>
-							<IoMail /> support@miniflicks.com
+							<div className="min-w-5">
+								<IoMail />
+							</div>{" "}
+							support@miniflicks.com
 						</div>
 						<div
 							className="flex justify-center md:justify-start gap-3"
@@ -157,7 +164,10 @@ const Footer = () => {
 									contactInfoRef.current.push(el);
 								}
 							}}>
-							<FaPhoneAlt /> +1 234 567 890
+							<div className="min-w-5">
+								<FaPhoneAlt />
+							</div>{" "}
+							+1 234 567 890
 						</div>
 						<div
 							className="flex justify-center md:justify-start gap-3"
@@ -166,7 +176,10 @@ const Footer = () => {
 									contactInfoRef.current.push(el);
 								}
 							}}>
-							<IoLocationSharp /> 123 MiniFlicks St., Cinema City
+							<div className="min-w-5">
+								<IoLocationSharp />
+							</div>{" "}
+							1st A cross, Anantharama reddy layout, The Summit, #13, Outer Ring Rd, Chinnapanahalli, Marathahalli, Bengaluru, Karnataka 560037
 						</div>
 					</div>
 				</div>
@@ -176,7 +189,7 @@ const Footer = () => {
 					<p className="text-gray-400">© 2024 MiniFlicks. All rights reserved.</p>
 					<p className="text-gray-400">
 						Developed and maintained by{" "}
-						<NavLink to={"https://manidev.com"} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline cursor-pointer">
+						<NavLink to={"https://manidev.in"} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline cursor-pointer">
 							ManiKanta
 						</NavLink>
 					</p>

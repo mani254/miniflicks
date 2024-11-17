@@ -140,4 +140,7 @@
 	.contact-side {
 		background: linear-gradient(to right, rgb(213, 208, 255) 0%, rgb(255, 224, 252) 100%);
 	}
+	.circular-gradient {
+		background: radial-gradient(circle, black, transparent 50%, black 100%);
+	}
 }

@@ -13,7 +13,7 @@ function Home() {
 		<div className="home">
 			<Banners />
 			<About />
-			{/* <Cta /> */}
+			<Cta />
 			<Amenities />
 			{/* <VideoSection /> */}
 			<Services />

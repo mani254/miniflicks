@@ -13,7 +13,7 @@ const customerRouter = require("./customer")
 const authRouter = require('./authRouter');
 const occasionRouter = require("./occasion");
 const cakeRouter = require('./cake');
-
+const sendContactForm = require('../utils/sendContactForm')
 
 apiRouter.use('/cities', cityRouter)
 apiRouter.use('/locations', locationRouter)
@@ -27,6 +27,7 @@ apiRouter.use('/customers', customerRouter)
 apiRouter.use('/auth', authRouter)
 apiRouter.use('/occasions', occasionRouter)
 apiRouter.use("/cakes", cakeRouter)
+apiRouter.post('/sendContactForm', sendContactForm);
 
 
 module.exports = apiRouter;

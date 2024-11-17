@@ -39,6 +39,10 @@ import paperEffectImage from '../assets/home-about-image-1.png'
 import googleReview from '../assets/icons/google-reviews.png'
 import celebration from '../assets/icons/celebration.webp'
 
+import cta from '../assets/cta.png'
+
+import miniflicksCartoon from '../assets/videos/miniflicks-cartoon.mp4'
+
 export { fingerImage, star, mfLogo }
 
 export { addonAvailable, addonUnavailable }
@@ -55,7 +59,10 @@ export { dolby, screen, lighting, reception, sofa, wifi }
 
 export { paperEffectImage }
 
-export { googleReview, celebration }
+export { googleReview, celebration, cta }
+
+export { miniflicksCartoon }
+
 
 
 export function validation(action, value) {
@@ -97,7 +104,7 @@ export function validation(action, value) {
 
 
 const socialMediaLinks = [
-   { href: "https://instagram.com/miniflicks", title: "Instagram", src: instagramColoured, alt: "Instagram" },
+   { href: "https://www.instagram.com/miniflicks_marathahalli", title: "Instagram", src: instagramColoured, alt: "Instagram" },
    { href: "https://youtube.com/miniflicks", title: "YouTube", src: youtbeColoured, alt: "YouTube" },
    { href: "https://facebook.com/miniflicks", title: "Facebook", src: facebookColoured, alt: "Facebook" },
    { href: "https://wa.me/miniflicks", title: "WhatsApp", src: whatsappColoured, alt: "WhatsApp" },

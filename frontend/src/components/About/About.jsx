@@ -1,11 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 import image1 from "../../assets/gallery/rose-path/image-3.webp";
 import image2 from "../../assets/gallery/smoke/image-1.jpg";
 import Ripple from "../Loader/Ripple";
-
-gsap.registerPlugin(ScrollTrigger);
+import { miniflicksCartoon } from "../../utils";
 
 function About() {
 	const imagesRef = useRef([]);
@@ -72,7 +70,7 @@ function About() {
 								<Ripple />
 							</div>
 						)}
-						<video className="absolute w-full h-full object-cover" src="../../assets/video/sample-video.mp4" muted autoPlay loop playsInline onCanPlay={() => setVideoLoading(false)} loading="lazy" />
+						<video className="absolute w-full h-full object-cover" src={miniflicksCartoon} controls muted autoPlay loop playsInline onCanPlay={() => setVideoLoading(false)} loading="lazy" />
 					</div>
 					<div ref={(el) => (imagesRef.current[1] = el)} className="relative hidden md:block w-1/4 aspect-[3/4] bg-gray-300 rounded-2xl overflow-hidden">
 						<img className="absolute w-full h-full object-cover" src={image2} alt="private theatre image" />

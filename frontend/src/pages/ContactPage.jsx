@@ -5,6 +5,10 @@ import { IoMail } from "react-icons/io5";
 import { socialMediaLinks } from "../utils";
 import { NavLink } from "react-router-dom";
 import gsap from "gsap";
+import axios from "axios";
+import { showNotification } from "../redux/notification/notificationActions";
+import { useDispatch } from "react-redux";
+import Loader from "../components/Loader/Loader";
 
 function ContactPage() {
 	const phoneCardRef = useRef(null);
@@ -13,6 +17,8 @@ function ContactPage() {
 	const balloonRef = useRef(null);
 	const breadcrumbRef = useRef(null);
 	const formInputsRef = useRef([]);
+	const dispatch = useDispatch();
+	const [loading, setLoading] = useState(false);
 
 	const [formData, setFormData] = useState({
 		name: "",
@@ -88,13 +94,36 @@ function ContactPage() {
 	};
 
 	// Form submission handler
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log("Form Data:", formData);
+		try {
+			setLoading(true);
+			const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/sendContactForm`, formData);
+			if (response.data) {
+				dispatch(showNotification("Message Sent Successfully"));
+				setFormData({
+					name: "",
+					phone: "",
+					email: "",
+					message: "",
+				});
+				setLoading(false);
+			}
+		} catch (error) {
+			let errMessage = error.response ? error.response.data.error : "Something went wrong";
+			console.log(errMessage);
+			dispatch(showNotification(errMessage));
+			setLoading(false);
+		}
 	};
 
 	return (
 		<div>
+			{loading && (
+				<div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[50]">
+					<Loader></Loader>
+				</div>
+			)}
 			<div className="relative overflow-hidden">
 				<section ref={breadcrumbRef} className="breadcrumb overflow-hidden relative">
 					<div className="absolute w-full h-full inset-0 bg-gradient-to-r from-black/70 to-transparent z-[2]"></div>
@@ -104,8 +133,12 @@ function ContactPage() {
 						<h2 className="text-white text-center">Contact Us</h2>
 						<p className="text-md text-white text-center">To Book Slots or for any Queries Please Contact us!</p>
 						<div className="flex gap-5 justify-center">
-							<button className="btn-4 btn-white">Home</button>
-							<button className="btn-4 btn-white">Book slot</button>
+							<NavLink to="/">
+								<button className="btn-4 btn-white">Home</button>
+							</NavLink>
+							<NavLink to="/booking/locations">
+								<button className="btn-4 btn-white">Book slot</button>
+							</NavLink>
 						</div>
 					</div>
 				</section>
@@ -171,13 +204,13 @@ function ContactPage() {
 										<label className="block text-gray-700 font-medium mb-2" htmlFor="name">
 											Name
 										</label>
-										<input id="name" type="text" placeholder="Your Name" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100" value={formData.name} onChange={handleInputChange} ref={(el) => (formInputsRef.current[0] = el)} />
+										<input id="name" type="text" placeholder="Your Name" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100" value={formData.name} onChange={handleInputChange} ref={(el) => (formInputsRef.current[0] = el)} required />
 									</div>
 									<div className="flex-1">
 										<label className="block text-gray-700 font-medium mb-2" htmlFor="phone">
 											Phone Number
 										</label>
-										<input id="phone" type="tel" placeholder="Your Phone Number" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100" value={formData.phone} onChange={handleInputChange} ref={(el) => (formInputsRef.current[1] = el)} />
+										<input id="phone" type="tel" placeholder="Your Phone Number" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100" value={formData.phone} onChange={handleInputChange} ref={(el) => (formInputsRef.current[1] = el)} required />
 									</div>
 								</div>
 
@@ -185,18 +218,20 @@ function ContactPage() {
 									<label className="block text-gray-700 font-medium mb-2" htmlFor="email">
 										Email
 									</label>
-									<input id="email" type="email" placeholder="Your Email" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100" value={formData.email} onChange={handleInputChange} ref={(el) => (formInputsRef.current[2] = el)} />
+									<input id="email" type="email" placeholder="Your Email" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100" value={formData.email} onChange={handleInputChange} ref={(el) => (formInputsRef.current[2] = el)} required />
 								</div>
 
 								<div>
 									<label className="block text-gray-700 font-medium mb-2" htmlFor="message">
 										Message
 									</label>
-									<textarea id="message" rows="4" placeholder="Your Message" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100" value={formData.message} onChange={handleInputChange} ref={(el) => (formInputsRef.current[3] = el)}></textarea>
+									<textarea id="message" rows="4" placeholder="Your Message" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100" value={formData.message} onChange={handleInputChange} ref={(el) => (formInputsRef.current[3] = el)} required></textarea>
 								</div>
 
 								<div>
-									<button className="btn-3 w-full text-center">Send Message</button>
+									<button className="btn-3 w-full text-center" disabled={loading}>
+										Send Message
+									</button>
 								</div>
 							</form>
 						</div>

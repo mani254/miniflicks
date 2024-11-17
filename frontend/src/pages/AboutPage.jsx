@@ -4,7 +4,7 @@ import gsap from "gsap";
 import About from "../components/About/About";
 import FAQ from "../components/About/Faq";
 import BrandStory from "../components/About/BrandStory";
-// import Services from "../components/Home/Services";
+import { NavLink } from "react-router-dom";
 
 function AboutPage() {
 	const breadcrumbRef = useRef(null);
@@ -33,8 +33,12 @@ function AboutPage() {
 						<h2 className="text-white text-center">About Us</h2>
 						<p className="text-md text-white text-center max-w-xl mx-auto">We are the Best Private theatre in the Bangalore providing Best celbration Esperiences</p>
 						<div className="flex gap-5 justify-center">
-							<button className="btn-4 btn-white">Home</button>
-							<button className="btn-4 btn-white">Book slot</button>
+							<NavLink to="/">
+								<button className="btn-4 btn-white">Home</button>
+							</NavLink>
+							<NavLink to="/booking/locations">
+								<button className="btn-4 btn-white">Book slot</button>
+							</NavLink>
 						</div>
 					</div>
 				</section>

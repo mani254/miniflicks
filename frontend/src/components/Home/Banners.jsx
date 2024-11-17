@@ -30,7 +30,7 @@ function Banners({ bannersData }) {
 		if (banner.image) {
 			const timeline = gsap.timeline();
 
-			timeline.to(bannerRef.current, { opacity: 0, duration: 0 }).to(bannerRef.current, { opacity: 1, duration: 0.5 }).fromTo(titleRef.current, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6 }).fromTo(descriptionRef.current, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3").fromTo(buttonRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3");
+			timeline.to(bannerRef.current, { opacity: 0, duration: 0 }).to(bannerRef.current, { opacity: 1, duration: 0.3 }).fromTo(titleRef.current, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 }).fromTo(descriptionRef.current, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.3 }, "-=0.3").fromTo(buttonRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3");
 		}
 	}, [banner]);
 
