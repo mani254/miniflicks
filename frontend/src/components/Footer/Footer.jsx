@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { mfLogo } from "../../utils";
 import { socialMediaLinks } from "../../utils";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -17,7 +17,8 @@ const quickLinks = [
 ];
 
 const Footer = () => {
-	// Refs for each section
+	const location = useLocation();
+	const footerRef = useRef(null);
 	const socialLinksRef = useRef([]);
 	const logoRef = useRef(null);
 	const textRef = useRef(null);
@@ -25,81 +26,85 @@ const Footer = () => {
 	const contactInfoRef = useRef([]);
 
 	useEffect(() => {
-		const timelines = [];
+		if (!socialLinksRef.current || !logoRef.current || !quickLinksRef.current || !contactInfoRef.current) return;
 
-		// Social Media hover animation with ScrollTrigger
-		gsap.fromTo(
-			socialLinksRef.current,
-			{ opacity: 0, y: 20 },
-			{
-				opacity: 1,
-				y: 0,
-				stagger: 0.2,
-				scrollTrigger: {
-					trigger: socialLinksRef.current,
-					start: "top 98%",
-					toggleActions: "play none none reverse",
-				},
-			}
-		);
+		const ctx = gsap.context(() => {
+			// Social Media Links Animation
+			gsap.fromTo(
+				socialLinksRef.current,
+				{ opacity: 0, y: 20 },
+				{
+					opacity: 1,
+					y: 0,
+					stagger: 0.2,
+					scrollTrigger: {
+						trigger: footerRef.current,
+						start: "top 90%",
+						toggleActions: "play pause resume reset",
+					},
+				}
+			);
 
-		// Logo and text fade-up animation with ScrollTrigger
-		const logoTextTimeline = gsap.timeline({
-			scrollTrigger: {
-				trigger: logoRef.current,
-				start: "top 98%",
-				toggleActions: "play none none reverse",
-			},
-		});
-		logoTextTimeline.from(logoRef.current, { opacity: 0, y: 10, duration: 0.5 });
-		logoTextTimeline.from(textRef.current, { opacity: 0, y: 10, duration: 0.5 }, "-=0.3");
-		timelines.push(logoTextTimeline);
+			// Logo and Text Animation
+			gsap.fromTo(
+				[logoRef.current, textRef.current],
+				{ opacity: 0, y: 10 },
+				{
+					opacity: 1,
+					y: 0,
+					stagger: 0.2,
+					scrollTrigger: {
+						trigger: footerRef.current,
+						start: "top 90%",
+						toggleActions: "play pause resume reset",
+					},
+				}
+			);
 
-		// Quick links fade-up animation with stagger and ScrollTrigger
-		const quickLinksTimeline = gsap.timeline({
-			scrollTrigger: {
-				trigger: quickLinksRef.current,
-				start: "top 98%",
-				toggleActions: "play none none reverse",
-			},
-		});
-		quickLinksTimeline.from(quickLinksRef.current, { opacity: 0, y: 10, duration: 0.4, stagger: 0.1 });
-		timelines.push(quickLinksTimeline);
+			// Quick Links Animation
+			gsap.fromTo(
+				quickLinksRef.current,
+				{ opacity: 0, y: 10 },
+				{
+					opacity: 1,
+					y: 0,
+					stagger: 0.1,
+					scrollTrigger: {
+						trigger: footerRef.current,
+						start: "top 90%",
+						toggleActions: "play pause resume reset",
+					},
+				}
+			);
 
-		// Contact info fade-up animation with stagger and ScrollTrigger
-		const contactTimeline = gsap.timeline({
-			scrollTrigger: {
-				trigger: contactInfoRef.current,
-				start: "top 98%",
-				toggleActions: "play none none reverse",
-			},
-		});
-		contactTimeline.from(contactInfoRef.current, { opacity: 0, y: 10, duration: 0.4, stagger: 0.1 });
-		timelines.push(contactTimeline);
+			// Contact Information Animation
+			gsap.fromTo(
+				contactInfoRef.current,
+				{ opacity: 0, y: 10 },
+				{
+					opacity: 1,
+					y: 0,
+					stagger: 0.1,
+					scrollTrigger: {
+						trigger: footerRef.current,
+						start: "top 90%",
+						toggleActions: "play pause resume reset",
+					},
+				}
+			);
+		}, footerRef);
 
-		// Cleanup animations and ScrollTriggers on unmount
-		return () => {
-			timelines.forEach((timeline) => timeline.kill());
-		};
-	}, []);
+		return () => ctx.revert();
+	}, [socialLinksRef.current, logoRef.current, quickLinksRef.current, contactInfoRef.current, location]);
 
 	return (
-		<footer className="bg-dark text-white py-14">
+		<footer className="bg-dark text-white py-14" ref={footerRef}>
 			<div className="container mx-auto px-4">
 				{/* Social Media Links */}
-				<div className="flex justify-center gap-6 mb-8 ">
+				<div className="flex justify-center gap-6 mb-8">
 					{socialMediaLinks.map((link, index) => (
-						<NavLink
-							key={link.title}
-							to={link.href}
-							title={link.title}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="text-white "
-							ref={(el) => {
-								if (el && !socialLinksRef.current.includes(el)) socialLinksRef.current.push(el);
-							}}>
-							<img src={link.src} alt={link.alt} className="h-6 w-6  transition-all hover:-translate-y-1" />
+						<NavLink key={link.title} to={link.href} title={link.title} target="_blank" rel="noopener noreferrer" className="text-white" ref={(el) => (socialLinksRef.current[index] = el)}>
+							<img src={link.src} alt={link.alt} className="h-6 w-6 transition-all hover:-translate-y-1" />
 						</NavLink>
 					))}
 				</div>
@@ -108,8 +113,8 @@ const Footer = () => {
 				<div className="flex flex-col md:flex-row justify-between text-center md:text-left">
 					{/* Logo and Description */}
 					<div className="mb-6 md:mb-0 md:w-1/3 md:border-r border-gray-500 px-2 md:px-6">
-						<div className="flex items-center gap-2 justify-center md:justify-start" ref={logoRef}>
-							<div className="bg-dark w-11 h-11 rounded-full flex items-center justify-center p-1">
+						<div className="flex items-center gap-2 justify-center md:justify-start">
+							<div ref={logoRef} className="bg-dark w-11 h-11 rounded-full flex items-center justify-center p-1">
 								<img src={mfLogo} alt="miniflicks logo" className="w-12" />
 							</div>
 							<h3 className="font-jokerman text-white">Miniflicks</h3>
@@ -124,11 +129,7 @@ const Footer = () => {
 						<h4 className="font-semibold mb-4">Quick Links</h4>
 						<ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5 md:grid grid-cols-2 md:gap-2">
 							{quickLinks.map((link, index) => (
-								<li
-									key={link.label}
-									ref={(el) => {
-										if (el && !quickLinksRef.current.includes(el)) quickLinksRef.current.push(el);
-									}}>
+								<li key={link.label} ref={(el) => (quickLinksRef.current[index] = el)}>
 									<NavLink to={link.href} className="hover:text-gray-400 whitespace-nowrap">
 										{link.label}
 									</NavLink>
@@ -143,21 +144,27 @@ const Footer = () => {
 						<div
 							className="flex justify-center md:justify-start gap-3"
 							ref={(el) => {
-								if (el && !contactInfoRef.current.includes(el)) contactInfoRef.current.push(el);
+								if (el && !contactInfoRef.current.includes(el)) {
+									contactInfoRef.current.push(el);
+								}
 							}}>
 							<IoMail /> support@miniflicks.com
 						</div>
 						<div
 							className="flex justify-center md:justify-start gap-3"
 							ref={(el) => {
-								if (el && !contactInfoRef.current.includes(el)) contactInfoRef.current.push(el);
+								if (el && !contactInfoRef.current.includes(el)) {
+									contactInfoRef.current.push(el);
+								}
 							}}>
 							<FaPhoneAlt /> +1 234 567 890
 						</div>
 						<div
 							className="flex justify-center md:justify-start gap-3"
 							ref={(el) => {
-								if (el && !contactInfoRef.current.includes(el)) contactInfoRef.current.push(el);
+								if (el && !contactInfoRef.current.includes(el)) {
+									contactInfoRef.current.push(el);
+								}
 							}}>
 							<IoLocationSharp /> 123 MiniFlicks St., Cinema City
 						</div>

@@ -78,9 +78,9 @@ import Paymentgateway from "./pages/Paymentgateway";
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 function App({ modal }) {
-	gsap.registerPlugin(ScrollTrigger);
 	axios.defaults.withCredentials = true;
 	return (
 		<React.Fragment>

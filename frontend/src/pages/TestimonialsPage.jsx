@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { gsap } from "gsap"; // Import GSAP
+import { gsap } from "gsap";
 import testimonials from "../utils/Testimonials";
 import { NavLink } from "react-router-dom";
 
@@ -15,10 +15,6 @@ function TestimonialsPage() {
 			y: 20,
 			stagger: 0.05,
 		});
-
-		return () => {
-			timeline.kill();
-		};
 	}, []);
 
 	return (

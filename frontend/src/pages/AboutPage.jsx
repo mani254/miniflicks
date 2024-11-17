@@ -4,7 +4,7 @@ import gsap from "gsap";
 import About from "../components/About/About";
 import FAQ from "../components/About/Faq";
 import BrandStory from "../components/About/BrandStory";
-import Services from "../components/Home/Services";
+// import Services from "../components/Home/Services";
 
 function AboutPage() {
 	const breadcrumbRef = useRef(null);

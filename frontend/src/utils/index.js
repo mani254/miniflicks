@@ -21,6 +21,14 @@ import gift from '../assets/services/gifts.webp'
 import ledName from '../assets/services/led-name.webp'
 import boquet from '../assets/services/boquet.webp'
 
+
+import dolby from '../assets/icons/dolby.svg'
+import screen from '../assets/icons/hd.svg'
+import lighting from '../assets/icons/lighting.svg'
+import reception from '../assets/icons/reception.svg'
+import sofa from '../assets/icons/sofa.svg'
+import wifi from '../assets/icons/wifi.svg'
+
 import contactBalloon from '../assets/contact-balloon.webp'
 import contactBreadcrumb from '../assets/contact-breadcrumb.jpg'
 
@@ -38,6 +46,7 @@ export { contactBalloon, contactBreadcrumb }
 
 export { aboutBreadcrumb, aboutEdited }
 
+export { dolby, screen, lighting, reception, sofa, wifi }
 
 
 export function validation(action, value) {

@@ -5,13 +5,14 @@ import { useDispatch } from "react-redux";
 import { connect } from "react-redux";
 import { getLocations } from "../redux/location/locationActions";
 import SmoothScroll from "../components/SmoothScroll/SmoothScroll";
-
+import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
 
 import { getBanners } from "../redux/banner/bannerActions";
 
 function UsersLayout({ customerBooking, getBanners }) {
 	const dispatch = useDispatch();
+	const location = useLocation();
 
 	useEffect(() => {
 		async function fetchBanners() {
@@ -36,6 +37,21 @@ function UsersLayout({ customerBooking, getBanners }) {
 		}
 		fetchLocations();
 	}, [customerBooking.city]);
+
+	useEffect(() => {
+		const handleScrollToTop = () => {
+			window.scrollTo(0, 0); // Reset scroll position to top
+		};
+
+		handleScrollToTop(); // Reset scroll position on component mount
+
+		// Add scroll listener for future route changes
+		window.addEventListener("popstate", handleScrollToTop);
+
+		return () => {
+			window.removeEventListener("popstate", handleScrollToTop);
+		};
+	}, [location.pathname]);
 
 	return (
 		<SmoothScroll>

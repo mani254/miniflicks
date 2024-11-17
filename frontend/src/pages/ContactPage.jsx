@@ -5,9 +5,6 @@ import { IoMail } from "react-icons/io5";
 import { socialMediaLinks } from "../utils";
 import { NavLink } from "react-router-dom";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 function ContactPage() {
 	const phoneCardRef = useRef(null);
@@ -26,6 +23,8 @@ function ContactPage() {
 
 	useEffect(() => {
 		// Animate breadcrumb
+		if (!breadcrumbRef.current || !socialMediaCardRef.current || !emailCardRef.current || !balloonRef.current || !formInputsRef.current) return;
+
 		gsap.fromTo(
 			breadcrumbRef.current.children,
 			{ y: 20, opacity: 0 },
@@ -80,7 +79,7 @@ function ContactPage() {
 				}
 			);
 		});
-	}, []);
+	}, [breadcrumbRef.current, socialMediaCardRef.current, emailCardRef.current, balloonRef.current, formInputsRef.current]);
 
 	// Handle form input change
 	const handleInputChange = (e) => {
