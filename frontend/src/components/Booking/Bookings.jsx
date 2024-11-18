@@ -46,6 +46,7 @@ function Bookings({ getBookings, bookingData }) {
 								<th>Phone no</th>
 								<th>Location</th>
 								<th>Screen</th>
+								<th>Booked On</th>
 								<th>Date</th>
 								<th>Slot</th>
 								<th>Total</th>
@@ -64,6 +65,7 @@ function Bookings({ getBookings, bookingData }) {
 										<td>{booking.customer.number}</td>
 										<td className={`${booking.location?.name ? "" : "text-gray-500"}`}>{booking.location?.name || "undefined"}</td>
 										<td className={`${booking.screen?.name ? "" : "text-gray-500"}`}>{booking.screen?.name || "undefined"}</td>
+										<td>{new Date(booking.createdAt).toLocaleString().split(",")[0]}</td>
 										<td>{new Date(booking.date).toLocaleString().split(",")[0]}</td>
 										<td>{booking.slot.from + "-" + booking.slot.to}</td>
 										<td>{booking.totalPrice}</td>

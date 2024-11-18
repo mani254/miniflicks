@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import React, { useEffect } from "react";
+
 import { connect, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { setBookingCakes } from "../../redux/customerBooking/customerBookingActions";
+import OtherDetailsButton from "../Booking/OtherDetailsButton";
 
-function OtherDetailsNav({ customerBooking }) {
-	const [navOptions, setNavOptions] = useState(["Packages", "Occasions", "Addons", "Cakes", "Gifts"]);
-	const [activeIndex, setActiveIndex] = useState(0); // Initialize as null
+function OtherDetailsNav({ customerBooking, activeIndex, navOptions, setNavOptions, setActiveIndex }) {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
@@ -52,14 +51,14 @@ function OtherDetailsNav({ customerBooking }) {
 	// 	}
 	// }, [activeIndex, navOptions]);
 
-	function handleNext() {
-		if (activeIndex < navOptions.length - 1) {
-			setActiveIndex((prev) => prev + 1);
-			navigate(`${navOptions[activeIndex + 1].toLowerCase()}`);
-		} else {
-			navigate("/booking/payment");
-		}
-	}
+	// function handleNext() {
+	// 	if (activeIndex < navOptions.length - 1) {
+	// 		setActiveIndex((prev) => prev + 1);
+	// 		navigate(`${navOptions[activeIndex + 1].toLowerCase()}`);
+	// 	} else {
+	// 		navigate("/booking/payment");
+	// 	}
+	// }
 
 	function handleOptionClick(index) {
 		setActiveIndex(index);
@@ -74,9 +73,10 @@ function OtherDetailsNav({ customerBooking }) {
 				</div>
 			))}
 			<div className="book-now-btn">
-				<button className="btn-3 text-center flex w-[100px] items-center gap-2 m-auto" onClick={handleNext}>
+				{/* <button className="btn-3 text-center flex w-[100px] items-center gap-2 m-auto" onClick={handleNext}>
 					Next <FaArrowRight className="text-xs" />
-				</button>
+				</button> */}
+				<OtherDetailsButton navOptions={navOptions} setActiveIndex={setActiveIndex} activeIndex={activeIndex} />
 			</div>
 		</div>
 	);

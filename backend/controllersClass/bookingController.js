@@ -328,17 +328,82 @@ async function getGraphData(req, res) {
    }
 }
 
+
+
+async function getBooking(req, res) {
+   try {
+      const { id } = req.params;
+
+      const bookedData = await Booking.findById(id).populate({ path: 'location', select: 'name _id' }).populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice', });
+      if (bookedData) {
+         return res.status(200).json({ message: 'Successfully fetched booking', booking: bookedData });
+      } else {
+         return res.status(500).json({ error: 'Failed to save booking data.' });
+      }
+   } catch (error) {
+      console.error('Error:', error);
+      const statusCode = error.code === 11000 ? 400 : 500;
+      return res.status(statusCode).json({ error: error.message || 'An unknown error occurred.' });
+   }
+}
+
+
+// async function getBookedSlots(req, res) {
+//    try {
+//       const { currentDate, screenId } = req.body;
+//       if (!currentDate, !screenId) {
+//          return res.status(200).json([]);
+//       }
+
+//       let date = new Date(currentDate);
+//       date.setHours(0, 0, 0, 0);
+
+//       const bookings = await Booking.find({ date, screen: screenId, status: { $ne: 'canceled' } });
+//       const bookedSlots = bookings.map((booking) => booking.slot);
+
+//       return res.status(200).json(bookedSlots);
+//    } catch (error) {
+//       console.error('Error:', error);
+//       return res.status(500).json({ error: error.message || 'An unknown error occurred' });
+//    }
+// }
+
+async function getBookedSlots(req, res) {
+   try {
+      const { currentDate, screenId } = req.body;
+      if (!currentDate || !screenId) {
+         return res.status(200).json([]);
+      }
+
+      let date = new Date(currentDate);
+      date.setHours(0, 0, 0, 0);
+
+      const bookings = await Booking.find({
+         date,
+         screen: screenId,
+         status: { $in: ["pending", "booked"] },
+      });
+      const bookedSlots = bookings.map((booking) => booking.slot);
+
+      return res.status(200).json(bookedSlots);
+   } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ error: error.message || 'An unknown error occurred' });
+   }
+}
+
 async function createAdminBooking(req, res) {
    try {
       const currentBooking = await saveBooking(req, res, 'booked');
 
       const bookedData = await Booking.findById(currentBooking._id)
          .populate({ path: 'location', select: 'name _id addressLink' })
-         .populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice' });
+         .populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice' })
+         .populate({ path: 'customer', select: 'name email' });
 
       if (bookedData) {
          const html = generateBookingHTML(bookedData);
-         sendMail({ to: currentBooking.customer.email, subject: 'Miniflicks Theater Booking Confirmation', html });
+         sendMail({ to: bookedData.customer.email, subject: 'Miniflicks Theater Booking Confirmation', html });
          return res.status(200).json({ message: 'Booking successful', booking: bookedData });
       } else {
          return res.status(500).json({ error: 'Failed to save booking data.' });
@@ -350,6 +415,22 @@ async function createAdminBooking(req, res) {
       return res.status(statusCode).json({ error: error.message || 'An unknown error occurred.' });
    }
 }
+
+const updateBookingStatus = async (bookingId) => {
+   try {
+      const booking = await Booking.findById(bookingId);
+
+
+      if (booking.status === 'pending') {
+         booking.status = 'canceled';
+         booking.razorpayOrderId = null;
+         await booking.save();
+         console.log(`Booking ${bookingId} status updated to 'payment canceled' due to timeout.`);
+      }
+   } catch (error) {
+      console.error('Error updating booking status:', error);
+   }
+};
 
 async function createCustomerBooking(req, res) {
    try {
@@ -387,6 +468,10 @@ async function createCustomerBooking(req, res) {
       // Step 6: Save the Razorpay order ID in the current booking
       const bookedData = await currentBooking.updateOne({ razorpayOrderId: razorpayOrder.id });
 
+      // Step 7: Start the timer to automatically cancel the booking after 10 minutes
+      setTimeout(() => {
+         updateBookingStatus(currentBooking._id);
+      }, 10 * 60 * 1000);
 
       // Step 8: Return the booking details along with Razorpay order ID
       if (bookedData) {
@@ -402,43 +487,6 @@ async function createCustomerBooking(req, res) {
       console.error('Error:', error);
       const statusCode = error.code === 11000 ? 400 : 500;
       return res.status(statusCode).json({ error: error.message || 'An unknown error occurred.' });
-   }
-}
-
-async function getBooking(req, res) {
-   try {
-      const { id } = req.params;
-
-      const bookedData = await Booking.findById(id).populate({ path: 'location', select: 'name _id' }).populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice', });
-      if (bookedData) {
-         return res.status(200).json({ message: 'Successfully fetched booking', booking: bookedData });
-      } else {
-         return res.status(500).json({ error: 'Failed to save booking data.' });
-      }
-   } catch (error) {
-      console.error('Error:', error);
-      const statusCode = error.code === 11000 ? 400 : 500;
-      return res.status(statusCode).json({ error: error.message || 'An unknown error occurred.' });
-   }
-}
-
-async function getBookedSlots(req, res) {
-   try {
-      const { currentDate, screenId } = req.body;
-      if (!currentDate, !screenId) {
-         return res.status(200).json([]);
-      }
-
-      let date = new Date(currentDate);
-      date.setHours(0, 0, 0, 0);
-
-      const bookings = await Booking.find({ date, screen: screenId, status: { $ne: 'confirmed' } });
-      const bookedSlots = bookings.map((booking) => booking.slot);
-
-      return res.status(200).json(bookedSlots);
-   } catch (error) {
-      console.error('Error:', error);
-      return res.status(500).json({ error: error.message || 'An unknown error occurred' });
    }
 }
 
@@ -462,15 +510,32 @@ async function verifyPayment(req, res) {
          if (!booking) {
             return res.status(404).json({ error: 'Booking Not Found' })
          }
-         booking.status = 'booked'
-         booking.razorpayPaymentId = razorpay_payment_id
-         console.log(order.amount_paid, '-----paid amount--------')
-         booking.advancePrice = order.amount_paid / 100
-         booking.remainingAmount = booking.totalPrice - (order.amount_paid / 100)
 
-         await booking.save()
+         booking.status = 'booked';
+         booking.razorpayPaymentId = razorpay_payment_id;
+         booking.advancePrice = order.amount_paid / 100;
+         booking.remainingAmount = booking.totalPrice - (order.amount_paid / 100);
 
-         return res.status(200).json({ success: true, message: "Payment verified", booking: updatedBooking });
+         await booking.save();
+
+         const populatedBooking = await Booking.findById(booking._id)
+            .populate({ path: 'location', select: 'name _id addressLink' })
+            .populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice' })
+            .populate({ path: 'customer', select: 'name email' });
+
+         const html = generateBookingHTML(populatedBooking);
+         sendMail({
+            to: populatedBooking.customer.email,
+            subject: 'Miniflicks Theater Booking Confirmation',
+            html,
+         });
+
+         return res.status(200).json({
+            success: true,
+            message: "Payment verified and email sent",
+            booking: populatedBooking,
+         });
+
       } catch (error) {
          console.error("Error updating booking status", error);
          return res.status(500).json({ success: false, error: "Failed to update booking status" });
@@ -503,4 +568,31 @@ async function yesterdayBookingCustomers(req, res) {
    }
 }
 
-module.exports = { getBookings, getDashboardInfo, getGraphData, createAdminBooking, getBooking, getBookedSlots, yesterdayBookingCustomers, createCustomerBooking, verifyPayment }
+async function bookingsFrom360DaysAgo() {
+   const today = new Date();
+
+   const startOf360DaysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 360);
+   startOf360DaysAgo.setHours(0, 0, 0, 0);
+
+   const endOf360DaysAgo = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 360);
+   endOf360DaysAgo.setHours(23, 59, 59, 999);
+
+   try {
+      const bookings = await Booking.find(
+         { date: { $gte: startOf360DaysAgo, $lte: endOf360DaysAgo } },
+         "_id"
+      ).populate('customer');
+
+      const bookingList = bookings.map((booking) => ({
+         customer: booking.customer.email,
+         date: booking.date,
+      }));
+
+      return bookingList;
+   } catch (error) {
+      console.error("Error fetching bookings:", error);
+      throw new Error("Failed to fetch bookings");
+   }
+}
+
+module.exports = { getBookings, getDashboardInfo, getGraphData, createAdminBooking, getBooking, getBookedSlots, yesterdayBookingCustomers, createCustomerBooking, verifyPayment, bookingsFrom360DaysAgo }

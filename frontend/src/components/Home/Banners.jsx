@@ -49,10 +49,10 @@ function Banners({ bannersData }) {
 									<img className="w-full h-full object-cover" src={banner.image} ref={bannerRef} alt="miniflicks banner image" />
 								</div>
 								<div className=" w-full max-w-[500px] relative z-[2] space-y-6">
-									<h2 className="text-white text-center md:text-start text-xl md:text-2xl" ref={titleRef}>
+									<h2 className="text-gray-300 text-center md:text-start text-xl md:text-2xl" ref={titleRef}>
 										{banner.title}
 									</h2>
-									<p className="text-white text-md md:text-lg text-center md:text-start" ref={descriptionRef}>
+									<p className="text-gray-300 text-md md:text-lg text-center md:text-start" ref={descriptionRef}>
 										{banner.description}
 									</p>
 									<button className="btn-4 btn-white block m-auto md:m-0" ref={buttonRef}>

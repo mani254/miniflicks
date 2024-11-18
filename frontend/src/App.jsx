@@ -10,7 +10,8 @@ import Home from "./pages/Home";
 import SlotBookingPage from "./pages/SlotBookingPage";
 import UserLocations from "./components/Locations/UserLocations";
 import UserScreens from "./components/Screen/UserScreens";
-import BookingLayout from "./layouts/BookingLayout";
+// import BookingLayout from "./layouts/BookingLayout";
+const BookingLayout = lazy(() => import("./layouts/BookingLayout"));
 import OtherDetails from "./components/OtherDetails/OtherDetails";
 import PackagesSection from "./components/OtherDetails/PackagesSection";
 import OccasionsSection from "./components/OtherDetails/OccasionsSection";
@@ -97,7 +98,18 @@ function App({ modal }) {
 						<Route path="bookingConfirmation" element={<BookingConfirmation />} />
 						<Route path="paymentgateway" element={<Paymentgateway />} />
 						<Route path="about" element={<AboutPage />} />
-						<Route path="booking" element={<BookingLayout />}>
+						<Route
+							path="booking"
+							element={
+								<Suspense
+									fallback={
+										<div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+											<Loader />
+										</div>
+									}>
+									<BookingLayout />
+								</Suspense>
+							}>
 							<Route path="locations" element={<UserLocations />}></Route>
 							<Route path="screens" element={<UserScreens />}></Route>
 							<Route path="slots" element={<SlotBookingPage />}></Route>
@@ -121,7 +133,7 @@ function App({ modal }) {
 						element={
 							<Suspense
 								fallback={
-									<div className="w-full h-screen">
+									<div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
 										<Loader />
 									</div>
 								}>

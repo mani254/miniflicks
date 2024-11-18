@@ -62,31 +62,47 @@ class BookingClass {
    }
 
    async slotValidation(date = this.date, slot = this.slot, screen = this.screen) {
+      const thatDayBookings = await Booking.find({
+         date,
+         screen,
+         status: { $in: ["pending", "booked"] },
+      });
 
-      const thatDayBookings = await Booking.find({ date, screen, status: { $ne: "canceled" } })
       const requestedFrom = new Date(date).setHours(slot.from.split(":")[0], slot.from.split(":")[1], 0, 0);
       const requestedTo = new Date(date).setHours(slot.to.split(":")[0], slot.to.split(":")[1], 0, 0);
 
       thatDayBookings.forEach((booking) => {
+         const from = new Date(date).setHours(booking.slot.from.split(":")[0], booking.slot.from.split(":")[1], 0, 0);
+         const to = new Date(date).setHours(booking.slot.to.split(":")[0], booking.slot.to.split(":")[1], 0, 0);
 
-         const from = new Date(date).setHours(booking.slot.from.split(":")[0], booking.slot.from.split(":")[1], 0, 0)
-         const to = new Date(date).setHours(booking.slot.to.split(":")[0], booking.slot.to.split(":")[1], 0, 0)
-
-         // console.log(thatDayBookings.length)
-         // console.log(from, requestedFrom)
-         // console.log(to, requestedTo)
-         // console.log((requestedFrom >= from && requestedFrom < to),
-         //    (requestedTo > from && requestedTo <= to),
-         //    (requestedFrom <= from && requestedTo >= to))
          if (
             (requestedFrom >= from && requestedFrom < to) ||
             (requestedTo > from && requestedTo <= to)
-            // (requestedFrom <= from && requestedTo >= to)
          ) {
             throw new Error("Requested slot is already booked on the selected date.");
          }
-      })
+      });
    }
+
+   // async slotValidation(date = this.date, slot = this.slot, screen = this.screen) {
+
+   //    const thatDayBookings = await Booking.find({ date, screen, status: { $: "canceled" } })
+   //    const requestedFrom = new Date(date).setHours(slot.from.split(":")[0], slot.from.split(":")[1], 0, 0);
+   //    const requestedTo = new Date(date).setHours(slot.to.split(":")[0], slot.to.split(":")[1], 0, 0);
+
+   //    thatDayBookings.forEach((booking) => {
+
+   //       const from = new Date(date).setHours(booking.slot.from.split(":")[0], booking.slot.from.split(":")[1], 0, 0)
+   //       const to = new Date(date).setHours(booking.slot.to.split(":")[0], booking.slot.to.split(":")[1], 0, 0)
+
+   //       if (
+   //          (requestedFrom >= from && requestedFrom < to) ||
+   //          (requestedTo > from && requestedTo <= to)
+   //       ) {
+   //          throw new Error("Requested slot is already booked on the selected date.");
+   //       }
+   //    })
+   // }
 
    async fetchOccasion() {
       if (!this.bookingData.occasion?._id) return

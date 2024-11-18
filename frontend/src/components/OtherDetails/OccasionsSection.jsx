@@ -4,11 +4,14 @@ import { connect, useDispatch } from "react-redux";
 import { setBookingOccasion } from "../../redux/customerBooking/customerBookingActions";
 import { showModal } from "../../redux/modal/modalActions";
 import KnowMore from "../KnowMore/KnowMore";
+import { useNavigate } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
 
 function OccasionsSection({ OccasionsData, getAllOccasions, customerBooking }) {
 	const [selected, setSelected] = useState(null);
 	const [celebrantName, setCelebrantName] = useState("");
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		(async () => {
@@ -42,6 +45,14 @@ function OccasionsSection({ OccasionsData, getAllOccasions, customerBooking }) {
 		}
 	}
 
+	// function handleNext() {
+
+	// 	if (customerBooking.package?.addons.includes("Cake")) {
+	// 		navigate("/booking/otherdetails/cakes");
+	// 	} else {
+	// 		navigate("/booking/otherdetails/addons");
+	// 	}
+	// }
 	function handleCelebrantName(e) {
 		setCelebrantName(e.target.value);
 	}
@@ -95,6 +106,15 @@ function OccasionsSection({ OccasionsData, getAllOccasions, customerBooking }) {
 								</div>
 							);
 						})}
+						{/* <div className="w-full h-full flex items-center justify-center ">
+							<button
+								className="btn-3 text-center flex w-full items-center gap-2 m-auto max-w-[120px]"
+								onClick={() => {
+									handleNext;
+								}}>
+								Next <FaArrowRight className="text-xs" />
+							</button>
+						</div> */}
 					</div>
 				) : (
 					<div className="w-full flex items-center justify-center min-h-sm">

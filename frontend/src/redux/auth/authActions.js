@@ -95,7 +95,24 @@ export const initialLogin = (token) => {
    };
 };
 
+export const logOutSuccess = () => ({
+   type: 'LOGOUT_SUCCESS',
+})
 
-
+export const logout = () => {
+   return async (dispatch) => {
+      dispatch(loginRequest());
+      try {
+         localStorage.setItem('authToken', "");
+         const res = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/auth/logout`);
+         dispatch(logOutSuccess())
+         return Promise.resolve(res.data.admin);
+      } catch (err) {
+         const errorMessage = err.response ? err.response.data.error : 'Network Error';
+         dispatch(showNotification(errorMessage));
+         return Promise.reject(err);
+      }
+   };
+};
 
 

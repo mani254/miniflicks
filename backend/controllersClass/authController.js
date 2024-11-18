@@ -140,6 +140,21 @@ class AuthController {
          this.handleError(err, res, 'Error while registering superAdmin');
       }
    }
+   async logout(req, res) {
+      try {
+         let token = ""
+         res.status(200)
+            .cookie("authToken", token, {
+               httpOnly: true,
+               sameSite: 'None',
+               // sameSite: "Lax",
+               secure: true,
+            })
+            .json({ message: "Logged out successfully" });
+      } catch (err) {
+         this.handleError(err, res, 'Error while registering superAdmin');
+      }
+   }
 
    handleError(err, res, message) {
       console.error(message + ':', err.message);

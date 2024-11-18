@@ -9,7 +9,7 @@ const navlinks = [
 		to: "/admin/bookings",
 		image: "https://img.icons8.com/m_rounded/512w/purchase-order.png",
 		children: [
-			{ title: "New Booking", to: "/admin/bookings/newbooking" },
+			{ title: "New Booking", to: "/booking/locations" },
 			{ title: "Bookings Today", to: "/admin/bookings?page=1&limit=10&toDate=2024-10-21&fromDate=2024-10-21" },
 			{ title: "Upcoming", to: "/admin/bookings/upcoming" },
 		],

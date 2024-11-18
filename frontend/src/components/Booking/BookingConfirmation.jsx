@@ -43,13 +43,13 @@ const BookingConfirmation = ({ customerBooking, locationsData }) => {
 					<p className="mt-2 text-sm">Please check your email for the booking details, including your itinerary. If you don't see it, kindly check your spam or junk folder.</p>
 					<div className="flex items-center justify-center gap-20 my-5 flex-wrap">
 						<div className="mt-4 book-now-btn">
-							<button onClick={() => navigate("/", { replace: true })} className="btn-3">
+							<button onClick={() => navigate("/", { replace: true })} className="btn-3 font-medium">
 								Go to Home Page
 							</button>
 						</div>
 						<div className="mt-4 book-now-btn">
 							<button onClick={() => navigate("/", { replace: true })} className="btn-3">
-								<a href={location?.addressLink} target="_blank" rel="noopener noreferrer" className="font-bold">
+								<a href={location?.addressLink} target="_blank" rel="noopener noreferrer" className="font-medium">
 									Navigate to Location
 								</a>
 							</button>
