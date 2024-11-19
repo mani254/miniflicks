@@ -11,6 +11,7 @@ function OtherDetailsButton({ customerBooking, activeIndex, navOptions, setActiv
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+	const [verificationLoading, setVerificationLoading] = useState(false);
 
 	function handleNext() {
 		if (activeIndex < navOptions.length - 1) {
@@ -36,7 +37,6 @@ function OtherDetailsButton({ customerBooking, activeIndex, navOptions, setActiv
 			const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/customerBooking`, customerBooking);
 
 			if (response.data) {
-				// Step 2: Call Razorpay payment initiation function
 				startRazorpayPayment({
 					booking: response.data.booking,
 					razorpayOrderId: response.data.razorpayOrderId,
@@ -67,13 +67,20 @@ function OtherDetailsButton({ customerBooking, activeIndex, navOptions, setActiv
 			name: "Miniflicks Theater",
 			description: "Booking Payment",
 			order_id: razorpayOrderId,
-			timeout: 20 * 60,
+			timeout: 10 * 60,
 			handler: function (paymentResponse) {
-				console.log("Payment successful!", paymentResponse);
-
-				// Send payment details to the backend for verification
-				verifyPayment(paymentResponse);
+				if (paymentResponse && paymentResponse.razorpay_payment_id) {
+					console.log("Payment successful!", paymentResponse);
+					verifyPayment(paymentResponse);
+				}
 			},
+			modal: {
+				ondismiss: function () {
+					console.log(`Razorpay modal closed for order ID: ${razorpayOrderId}`);
+					delPreviousOrder(razorpayOrderId);
+				},
+			},
+
 			prefill: {
 				name: customerBooking.customer.name,
 				email: customerBooking.customer.email,
@@ -86,6 +93,7 @@ function OtherDetailsButton({ customerBooking, activeIndex, navOptions, setActiv
 			rzp.on("payment.failed", function (response) {
 				handlePaymentFailure(response);
 			});
+
 			rzp.open();
 		} catch (error) {
 			console.error("Error initializing Razorpay:", error);
@@ -94,6 +102,7 @@ function OtherDetailsButton({ customerBooking, activeIndex, navOptions, setActiv
 
 	function verifyPayment(paymentResponse) {
 		// Send the payment details to the backend for verification
+		setVerificationLoading(true);
 		axios
 			.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/verifyPayment`, {
 				razorpay_payment_id: paymentResponse.razorpay_payment_id,
@@ -105,25 +114,56 @@ function OtherDetailsButton({ customerBooking, activeIndex, navOptions, setActiv
 					navigate("/bookingConfirmation");
 					alert("Payment verified successfully!");
 					// Optionally, navigate to success page
+					setVerificationLoading(false);
 				} else {
 					alert("Payment verification failed!");
+					setVerificationLoading(false);
 				}
 			})
 			.catch((error) => {
 				console.error("Error verifying payment:", error);
 				alert("Error during payment verification.");
+				setVerificationLoading(false);
+			});
+	}
+
+	function delPreviousOrder(orderId) {
+		axios
+			.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/delPreviousOrder`, {
+				orderId,
+			})
+			.then((response) => {
+				console.log("deleted the prev order succesfully", response.data);
+			})
+			.catch((error) => {
+				console.error("Error deletring the previously saved booking", error);
+			});
+	}
+
+	function logPaymentCancellation(orderId, reason) {
+		axios
+			.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/cancelPayment`, {
+				orderId,
+				reason,
+			})
+			.then((response) => {
+				console.log("Payment cancellation logged successfully:", response.data);
+				dispatch(showNotification("Payment canceled due to timeout or failure."));
+			})
+			.catch((error) => {
+				console.error("Error logging payment cancellation:", error);
 			});
 	}
 
 	function handlePaymentFailure(response) {
 		console.error("Payment failed", response.error);
-
+		logPaymentCancellation(response.error.metadata.order_id, response.error.description);
 		alert(`Payment failed: ${response.error.description}`);
 	}
 
 	return (
 		<>
-			{loading && (
+			{(loading || verificationLoading) && (
 				<div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
 					<Loader />
 				</div>

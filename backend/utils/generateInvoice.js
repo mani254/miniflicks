@@ -1,4 +1,6 @@
-const generateBookingHTML = (bookingData) => {
+const Coupon = require('../schema/couponSchema')
+
+const generateBookingHTML = async (bookingData) => {
    // Helper functions to calculate prices
    const packagePrice = () => bookingData.package?.price || 0;
    const occasionPrice = () => bookingData.occasion?.price || 0;
@@ -12,6 +14,25 @@ const generateBookingHTML = (bookingData) => {
       }
       return 0;
    };
+
+   const couponCodePrice = async () => {
+      if (!bookingData.couponCode) return 0
+
+      const coupon = await Coupon.findOne({ code: bookingData.couponCode.toUpperCase() });
+
+      let amount = 0
+
+      if (coupon.type === "fixed") {
+         amount = -coupon.discount;
+         return amount
+      } else {
+         const total = packagePrice() + occasionPrice() + addonsPrice() + giftsPrice() + cakesPrice() + peoplePrice();
+         amount = -parseFloat(((coupon.discount / 100) * total).toFixed(2));
+         return amount
+      }
+   }
+
+   const couponValue = await couponCodePrice()
 
    const convertToAMPM = (time) => {
       const [hours, minutes] = time.split(":");
@@ -227,6 +248,14 @@ const generateBookingHTML = (bookingData) => {
                <tr style="border-bottom:1px solid #e2e8f0;">
                   <td style="padding:4px; color:#4a5568;">Cakes</td>
                   <td style="padding:4px; color:#4a5568;">₹${cakesPrice()}</td>
+               </tr>`
+         : ""
+      }
+               ${(couponValue < 0)
+         ? `
+               <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:4px; color:#4a5568;">Coupon</td>
+                  <td style="padding:4px; color:#4a5568;">₹${couponValue}</td>
                </tr>`
          : ""
       }

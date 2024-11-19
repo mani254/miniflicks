@@ -3,6 +3,7 @@ import { connect, useDispatch } from "react-redux";
 import { createBooking } from "../redux/booking/bookingActions";
 import { useNavigate } from "react-router-dom";
 import { setBookingAdvance, setBookingNote } from "../redux/customerBooking/customerBookingActions";
+import Loader from "../components/Loader/Loader";
 
 function paymentPage({ customerBooking, createBooking, auth }) {
 	const navigate = useNavigate();
@@ -13,6 +14,7 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 		note: "",
 		total: 0,
 	});
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		if (!customerBooking) return;
@@ -39,13 +41,16 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 
 	async function handleBooking() {
 		try {
+			setLoading(true);
 			const res = await createBooking(customerBooking);
 
 			if (res) {
 				console.log(res);
+				setLoading(false);
 				navigate("/bookingConfirmation", { replace: true });
 			}
 		} catch (err) {
+			setLoading(false);
 			console.log(err);
 		}
 	}
@@ -57,6 +62,11 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 
 	return (
 		<div style={{ height: "calc(100vh - 60px)" }} className="w-full flex flex-col items-center justify-center">
+			{loading && (
+				<div className="fixed inset-0 bg-black bg-opacity-30 z-50">
+					<Loader />
+				</div>
+			)}
 			{customerBooking && (
 				<form className="w-full max-w-[400px] bg-white p-5 rounded-lg shadow-md customer-details" onSubmit={handleSubmit}>
 					<div className="input-wrapper">
@@ -74,7 +84,7 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 							Total: <span className="text-gray-600 text-md">₹ {details.total}</span>{" "}
 						</h4>
 						<h4>
-							Remaining: <span className="text-gray-600 text-md">₹ {details.total - details.advance}</span>
+							Remaining: <span className="text-gray-600 text-md">₹ {parseFloat((details.total - details.advance).toFixed(2))}</span>
 						</h4>
 					</div>
 

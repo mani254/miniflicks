@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { FaArrowRight } from "react-icons/fa";
 import CouponComponent from "./CouponComponent";
 import { setBookingTotal } from "../../redux/customerBooking/customerBookingActions";
-import axios from "axios";
-import { showNotification } from "../../redux/notification/notificationActions";
 import OtherDetailsButton from "../Booking/OtherDetailsButton";
 
 function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions, setActiveIndex }) {

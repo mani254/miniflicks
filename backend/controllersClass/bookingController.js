@@ -77,7 +77,8 @@ async function saveBooking(req, res, status = "pending") {
       return null
    }
 
-   booking.calculateTotalPrice();
+   await booking.calculateTotalPrice();
+
    const currentBooking = await booking.saveBooking(status);
    if (currentBooking) {
       return currentBooking
@@ -396,13 +397,18 @@ async function createAdminBooking(req, res) {
    try {
       const currentBooking = await saveBooking(req, res, 'booked');
 
+      // console.log(currentBooking, 'booking Details after saving the booking')
+
       const bookedData = await Booking.findById(currentBooking._id)
          .populate({ path: 'location', select: 'name _id addressLink' })
          .populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice' })
          .populate({ path: 'customer', select: 'name email' });
 
+      // console.log("-------------------------------------------------------------")
+      // console.log(bookedData, 'booked Data after fetching the saved booking')
+
       if (bookedData) {
-         const html = generateBookingHTML(bookedData);
+         const html = await generateBookingHTML(bookedData);
          sendMail({ to: bookedData.customer.email, subject: 'Miniflicks Theater Booking Confirmation', html });
          return res.status(200).json({ message: 'Booking successful', booking: bookedData });
       } else {
@@ -420,17 +426,41 @@ const updateBookingStatus = async (bookingId) => {
    try {
       const booking = await Booking.findById(bookingId);
 
+      if (!booking) return
 
       if (booking.status === 'pending') {
          booking.status = 'canceled';
-         booking.razorpayOrderId = null;
          await booking.save();
-         console.log(`Booking ${bookingId} status updated to 'payment canceled' due to timeout.`);
       }
    } catch (error) {
       console.error('Error updating booking status:', error);
    }
 };
+
+const cancelPayment = async (req, res) => {
+   const { orderId, reason } = req.body;
+
+   if (!orderId || !reason) {
+      return res.status(400).json({ error: 'Order ID and reason are required.' });
+   }
+
+   try {
+      const booking = await Booking.findOne({ razorpayOrderId: orderId });
+      if (!booking) {
+         return res.status(404).json({ error: 'Booking not found.' });
+      }
+
+      booking.status = 'canceled';
+      booking.cancellationReason = reason;
+      await booking.save();
+
+      return res.status(200).json({ message: 'Payment canceled successfully.' });
+   } catch (error) {
+      console.error('Error canceling payment:', error);
+      return res.status(500).json({ error: 'Failed to cancel payment.' });
+   }
+};
+
 
 async function createCustomerBooking(req, res) {
    try {
@@ -489,6 +519,29 @@ async function createCustomerBooking(req, res) {
       return res.status(statusCode).json({ error: error.message || 'An unknown error occurred.' });
    }
 }
+async function delPreviousOrder(req, res) {
+   const { orderId } = req.body;
+
+   if (!orderId) {
+      return res.status(400).json({ error: 'Invalid orderId' });
+   }
+
+   try {
+      const booking = await Booking.findOneAndDelete({
+         razorpayOrderId: orderId,
+         status: 'pending',
+      });
+
+      if (!booking) {
+         return res.status(404).json({ error: 'Booking not found.' });
+      }
+
+      return res.status(200).json({ message: 'Previous order deleted successfully.' });
+   } catch (error) {
+      console.error('Error canceling payment:', error);
+      return res.status(500).json({ error: 'Failed to cancel payment.' });
+   }
+}
 
 async function verifyPayment(req, res) {
    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
@@ -523,7 +576,7 @@ async function verifyPayment(req, res) {
             .populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice' })
             .populate({ path: 'customer', select: 'name email' });
 
-         const html = generateBookingHTML(populatedBooking);
+         const html = await generateBookingHTML(populatedBooking);
          sendMail({
             to: populatedBooking.customer.email,
             subject: 'Miniflicks Theater Booking Confirmation',
@@ -595,4 +648,4 @@ async function bookingsFrom360DaysAgo() {
    }
 }
 
-module.exports = { getBookings, getDashboardInfo, getGraphData, createAdminBooking, getBooking, getBookedSlots, yesterdayBookingCustomers, createCustomerBooking, verifyPayment, bookingsFrom360DaysAgo }
+module.exports = { getBookings, getDashboardInfo, getGraphData, createAdminBooking, getBooking, getBookedSlots, yesterdayBookingCustomers, createCustomerBooking, verifyPayment, bookingsFrom360DaysAgo, cancelPayment, delPreviousOrder }

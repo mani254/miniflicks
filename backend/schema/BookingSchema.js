@@ -165,7 +165,11 @@ const bookingSchema = new Schema({
       type: String,
       required: false,
    },
-   
+   cancellationReason: {
+      type: String,
+      required: false
+   }
+
 
 }, { timestamps: true });
 

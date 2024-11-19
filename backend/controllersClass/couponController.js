@@ -109,6 +109,7 @@ class CouponController {
       } catch (err) {
          this.handleError(res, err, 'Error while validating coupon');
       }
+
    }
 
 

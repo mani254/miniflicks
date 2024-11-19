@@ -7,6 +7,7 @@ const Cake = require("../schema/cakeSchema")
 const Gift = require('../schema/giftSchema')
 const Customer = require('../schema/customerSchema')
 const Booking = require('../schema/bookingSchema');
+const Coupon = require('../schema/couponSchema')
 
 class BookingClass {
    constructor(bookingData) {
@@ -28,6 +29,7 @@ class BookingClass {
       this.ledInfo = bookingData.otherInfo.ledInfo || "";
       this.note = bookingData.note || '';
       // this.status = 'pending';
+      this.couponCode = bookingData.otherInfo.couponCode || null
       this.totalPrice = 0;
       this.remainingAmount = 0;
       this.advancePrice = bookingData.advance || 999
@@ -186,9 +188,16 @@ class BookingClass {
       }
    }
 
-   calculateTotalPrice() {
-      this.totalPrice = this.calculatePackagePrice() + this.calculateOccasionPrice() + this.calculateAddonsPrice() + this.calculateCakesPrice() + this.calculateGiftsPrice() + this.calculatePeoplePrice();
-      this.remainingAmount = this.totalPrice - this.advancePrice;
+   async calculateTotalPrice() {
+      let couponDiscount = 0
+      try {
+         couponDiscount = await this.calculateCouponPrice()
+         this.totalPrice = this.calculatePackagePrice() + this.calculateOccasionPrice() + this.calculateAddonsPrice() + this.calculateCakesPrice() + this.calculateGiftsPrice() + this.calculatePeoplePrice() + couponDiscount;
+         this.remainingAmount = this.totalPrice - this.advancePrice;
+      }
+      catch (err) {
+         console.log(err)
+      }
    }
 
    calculatePackagePrice() {
@@ -202,6 +211,35 @@ class BookingClass {
    calculateAddonsPrice() {
       if (this.addons.length === 0) return 0
       return this.addons.reduce((sum, addon) => sum + addon.price * addon.count, 0);
+   }
+
+   async calculateCouponPrice() {
+      if (!this.couponCode) return 0
+
+      const coupon = await Coupon.findOne({ code: this.couponCode.toUpperCase() });
+
+      if (!coupon) {
+         throw new Error("Invalid coupon code.");
+      }
+
+      if (!coupon.status) {
+         throw new Error("This coupon is inactive.");
+      }
+
+      const currentDate = new Date();
+      if (currentDate > coupon.expireDate) {
+         throw new Error("This coupon has expired.");
+      }
+      let amount = 0
+
+      if (coupon.type === "fixed") {
+         amount = -coupon.discount;
+         return amount
+      } else {
+         const total = this.calculatePackagePrice() + this.calculateOccasionPrice() + this.calculateAddonsPrice() + this.calculateCakesPrice() + this.calculateGiftsPrice() + this.calculatePeoplePrice();
+         amount = -parseFloat(((coupon.discount / 100) * total).toFixed(2));
+         return amount
+      }
    }
 
    calculateGiftsPrice() {
@@ -228,6 +266,8 @@ class BookingClass {
       return 0;
    }
 
+
+
    async saveBooking(status = 'pending') {
       const bookingDetails = {
          city: this.city._id,
@@ -249,6 +289,7 @@ class BookingClass {
          advancePrice: this.advancePrice,
          totalPrice: this.totalPrice,
          remainingAmount: this.remainingAmount,
+         couponCode: this.couponCode
       };
 
       const bookedData = await Booking.create(bookingDetails);
