@@ -35,7 +35,7 @@ import Modal from "./components/Modal/Modal";
 
 import CitiesWrapper from "./components/Cities/CitiesWrapper";
 import Cities from "./components/Cities/Cities";
-import AddCities from "./components/Cities/addCities";
+import AddCities from "./components/Cities/AddCities";
 
 import LocationsWrapper from "./components/Locations/LocationsWrapper";
 import Locations from "./components/Locations/Locations";
