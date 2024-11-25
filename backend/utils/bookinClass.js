@@ -193,7 +193,7 @@ class BookingClass {
       try {
          couponDiscount = await this.calculateCouponPrice()
          this.totalPrice = this.calculatePackagePrice() + this.calculateOccasionPrice() + this.calculateAddonsPrice() + this.calculateCakesPrice() + this.calculateGiftsPrice() + this.calculatePeoplePrice() + couponDiscount;
-         this.remainingAmount = this.totalPrice - this.advancePrice;
+         this.remainingAmount = parseFloat((this.totalPrice - this.advancePrice).toFixed(2));;
       }
       catch (err) {
          console.log(err)
@@ -265,7 +265,6 @@ class BookingClass {
       }
       return 0;
    }
-
 
 
    async saveBooking(status = 'pending') {
