@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { addScreen, updateScreen } from "../../redux/screen/screenActions";
 import { ImageUploaderComponent } from "editorify-dev/imageUploader";
 import "editorify-dev/css/imageUploader";
-import PackageForm from "./packages";
+import PackageForm from "./Packages";
 
 function AddScreens({ addScreen, update = false, updateScreen }) {
 	const navigate = useNavigate();

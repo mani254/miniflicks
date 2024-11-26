@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { gsap } from "gsap";
-import testimonials from "../utils/Testimonials";
+import testimonials from "../utils/testimonials";
 import { NavLink } from "react-router-dom";
 
 function TestimonialsPage() {

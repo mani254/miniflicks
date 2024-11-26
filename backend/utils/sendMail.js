@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { oauth2Client, getAccessToken } = require('./oauthConfig');
+const { oauth2Client, getAccessToken } = require('./oAuthConfig');
 require('dotenv').config();
 
 async function sendMail({ subject, html, to }) {
