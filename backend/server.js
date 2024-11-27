@@ -85,6 +85,7 @@ cron.schedule('00 10 * * *', async () => {
 });
 
 app.use((err, req, res, next) => {
+   console.log(err)
    if (err instanceof multer.MulterError) {
       // Handle multer-specific errors (like file size exceeded)
       return res.status(400).json({ error: err.message });

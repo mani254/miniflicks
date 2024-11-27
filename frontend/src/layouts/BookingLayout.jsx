@@ -7,6 +7,8 @@ import { setBookingFromLocalStorage } from "../redux/customerBooking/customerBoo
 import { getScreens } from "../redux/screen/screenActions";
 import { initialLogin } from "../redux/auth/authActions";
 
+import { Helmet } from "react-helmet-async";
+
 function UsersLayout({ customerBooking, auth, initialLogin }) {
 	const dispatch = useDispatch();
 
@@ -26,7 +28,6 @@ function UsersLayout({ customerBooking, auth, initialLogin }) {
 		fetchInitialData();
 	}, []);
 
-	// useeffect when when reloaded or rendered fetch the data from the local storeage and set in the redux
 	useEffect(() => {
 		const savedBookingData = localStorage.getItem("customerBooking");
 		console.log(savedBookingData, "savedbookingdata");
@@ -51,9 +52,25 @@ function UsersLayout({ customerBooking, auth, initialLogin }) {
 	}, [customerBooking.location]);
 
 	return (
-		<div className="container m-auto max-w-[1350px]">
-			<Outlet />
-		</div>
+		<>
+			<Helmet>
+				<title>Book Miniflicks | Your Private Theatre Awaits</title>
+				<meta name="description" content="Reserve Miniflicks for an exclusive private theatre experience. Check availability and book for movie nights, parties, birthdays, and customized celebrations with ease." />
+				<meta name="keywords" content="book Miniflicks, private theatre booking, movie night reservations, luxury theatre rental, party venue booking, customized celebrations" />
+				<meta property="og:title" content="Book Miniflicks | Your Private Theatre Awaits" />
+				<meta property="og:description" content="Secure your private theatre experience at Miniflicks. Book for birthdays, parties, or movie nights with personalized themes and luxury amenities." />
+				<meta property="og:image" content="https://miniflicks.in/decoration.webp" />
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content="https://miniflicks.in/booking/locations" />
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta name="twitter:title" content="Book Miniflicks | Your Private Theatre Awaits" />
+				<meta name="twitter:description" content="Reserve Miniflicks for an unforgettable private theatre experience. Perfect for celebrations and movie nights with Dolby Atmos and luxurious seating." />
+				<meta name="twitter:image" content="https://miniflicks.in/decoration.webp" />
+			</Helmet>
+			<div className="container m-auto max-w-[1350px]">
+				<Outlet />
+			</div>
+		</>
 	);
 }
 

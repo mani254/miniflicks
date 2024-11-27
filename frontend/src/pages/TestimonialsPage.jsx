@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { gsap } from "gsap";
 import testimonials from "../utils/testimonials";
 import { NavLink } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 function TestimonialsPage() {
 	useEffect(() => {
@@ -18,10 +19,41 @@ function TestimonialsPage() {
 	}, []);
 
 	return (
-		<section className="container testimonials-section py-10">
-			<div className="mb-10 md:flex items-center justify-between">
-				<h1 className="text-center text-xl font-medium font-ks">Cherished Experiences from Our Guests</h1>
+		<>
+			<Helmet>
+				<title>Miniflicks Testimonials | Hear From Our Guests</title>
+				<meta name="description" content="See what our happy customers say about their unforgettable experiences at Miniflicks, the ultimate private theatre destination." />
+				<meta name="keywords" content="Miniflicks testimonials, customer reviews, private theatre feedback, luxury experience reviews" />
+				<meta property="og:title" content="Miniflicks Testimonials | Hear From Our Guests" />
+				<meta property="og:description" content="Customer reviews and experiences at Miniflicks, a luxury private theatre for all occasions." />
+				<meta property="og:image" content="https://miniflicks.in/decoration.webp" />
+				<meta property="og:type" content="website" />
+				<meta property="og:url" content="https://miniflicks.in/testimonials" />
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta name="twitter:title" content="Miniflicks Testimonials | Hear From Our Guests" />
+				<meta name="twitter:description" content="Discover what guests say about their experiences at Miniflicks Private Theatre." />
+				<meta name="twitter:image" content="https://miniflicks.in/decoration.webp" />
+			</Helmet>
+			<section className="container testimonials-section py-10">
+				<div className="mb-10 md:flex items-center justify-between">
+					<h1 className="text-center text-xl font-medium font-ks">Cherished Experiences from Our Guests</h1>
 
+					<div className="book-now-btn mt-3 md:mt-0">
+						<NavLink
+							target="_blank"
+							to="https://www.google.com/search?q=google+reviews+miniflicks+bangalore&sca_esv=68041e448ebf4032&sca_upv=1&rlz=1C5CHFA_enIN966IN967&sxsrf=ADLYWIL02G252tgnDSn1xjqQwlY9ZxUvdg%3A1719863970531&ei=ogqDZsuQIOmY4-EP3Y-x-AY&oq=google+reviews+miniflicks+&gs_lp=Egxnd3Mtd2l6LXNlcnAiGmdvb2dsZSByZXZpZXdzIG1pbmlmbGlja3MgKgIIADIFECEYoAEyBRAhGKABMgUQIRifBUiQClCcAVicAXABeACQAQCYAYYBoAGGAaoBAzAuMbgBAcgBAPgBAZgCAaACiwGYAwCIBgGSBwMwLjGgB74D&sclient=gws-wiz-serp#lrd=0x3bae131e0d1e4479:0xcba4ab3250d34b75,1,,,,"
+							className="btn-3 text-center flex w-[200px] items-center gap-2 m-auto">
+							See All Google Reviews
+						</NavLink>
+					</div>
+				</div>
+				<div className="mx-auto max-w-md columns-1 gap-5 text-sm leading-6 text-gray-900 sm:max-w-2xl sm:columns-2 xl:mx-0 xl:max-w-none xl:columns-3">
+					{testimonials.map(({ body, author }, index) => (
+						<div key={index} className="mb-5 break-inside-avoid testimonial-item">
+							<SingleTestimonial body={body} author={author} />
+						</div>
+					))}
+				</div>
 				<div className="book-now-btn mt-3 md:mt-0">
 					<NavLink
 						target="_blank"
@@ -30,23 +62,8 @@ function TestimonialsPage() {
 						See All Google Reviews
 					</NavLink>
 				</div>
-			</div>
-			<div className="mx-auto max-w-md columns-1 gap-5 text-sm leading-6 text-gray-900 sm:max-w-2xl sm:columns-2 xl:mx-0 xl:max-w-none xl:columns-3">
-				{testimonials.map(({ body, author }, index) => (
-					<div key={index} className="mb-5 break-inside-avoid testimonial-item">
-						<SingleTestimonial body={body} author={author} />
-					</div>
-				))}
-			</div>
-			<div className="book-now-btn mt-3 md:mt-0">
-				<NavLink
-					target="_blank"
-					to="https://www.google.com/search?q=google+reviews+miniflicks+bangalore&sca_esv=68041e448ebf4032&sca_upv=1&rlz=1C5CHFA_enIN966IN967&sxsrf=ADLYWIL02G252tgnDSn1xjqQwlY9ZxUvdg%3A1719863970531&ei=ogqDZsuQIOmY4-EP3Y-x-AY&oq=google+reviews+miniflicks+&gs_lp=Egxnd3Mtd2l6LXNlcnAiGmdvb2dsZSByZXZpZXdzIG1pbmlmbGlja3MgKgIIADIFECEYoAEyBRAhGKABMgUQIRifBUiQClCcAVicAXABeACQAQCYAYYBoAGGAaoBAzAuMbgBAcgBAPgBAZgCAaACiwGYAwCIBgGSBwMwLjGgB74D&sclient=gws-wiz-serp#lrd=0x3bae131e0d1e4479:0xcba4ab3250d34b75,1,,,,"
-					className="btn-3 text-center flex w-[200px] items-center gap-2 m-auto">
-					See All Google Reviews
-				</NavLink>
-			</div>
-		</section>
+			</section>
+		</>
 	);
 }
 
