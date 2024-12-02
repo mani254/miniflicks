@@ -223,12 +223,20 @@ const DetailedBooking = ({ bookingData }) => {
 									<td className="p-[2px] text-gray-600">₹{cakesPrice()}</td>
 								</tr>
 							)}
+
+							{bookingData?.couponPrice < 0 && (
+								<tr className="border-b border-gray-200">
+									<td className="p-[2px]  text-gray-700">Coupon</td>
+									<td className="p-[2px] text-gray-600">₹{bookingData.couponPrice}</td>
+								</tr>
+							)}
+							
 						</tbody>
 					</table>
 					<div className="flex w-full justify-around mt-4">
 						<div className=" flex gap-2 border-b border-gray-200">
 							<div className="p-[2px] font-medium  text-gray-700">Advance:</div>
-							<div className="p-[2px] text-gray-600">₹999</div>
+							<div className="p-[2px] text-gray-600">₹{bookingData.advancePrice}</div>
 						</div>
 						<div className=" flex gap-2 border-b border-gray-200">
 							<div className="p-[2px] font-medium  text-gray-700">Total:</div>
@@ -253,10 +261,16 @@ const DetailedBooking = ({ bookingData }) => {
 						</div>
 					)}
 
-					{bookingData?.ledInfo && (
+					{bookingData?.ledName && (
 						<div className="flex gap-2 w-auto">
-							<div className="font-medium">Led Info:</div>
-							<div>{bookingData.ledInfo}</div>
+							<div className="font-medium">Led Name:</div>
+							<div>{bookingData.ledName}</div>
+						</div>
+					)}
+					{bookingData?.ledNumber && (
+						<div className="flex gap-2 w-auto">
+							<div className="font-medium">Led Number:</div>
+							<div>{bookingData.ledNumber}</div>
 						</div>
 					)}
 

@@ -1,19 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect,useRef} from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { connect } from "react-redux";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { showNotification } from "../../redux/notification/notificationActions";
 import axios from "axios";
 import Loader from "../Loader/Loader";
 
-function OtherDetailsButton({ customerBooking, activeIndex, navOptions, setActiveIndex }) {
+function OtherDetailsButton({ customerBooking, showNotification, activeIndex, navOptions, setActiveIndex }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [verificationLoading, setVerificationLoading] = useState(false);
+	const [isDisabled, setIsDisabled] = useState(false)
+	const location = useLocation();
+
+
+	useEffect(() => {
+		const disabledPaths = ['/occasions', '/cakes'];
+		setIsDisabled(disabledPaths.some((path) => location.pathname.endsWith(path)));
+	}, [location.pathname]);
+
 
 	function handleNext() {
+		if(isDisabled) {
+			if(!customerBooking.occasion){
+				showNotification('Select atleast one Occasion')
+				return
+			}
+			if(location.pathname.endsWith('/cakes')){
+				if(!customerBooking.cakes.length>0){
+					showNotification('Select atleast one Cake')
+					return
+				}
+			}
+		}
+
 		if (activeIndex < navOptions.length - 1) {
 			setActiveIndex((prev) => prev + 1);
 			navigate(`${navOptions[activeIndex + 1].toLowerCase()}`);
@@ -181,4 +203,10 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, null)(OtherDetailsButton);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		showNotification: (message) => dispatch(showNotification(message))
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OtherDetailsButton);

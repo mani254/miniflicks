@@ -4,12 +4,15 @@ import { setBookingAddons, setBookingGifts, setBookingCakes, setBookingOtherInfo
 import { getAllAddons } from "../../redux/addon/addonActions";
 import { getAllGifts } from "../../redux/gift/giftActions";
 import { getAllCakes } from "../../redux/cake/cakeActions";
+import Loader from '../Loader/Loader'
 
 function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) {
 	const [selected, setSelected] = useState([]);
-	const [ledInfo, setLedInfo] = useState("");
+	const [ledName, setLedName] = useState("");
+	const [ledNumber,setLedNumber]=useState("");
 	const [nameOnCake, setNameOnCake] = useState("");
 	const dispatch = useDispatch();
+	const [loading,setLoading]=useState(true)
 
 	const normalCakes = useRef(null);
 	const specialCakes = useRef(null);
@@ -40,10 +43,19 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 
 	// Fetch items based on type
 	useEffect(() => {
+		// if (fetchAction) {
+		// 	dispatch(fetchAction());
+		// }
 		if (fetchAction) {
-			dispatch(fetchAction());
+			setLoading(true); 
+			dispatch(fetchAction())
+				.finally(() => setLoading(false)); 
 		}
 	}, [fetchAction, dispatch]);
+
+	useEffect(()=>{
+		console.log(customerBooking.otherInfo)
+	},[customerBooking])
 
 	// Sync with customerBooking
 	useEffect(() => {
@@ -89,22 +101,20 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 	useEffect(() => {
 		if (!customerBooking.otherInfo) return;
 		if (customerBooking.otherInfo) {
-			setLedInfo(customerBooking.otherInfo.ledInfo);
+			setLedName(customerBooking.otherInfo.ledName);
+			setLedNumber(customerBooking.otherInfo.ledNumber);
 			setNameOnCake(customerBooking.otherInfo.nameOnCake);
 		}
 	}, [customerBooking.otherInfo]);
 
 	function handleOtherInfo(e) {
-		if (type === "addons") {
-			setLedInfo(e.target.value);
-		}
 		if (type === "cakes") {
 			setNameOnCake(e.target.value);
 		}
 	}
 
 	function handleBlur() {
-		dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, ledInfo, nameOnCake }));
+		dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, ledName,ledNumber,nameOnCake }));
 	}
 
 	function handleKeyPress(e) {
@@ -112,6 +122,7 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 			handleBlur();
 		}
 	}
+	
 	// Function to render each item card
 	function ItemCard({ item, isSelected, isFree = false }) {
 		return (
@@ -160,6 +171,10 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 				</p>
 			)}
 
+			{loading && <div className="w-full min-h-[100px] relative">
+				<Loader></Loader>
+			</div>}
+
 			<div className="w-full">
 				{type === "cakes" ? (
 					<>
@@ -200,16 +215,31 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 						)}
 					</div>
 				)}
-				{type === "addons" && selected.some((addon) => addon.name.toLowerCase().includes("led")) && (
+				<div className="flex mt-2">
+					<div className="w-full md:w-1/2">	{type === "addons" && selected.some((addon) => addon.name.toLowerCase().includes("name")) && (
 					<div className="w-full md:max-w-[300px] mt-5 m-auto">
 						<div className="input-wrapper ">
-							<label htmlFor="ledInfo" className="whitespace-nowrap font-medium">
-								Led Name or Number
+							<label htmlFor="ledName" className="whitespace-nowrap font-medium">
+								Led Name
 							</label>
-							<input type="text" placeholder="Led Name / Led Number" id="ledInfo" name="ledInfo" value={ledInfo} onChange={handleOtherInfo} onBlur={handleBlur} onKeyPress={handleKeyPress} />
+							<input type="text" placeholder="Led Name" id="ledName" name="ledName" value={ledName} onChange={(e)=>setLedName(e.target.value)} onBlur={handleBlur} onKeyPress={handleKeyPress} />
 						</div>
 					</div>
-				)}
+				)}</div>
+					<div className="w-full md:w-1/2">{type === "addons" && selected.some((addon) => addon.name.toLowerCase().includes("number")) && (
+					<div className="w-full md:max-w-[300px] mt-5 m-auto">
+						<div className="input-wrapper ">
+							<label htmlFor="ledNumber" className="whitespace-nowrap font-medium">
+								Led Number
+							</label>
+							<input type="text" placeholder="Led Number" id="ledNumber" name="ledNumber" value={ledNumber} onChange={(e)=>setLedNumber(e.target.value)} onBlur={handleBlur} onKeyPress={handleKeyPress} />
+						</div>
+					</div>
+				)}</div>
+			
+				
+				</div>
+			
 				{type === "cakes" && selected.length > 0 && (
 					<div className="w-full md:max-w-[300px] mt-5 m-auto">
 						<div className="input-wrapper ">

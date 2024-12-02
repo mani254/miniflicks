@@ -19,7 +19,10 @@ class LocationController {
 
    async addLocation(req, res) {
       try {
+         console.log('hello')
          const locationData = req.body;
+
+         console.log(locationData)
 
          const adminValidationError = this.validateAdminData(locationData.admin);
          if (adminValidationError) return res.status(400).json(adminValidationError);

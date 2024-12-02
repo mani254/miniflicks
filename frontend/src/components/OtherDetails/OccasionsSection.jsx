@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { getAllOccasions } from "../../redux/occasion/occasionActions";
 import { connect, useDispatch } from "react-redux";
 import { setBookingOccasion } from "../../redux/customerBooking/customerBookingActions";
 import { showModal } from "../../redux/modal/modalActions";
 import KnowMore from "../KnowMore/KnowMore";
-import { useNavigate } from "react-router-dom";
-import { FaArrowRight } from "react-icons/fa";
+
 
 function OccasionsSection({ OccasionsData, getAllOccasions, customerBooking }) {
 	const [selected, setSelected] = useState(null);
 	const [celebrantName, setCelebrantName] = useState("");
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	
+	const inputRef=useRef(null)
 
 	useEffect(() => {
 		(async () => {
@@ -42,7 +42,18 @@ function OccasionsSection({ OccasionsData, getAllOccasions, customerBooking }) {
 			};
 			setSelected(updatedOccasion);
 			dispatch(setBookingOccasion(updatedOccasion));
+			if (inputRef.current) {
+				const topPosition = inputRef.current.getBoundingClientRect().top + window.pageYOffset;
+				const scrollToPosition = topPosition - window.innerHeight * 0.7; // Scroll 70% from the top
+				window.scrollTo({
+				  top: scrollToPosition,
+				  behavior: 'smooth', 
+				});
+			  }
+
+			inputRef.current.focus()
 		}
+
 	}
 
 	// function handleNext() {
@@ -53,6 +64,7 @@ function OccasionsSection({ OccasionsData, getAllOccasions, customerBooking }) {
 	// 		navigate("/booking/otherdetails/addons");
 	// 	}
 	// }
+
 	function handleCelebrantName(e) {
 		setCelebrantName(e.target.value);
 	}
@@ -122,12 +134,12 @@ function OccasionsSection({ OccasionsData, getAllOccasions, customerBooking }) {
 					</div>
 				)}
 			</div>
-			<div className="w-full md:max-w-[300px] mt-5  m-auto">
+			<div className="w-full md:max-w-[300px] mt-5  m-auto" >
 				<div className="input-wrapper ">
 					<label htmlFor="celebrantName" className="whitespace-nowrap font-medium">
 						Celebrant's Name:
 					</label>
-					<input type="text" placeholder="Celebrant's Name" id="celebrantName" name="celebrantName" value={celebrantName} onChange={handleCelebrantName} onBlur={handleBlur} onKeyPress={handleKeyPress} />
+					<input type="text" placeholder="Celebrant's Name" ref={inputRef} id="celebrantName" name="celebrantName" value={celebrantName} onChange={handleCelebrantName} onBlur={handleBlur} onKeyPress={handleKeyPress} />
 				</div>
 			</div>
 		</section>

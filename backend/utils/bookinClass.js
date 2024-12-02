@@ -26,9 +26,11 @@ class BookingClass {
       this.date.setHours(0, 0, 0, 0)
       this.numberOfPeople = bookingData.otherInfo.numberOfPeople || 0;
       this.nameOnCake = bookingData.otherInfo.nameOnCake || "";
-      this.ledInfo = bookingData.otherInfo.ledInfo || "";
+      this.ledName = bookingData.otherInfo.ledName || "";
+      this.ledNumber = bookingData.otherInfo.ledNumber || "";
       this.note = bookingData.note || '';
       // this.status = 'pending';
+      this.couponPrice= 0
       this.couponCode = bookingData.otherInfo.couponCode || null
       this.totalPrice = 0;
       this.remainingAmount = 0;
@@ -234,10 +236,12 @@ class BookingClass {
 
       if (coupon.type === "fixed") {
          amount = -coupon.discount;
+         this.couponPrice=amount
          return amount
       } else {
          const total = this.calculatePackagePrice() + this.calculateOccasionPrice() + this.calculateAddonsPrice() + this.calculateCakesPrice() + this.calculateGiftsPrice() + this.calculatePeoplePrice();
          amount = -parseFloat(((coupon.discount / 100) * total).toFixed(2));
+         this.couponPrice=amount
          return amount
       }
    }
@@ -282,9 +286,11 @@ class BookingClass {
          customer: this.customer._id,
          numberOfPeople: this.numberOfPeople,
          nameOnCake: this.nameOnCake,
-         ledInfo: this.ledInfo,
+         ledName: this.ledName,
+         ledNumber: this.ledNumber,
          note: this.note,
          status: status,
+         couponPrice:this.couponPrice,
          advancePrice: this.advancePrice,
          totalPrice: this.totalPrice,
          remainingAmount: this.remainingAmount,

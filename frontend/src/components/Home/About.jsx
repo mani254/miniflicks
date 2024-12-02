@@ -50,7 +50,7 @@ function About() {
 	}, [contentRef, floatRef]);
 
 	return (
-		<section className="py-14 container">
+		<section className="py-14 pb-8 container">
 			<div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center  md:px-8 gap-8 py-6">
 				{/* Image Section */}
 				<div className="w-full md:w-1/2 relative">
@@ -78,7 +78,7 @@ function About() {
 					<h2 className="font-semibold text-gray-800">Miniflicks Private Theatre</h2>
 					<p className="text-md text-gray-700 text-justify">Choose the occasion, give us the requirements and leave it to us. We will deliver the best.</p>
 					<p className="text-gray-700 leading-relaxed text-justify">Miniflicks, Private Theater is a unique space where you can watch your favorite content with your favorite people in the comfort of a private theater. With a 150" screen, Dolby Atmos audio, and plush sofas, you're sure to have an unforgettable experience. You can also celebrate special occasions like birthdays, anniversaries, and parties in the theater, with customized decorations to match your theme.</p>
-					<p className="text-gray-700 text-md text-justify">You can check available slots and book the theater from this website. For more details you can contact us on +91 8688014415</p>
+					<p className="text-gray-700 text-md text-justify">You can check available slots and book the theater from this website. For more details you can contact us on +91 9019162002</p>
 					<div className="div-1 my-2 h-[1px] bg-gray-100"></div>
 					<div>
 						<NavLink to="/about">

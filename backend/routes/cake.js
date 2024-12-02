@@ -11,7 +11,7 @@ const uploadOptions = {
    single: true,
    fieldName: 'image',
    maxSize: 1024 * 1024 * 2,
-   allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'],
+   allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/jpg',,'image/webp'],
 };
 
 cakeRouter.post('/', authorization, createFileUploadMiddleware(uploadOptions), cakeController.addCake);

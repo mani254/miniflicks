@@ -4,10 +4,12 @@ require('dotenv').config();
 
 async function sendMail({ subject, html, to }) {
    try {
-      oauth2Client.setCredentials({
-         refresh_token: process.env.GOOGLE_REFRESH_TOKEN
-      });
-      const accessToken = await getAccessToken();
+      // oauth2Client.setCredentials({
+      //    refresh_token: process.env.GOOGLE_REFRESH_TOKEN
+      // });
+      // const accessToken = await getAccessToken();
+      const accessToken = await getAccessToken(); 
+      
       const transporter = nodemailer.createTransport({
          service: 'gmail',
          auth: {

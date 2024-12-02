@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { addOccasion, updateOccasion } from "../../redux/occasion/occasionActions"; // Adjust import for occasion actions
 import { showNotification } from "../../redux/notification/notificationActions";
 
+import Loader from '../Loader/Loader'
+
 import { ImageUploaderComponent } from "editorify-dev/imageUploader";
 import "editorify-dev/css/imageUploader";
 
@@ -71,6 +73,10 @@ function AddOccasion({ addOccasion, update = false, updateOccasion, showNotifica
 	};
 
 	return (
+		<>
+		{occasionData.loading&&<div className="fixed inset-0 bg-gray-900 bg-opacity-10 z-50">
+			<Loader></Loader>
+		</div>}
 		<div className="w-full container px-6 mt-3">
 			<div className="pb-2 border-b border-gray-400">
 				<h3>{update ? "Update Occasion" : "Add Occasion"}</h3>
@@ -128,6 +134,8 @@ function AddOccasion({ addOccasion, update = false, updateOccasion, showNotifica
 				</div>
 			</form>
 		</div>
+		</>
+		
 	);
 }
 

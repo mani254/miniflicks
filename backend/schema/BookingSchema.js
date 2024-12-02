@@ -131,7 +131,10 @@ const bookingSchema = new Schema({
    nameOnCake: {
       type: String,
    },
-   ledInfo: {
+   ledName: {
+      type: String
+   },
+   ledNumber:{
       type: String
    },
    couponCode: {
@@ -141,6 +144,10 @@ const bookingSchema = new Schema({
       type: String,
       enum: ['pending', 'booked', 'canceled'],
       default: 'pending'
+   },
+   couponPrice:{
+      type:Number,
+      default:0,
    },
    note: {
       type: String,

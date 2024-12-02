@@ -565,3 +565,74 @@
 .Btn:active {
 	transform: translate(2px, 2px);
 }
+
+
+
+/* WhatsApp Icon Styles */
+.whatsapp-icon {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    bottom: 40px;
+    right: 30px;
+    z-index: 200;
+    animation: pulse 1.5s ease-out infinite;
+    border-radius: 50%;
+    /* background-color: #25d366; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+
+}
+/* .whatsapp-icon a{
+	display: block;
+	width:auto;
+	margin:auto;
+} */
+/* Icon Image */
+.whatsapp-icon img {
+    width: 90%;
+    height: 90%;
+	margin-left:2px;
+}
+
+/* Pulse Effect */
+.btn-whatsapp-pulse::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55px;
+    height: 55px;
+    border: 5px solid #25d366;
+    border-radius: 50%;
+    opacity: 0.75;
+    animation: pulse-border 1.5s ease-out infinite;
+}
+
+/* Keyframes for Pulse */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse-border {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.75;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
+}

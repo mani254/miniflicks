@@ -28,6 +28,12 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.use('/api', require('./routes/index.js'));
 
+app.get('/api/test', (req, res) => {
+   res.status(200).send('API is working!');
+   console.log('Testing request console');
+});
+
+
 const sendDailyEmail = async () => {
    const customerEmails = await yesterdayBookingCustomers();
 

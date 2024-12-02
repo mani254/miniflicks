@@ -8,6 +8,7 @@ import SmoothScroll from "../components/SmoothScroll/SmoothScroll";
 import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
 
+import {whatsappColoured} from '../utils';
 import { getBanners } from "../redux/banner/bannerActions";
 
 function UsersLayout({ customerBooking, getBanners }) {
@@ -61,6 +62,12 @@ function UsersLayout({ customerBooking, getBanners }) {
 				<Outlet />
 
 				<Footer />
+
+				<div class="whatsapp-icon">
+					<a href="https://wa.me/+919019162002?text=Hello. " class="btn-whatsapp-pulse" target="_blank">
+						<img src={whatsappColoured} alt="whatsapp icon"/>
+					</a>
+				</div>
 			</main>
 		</SmoothScroll>
 	);

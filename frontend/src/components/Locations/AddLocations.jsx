@@ -5,12 +5,13 @@ import CityOptions from "../Cities/CityOptions";
 
 import { connect } from "react-redux";
 import { addLocation, updateLocation } from "../../redux/location/locationActions";
-import AddonsList from "../Addon/AddonsList";
-import GiftsList from "../Gift/GiftsList";
+// import AddonsList from "../Addon/AddonsList";
+// import GiftsList from "../Gift/GiftsList";
 
 import { ImageUploaderComponent } from "editorify-dev/imageUploader";
 import "editorify-dev/css/imageUploader";
 import { showNotification } from "../../redux/notification/notificationActions";
+import Loader from "../Loader/Loader";
 
 function AddLocations({ addLocation, update = false, updateLocation, auth, showNotification }) {
 	const navigate = useNavigate();
@@ -108,25 +109,25 @@ function AddLocations({ addLocation, update = false, updateLocation, auth, showN
 		});
 	}, []);
 
-	const handleAddonsChange = useCallback((addonId, isChecked) => {
-		setSelectedAddons((prev) => {
-			if (isChecked) {
-				return [...prev, addonId];
-			} else {
-				return prev.filter((id) => id !== addonId);
-			}
-		});
-	}, []);
+	// const handleAddonsChange = useCallback((addonId, isChecked) => {
+	// 	setSelectedAddons((prev) => {
+	// 		if (isChecked) {
+	// 			return [...prev, addonId];
+	// 		} else {
+	// 			return prev.filter((id) => id !== addonId);
+	// 		}
+	// 	});
+	// }, []);
 
-	const handleGiftsChange = useCallback((addonId, isChecked) => {
-		setSelectedGifts((prev) => {
-			if (isChecked) {
-				return [...prev, addonId];
-			} else {
-				return prev.filter((id) => id !== addonId);
-			}
-		});
-	}, []);
+	// const handleGiftsChange = useCallback((addonId, isChecked) => {
+	// 	setSelectedGifts((prev) => {
+	// 		if (isChecked) {
+	// 			return [...prev, addonId];
+	// 		} else {
+	// 			return prev.filter((id) => id !== addonId);
+	// 		}
+	// 	});
+	// }, []);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -173,110 +174,117 @@ function AddLocations({ addLocation, update = false, updateLocation, auth, showN
 	};
 
 	return (
-		<div className="w-full container px-6 mt-3">
-			<div className="pb-2 border-b border-gray-400">
-				<h3>{update ? "Update Location" : "Add Location"}</h3>
-			</div>
-
-			<form className="w-full max-w-4xl m-auto mb-10" onSubmit={handleSubmit}>
-				<div className="flex gap-5">
-					<div className="w-full">
-						<div className="outer-box">
-							<h4 className="mb-3">Location Info</h4>
-							<div className="input-wrapper">
-								<label htmlFor="name">Name</label>
-								<input type="text" id="name" name="name" placeholder="Location Name" value={details.name} onChange={handleChange} required />
-								{errors.name && <p className="error">{errors.name}</p>}
-							</div>
-							<div className="input-wrapper">
-								<label htmlFor="address">Address</label>
-								<input type="text" id="address" name="address" placeholder="Location Address" value={details.address} onChange={handleChange} required />
-							</div>
-							<div className="input-wrapper">
-								<label htmlFor="addressLink">Address map link</label>
-								<input type="text" id="addressLink" name="addressLink" placeholder="Address Map Link" value={details.addressLink} onChange={handleChange} />
-							</div>
-						</div>
-						<div className="outer-box">
-							<h4 className="mb-3">Admin Info</h4>
-							<div className="flex gap-5">
-								<div className="input-wrapper w-full">
-									<label htmlFor="adminName">Name</label>
-									<input type="text" id="adminName" name="admin.name" placeholder="Admin Name" value={details.admin.name} onChange={handleChange} required />
-									{errors.admin.name && <p className="error">{errors.admin.name}</p>}
-								</div>
-								<div className="input-wrapper w-full">
-									<label htmlFor="adminEmail">Email</label>
-									<input type="email" id="adminEmail" name="admin.email" placeholder="Admin Email" value={details.admin.email} onChange={handleChange} required />
-									{errors.admin.email && <p className="error">{errors.admin.email}</p>}
-								</div>
-							</div>
-							<div className="flex gap-5">
-								<div className="input-wrapper w-full">
-									<label htmlFor="adminNumber">Number</label>
-									<input type="number" id="adminNumber" name="admin.number" placeholder="Admin Phone Number" value={details.admin.number} onChange={handleChange} required />
-									{errors.admin.number && <p className="error">{errors.admin.number}</p>}
-								</div>
-								<div className="input-wrapper w-full">
-									<label htmlFor="adminPassword">Password</label>
-									<input type="password" id="adminPassword" name="admin.password" placeholder="Admin Password" value={details.admin.password} onChange={handleChange} required={update ? false : true} />
-									{errors.admin.password && <p className="error">{errors.admin.password}</p>}
-								</div>
-							</div>
-						</div>
-						<div className="outer-box">
-							<h3 className="mb-3">Add Ons</h3>
-							<AddonsList checkedValues={selectedAddons} handleChange={handleAddonsChange} />
-						</div>
-						<div className="outer-box">
-							<h3 className="mb-3">Gifts</h3>
-							<GiftsList checkedValues={selectedGifts} handleChange={handleGiftsChange} />
-						</div>
-					</div>
-
-					<div className="outer-box w-1/3 min-w-[320px] flex flex-col justify-between">
-						<div>
-							<h4 className="mb-3">Status & Location Image</h4>
-
-							<CityOptions value={details.cityId} changeHandler={handleChange} />
-
-							<div className="input-wrapper">
-								<label htmlFor="status">Status</label>
-								<select id="status" name="status" value={details.status} onChange={handleChange}>
-									<option value={true}>Active</option>
-									<option value={false}>In Active</option>
-								</select>
-							</div>
-							<div className="mb-3">
-								<p className="mb-2">Location Image</p>
-								{update ? (
-									<ImageUploaderComponent
-										id="location-image"
-										maxImages={1}
-										onImagesChange={(images) => {
-											setDetails((prev) => ({ ...prev, image: images[0] }));
-										}}
-										loadedImages={loadedImages ? loadedImages : []}
-									/>
-								) : (
-									<ImageUploaderComponent
-										id="location-image"
-										maxImages={1}
-										onImagesChange={(images) => {
-											setDetails((prev) => ({ ...prev, image: images[0] }));
-										}}
-									/>
-								)}
-							</div>
-						</div>
-
-						<button type="submit" className="btn btn-1">
-							{update ? "Update Location" : "Add Location"}
-						</button>
-					</div>
+		<>
+			{locationsData.loading && (
+				<div className="fixed z-50 inset-0">
+					<Loader></Loader>
 				</div>
-			</form>
-		</div>
+			)}
+			<div className="w-full container px-6 mt-3">
+				<div className="pb-2 border-b border-gray-400">
+					<h3>{update ? "Update Location" : "Add Location"}</h3>
+				</div>
+
+				<form className="w-full max-w-4xl m-auto mb-10" onSubmit={handleSubmit}>
+					<div className="flex gap-5">
+						<div className="w-full">
+							<div className="outer-box">
+								<h4 className="mb-3">Location Info</h4>
+								<div className="input-wrapper">
+									<label htmlFor="name">Name</label>
+									<input type="text" id="name" name="name" placeholder="Location Name" value={details.name} onChange={handleChange} required />
+									{errors.name && <p className="error">{errors.name}</p>}
+								</div>
+								<div className="input-wrapper">
+									<label htmlFor="address">Address</label>
+									<input type="text" id="address" name="address" placeholder="Location Address" value={details.address} onChange={handleChange} required />
+								</div>
+								<div className="input-wrapper">
+									<label htmlFor="addressLink">Address map link</label>
+									<input type="text" id="addressLink" name="addressLink" placeholder="Address Map Link" value={details.addressLink} onChange={handleChange} />
+								</div>
+							</div>
+							<div className="outer-box">
+								<h4 className="mb-3">Admin Info</h4>
+								<div className="flex gap-5">
+									<div className="input-wrapper w-full">
+										<label htmlFor="adminName">Name</label>
+										<input type="text" id="adminName" name="admin.name" placeholder="Admin Name" value={details.admin.name} onChange={handleChange} required />
+										{errors.admin.name && <p className="error">{errors.admin.name}</p>}
+									</div>
+									<div className="input-wrapper w-full">
+										<label htmlFor="adminEmail">Email</label>
+										<input type="email" id="adminEmail" name="admin.email" placeholder="Admin Email" value={details.admin.email} onChange={handleChange} required />
+										{errors.admin.email && <p className="error">{errors.admin.email}</p>}
+									</div>
+								</div>
+								<div className="flex gap-5">
+									<div className="input-wrapper w-full">
+										<label htmlFor="adminNumber">Number</label>
+										<input type="number" id="adminNumber" name="admin.number" placeholder="Admin Phone Number" value={details.admin.number} onChange={handleChange} required />
+										{errors.admin.number && <p className="error">{errors.admin.number}</p>}
+									</div>
+									<div className="input-wrapper w-full">
+										<label htmlFor="adminPassword">Password</label>
+										<input type="password" id="adminPassword" name="admin.password" placeholder="Admin Password" value={details.admin.password} onChange={handleChange} required={update ? false : true} />
+										{errors.admin.password && <p className="error">{errors.admin.password}</p>}
+									</div>
+								</div>
+							</div>
+							{/* <div className="outer-box">
+                        <h3 className="mb-3">Add Ons</h3>
+                        <AddonsList checkedValues={selectedAddons} handleChange={handleAddonsChange} />
+                     </div>
+                     <div className="outer-box">
+                        <h3 className="mb-3">Gifts</h3>
+                        <GiftsList checkedValues={selectedGifts} handleChange={handleGiftsChange} />
+                     </div> */}
+						</div>
+
+						<div className="outer-box w-1/3 min-w-[320px] flex flex-col justify-between">
+							<div>
+								<h4 className="mb-3">Status & Location Image</h4>
+
+								<CityOptions value={details.cityId} changeHandler={handleChange} />
+
+								<div className="input-wrapper">
+									<label htmlFor="status">Status</label>
+									<select id="status" name="status" value={details.status} onChange={handleChange}>
+										<option value={true}>Active</option>
+										<option value={false}>In Active</option>
+									</select>
+								</div>
+								<div className="mb-3">
+									<p className="mb-2">Location Image</p>
+									{update ? (
+										<ImageUploaderComponent
+											id="location-image"
+											maxImages={1}
+											onImagesChange={(images) => {
+												setDetails((prev) => ({ ...prev, image: images[0] }));
+											}}
+											loadedImages={loadedImages ? loadedImages : []}
+										/>
+									) : (
+										<ImageUploaderComponent
+											id="location-image"
+											maxImages={1}
+											onImagesChange={(images) => {
+												setDetails((prev) => ({ ...prev, image: images[0] }));
+											}}
+										/>
+									)}
+								</div>
+							</div>
+
+							<button type="submit" className="btn btn-1">
+								{update ? "Update Location" : "Add Location"}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</>
 	);
 }
 

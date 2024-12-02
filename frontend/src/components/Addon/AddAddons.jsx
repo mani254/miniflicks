@@ -3,7 +3,7 @@ import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { connect } from "react-redux";
 import { addAddon, updateAddon } from "../../redux/addon/addonActions";
 import { showNotification } from "../../redux/notification/notificationActions";
-
+import Loader from "../Loader/Loader";
 import { ImageUploaderComponent } from "editorify-dev/imageUploader";
 import "editorify-dev/css/imageUploader";
 
@@ -71,63 +71,70 @@ function AddAddon({ addAddon, update = false, updateAddon, showNotification }) {
 	};
 
 	return (
-		<div className="w-full container px-6 mt-3">
-			<div className="pb-2 border-b border-gray-400">
-				<h3>{update ? "Update Addon" : "Add Addon"}</h3>
-			</div>
 
-			<form className="w-full max-w-4xl m-auto mb-10" onSubmit={handleSubmit}>
-				<div className="flex gap-5">
-					<div className="outer-box w-full">
-						<h4 className="mb-3">Addon Info</h4>
-						<div className="input-wrapper">
-							<label htmlFor="name">Name</label>
-							<input type="text" id="name" name="name" placeholder="Addon Name" value={details.name} onChange={handleChange} required />
-						</div>
-						<div className="input-wrapper">
-							<label htmlFor="description">Description</label>
-							<textarea id="description" name="description" placeholder="Addon Description" value={details.description} onChange={handleChange} />
-						</div>
-						<div className="input-wrapper">
-							<label htmlFor="price">Price</label>
-							<input type="number" id="price" name="price" placeholder="Addon Price" value={details.price} onChange={handleChange} required min={0} />
-						</div>
-						<div className="input-wrapper">
-							<label htmlFor="position">Position</label>
-							<input type="number" id="position" name="position" placeholder="Addon position" value={details.position} onChange={handleChange} required min={0} />
-						</div>
-					</div>
-					<div className="outer-box w-1/3 min-w-[320px]">
-						<h4 className="mb-3">Image</h4>
-						<div className="mb-3">
-							<p className="mb-2">Addon Image</p>
-							{update ? (
-								<ImageUploaderComponent
-									id="addon-image"
-									maxImages={1}
-									onImagesChange={(images) => {
-										setDetails((prev) => ({ ...prev, image: images[0] }));
-									}}
-									loadedImages={loadedImages ? loadedImages : []}
-								/>
-							) : (
-								<ImageUploaderComponent
-									id="location-image"
-									maxImages={1}
-									onImagesChange={(images) => {
-										setDetails((prev) => ({ ...prev, image: images[0] }));
-									}}
-								/>
-							)}
-						</div>
-
-						<button className="btn btn-1" type="submit">
-							{update ? "Update Addon" : "Add Addon"}
-						</button>
-					</div>
+		<>
+			{addonData.loading&&<div className="fixed inset-0 bg-gray-900 bg-opacity-10 z-50">
+				<Loader></Loader>
+			</div>}
+			<div className="w-full container px-6 mt-3">
+				<div className="pb-2 border-b border-gray-400">
+					<h3>{update ? "Update Addon" : "Add Addon"}</h3>
 				</div>
-			</form>
-		</div>
+
+				<form className="w-full max-w-4xl m-auto mb-10" onSubmit={handleSubmit}>
+					<div className="flex gap-5">
+						<div className="outer-box w-full">
+							<h4 className="mb-3">Addon Info</h4>
+							<div className="input-wrapper">
+								<label htmlFor="name">Name</label>
+								<input type="text" id="name" name="name" placeholder="Addon Name" value={details.name} onChange={handleChange} required />
+							</div>
+							<div className="input-wrapper">
+								<label htmlFor="description">Description</label>
+								<textarea id="description" name="description" placeholder="Addon Description" value={details.description} onChange={handleChange} />
+							</div>
+							<div className="input-wrapper">
+								<label htmlFor="price">Price</label>
+								<input type="number" id="price" name="price" placeholder="Addon Price" value={details.price} onChange={handleChange} required min={0} />
+							</div>
+							<div className="input-wrapper">
+								<label htmlFor="position">Position</label>
+								<input type="number" id="position" name="position" placeholder="Addon position" value={details.position} onChange={handleChange} required min={0} />
+							</div>
+						</div>
+						<div className="outer-box w-1/3 min-w-[320px]">
+							<h4 className="mb-3">Image</h4>
+							<div className="mb-3">
+								<p className="mb-2">Addon Image</p>
+								{update ? (
+									<ImageUploaderComponent
+										id="addon-image"
+										maxImages={1}
+										onImagesChange={(images) => {
+											setDetails((prev) => ({ ...prev, image: images[0] }));
+										}}
+										loadedImages={loadedImages ? loadedImages : []}
+									/>
+								) : (
+									<ImageUploaderComponent
+										id="location-image"
+										maxImages={1}
+										onImagesChange={(images) => {
+											setDetails((prev) => ({ ...prev, image: images[0] }));
+										}}
+									/>
+								)}
+							</div>
+
+							<button className="btn btn-1" type="submit">
+								{update ? "Update Addon" : "Add Addon"}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</>
+		
 	);
 }
 

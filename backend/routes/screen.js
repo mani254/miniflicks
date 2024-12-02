@@ -12,7 +12,7 @@ const uploadOptions = {
    single: false,
    fieldName: 'images',
    maxSize: 1024 * 1024 * 2,
-   allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'],
+   allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/jpg','image/webp'],
 };
 
 screenRouter.post('/', authorization, createFileUploadMiddleware(uploadOptions), ScreenController.addScreen);

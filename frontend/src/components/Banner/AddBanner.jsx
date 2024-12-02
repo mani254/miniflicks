@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { connect } from "react-redux";
 import { addBanner, updateBanner } from "../../redux/banner/bannerActions";
-
+import Loader from "../Loader/Loader";
 import { ImageUploaderComponent } from "editorify-dev/imageUploader";
 import "editorify-dev/css/imageUploader";
 
@@ -73,6 +73,10 @@ function AddBanner({ addBanner, update = false, updateBanner }) {
 	};
 
 	return (
+		<>
+		{bannersData.loading&&<div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-10">
+			<Loader></Loader>
+		</div>}
 		<div className="w-full container px-6 mt-3">
 			<div className="pb-2 border-b border-gray-400">
 				<h3>{update ? "Update Banner" : "Add Banner"}</h3>
@@ -138,6 +142,8 @@ function AddBanner({ addBanner, update = false, updateBanner }) {
 				</div>
 			</form>
 		</div>
+		</>
+		
 	);
 }
 

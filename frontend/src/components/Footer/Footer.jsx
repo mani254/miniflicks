@@ -124,7 +124,7 @@ const Footer = () => {
 						</NavLink>
 
 						<p ref={textRef} className="mt-2">
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam quod aliquid sint possimus quidem. Minus, sit voluptatum aut dolorem mollitia commodi voluptates hic dolor facere, facilis quo voluptate nisi pariatur?
+						Experience the joy of exclusive movie nights and unforgettable celebrations at Miniflicks. With a 150-inch screen, Dolby Atmos sound, and personalized decor, we bring your special moments to life in a private, luxurious theatre setting.
 						</p>
 					</div>
 
@@ -155,7 +155,7 @@ const Footer = () => {
 							<div className="min-w-5">
 								<IoMail />
 							</div>{" "}
-							support@miniflicks.com
+							<a target='_blank' href="mailto:miniflicksprivatetheatres@gmail.com">miniflicksprivatetheatres@gmail.com</a>
 						</div>
 						<div
 							className="flex justify-center md:justify-start gap-3"
@@ -167,7 +167,7 @@ const Footer = () => {
 							<div className="min-w-5">
 								<FaPhoneAlt />
 							</div>{" "}
-							+1 234 567 890
+							<a target="_blank" href="tel:+919019162002">+91 9019162002</a>
 						</div>
 						<div
 							className="flex justify-center md:justify-start gap-3"

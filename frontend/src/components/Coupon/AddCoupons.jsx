@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { connect } from "react-redux";
 import { addCoupon, updateCoupon } from "../../redux/coupon/couponActions";
-
+import Loader from "../Loader/Loader";
 function AddCoupons({ addCoupon, update = false, updateCoupon }) {
 	const navigate = useNavigate();
 	const { id } = useParams();
@@ -67,46 +67,55 @@ function AddCoupons({ addCoupon, update = false, updateCoupon }) {
 	const today = new Date().toISOString().split("T")[0];
 
 	return (
-		<div className="w-full container px-6 mt-3">
-			<div className="pb-2 border-b border-gray-400">
-				<h3>{update ? "Update Coupon" : "Add Coupon"}</h3>
+		<>
+
+			{couponsData.loading&&<div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-10">
+				<Loader></Loader>
+			</div>}
+
+			<div className="w-full container px-6 mt-3">
+				<div className="pb-2 border-b border-gray-400">
+					<h3>{update ? "Update Coupon" : "Add Coupon"}</h3>
+				</div>
+
+				<form className="max-w-xl m-auto" onSubmit={handleSubmit}>
+					<div className="outer-box">
+						<div className="input-wrapper">
+							<label htmlFor="code">Code</label>
+							<input type="text" id="code" name="code" placeholder="Coupon Code" value={details.code} onChange={handleChange} required />
+						</div>
+						<div className="input-wrapper">
+							<label htmlFor="type">Type</label>
+							<select id="type" name="type" value={details.type} onChange={handleChange} required>
+								<option value="percentage">Percentage</option>
+								<option value="fixed">Fixed Amount</option>
+							</select>
+						</div>
+						<div className="input-wrapper">
+							<label htmlFor="discount">Discount</label>
+							<input type="number" id="discount" name="discount" placeholder="Discount Amount/Percentage" value={details.discount} onChange={handleChange} required />
+							<p className="text-xs text-gray-400 opacity-60">{info}</p>
+						</div>
+						<div className="input-wrapper">
+							<label htmlFor="expireDate">Expire Date</label>
+							<input type="date" id="expireDate" name="expireDate" value={details.expireDate} onChange={handleChange} required min={today} />
+						</div>
+						<div className="input-wrapper">
+							<label htmlFor="status">Status</label>
+							<select id="status" name="status" value={details.status} onChange={handleChange} required>
+								<option value="true">Active</option>
+								<option value="false">Inactive</option>
+							</select>
+						</div>
+						<button className="btn btn-1" type="submit">
+							{update ? "Update Coupon" : "Add Coupon"}
+						</button>
+					</div>
+				</form>
 			</div>
 
-			<form className="max-w-xl m-auto" onSubmit={handleSubmit}>
-				<div className="outer-box">
-					<div className="input-wrapper">
-						<label htmlFor="code">Code</label>
-						<input type="text" id="code" name="code" placeholder="Coupon Code" value={details.code} onChange={handleChange} required />
-					</div>
-					<div className="input-wrapper">
-						<label htmlFor="type">Type</label>
-						<select id="type" name="type" value={details.type} onChange={handleChange} required>
-							<option value="percentage">Percentage</option>
-							<option value="fixed">Fixed Amount</option>
-						</select>
-					</div>
-					<div className="input-wrapper">
-						<label htmlFor="discount">Discount</label>
-						<input type="number" id="discount" name="discount" placeholder="Discount Amount/Percentage" value={details.discount} onChange={handleChange} required />
-						<p className="text-xs text-gray-400 opacity-60">{info}</p>
-					</div>
-					<div className="input-wrapper">
-						<label htmlFor="expireDate">Expire Date</label>
-						<input type="date" id="expireDate" name="expireDate" value={details.expireDate} onChange={handleChange} required min={today} />
-					</div>
-					<div className="input-wrapper">
-						<label htmlFor="status">Status</label>
-						<select id="status" name="status" value={details.status} onChange={handleChange} required>
-							<option value="true">Active</option>
-							<option value="false">Inactive</option>
-						</select>
-					</div>
-					<button className="btn btn-1" type="submit">
-						{update ? "Update Coupon" : "Add Coupon"}
-					</button>
-				</div>
-			</form>
-		</div>
+		</>
+
 	);
 }
 

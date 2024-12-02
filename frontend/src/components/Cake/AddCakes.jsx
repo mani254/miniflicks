@@ -3,7 +3,7 @@ import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { connect } from "react-redux";
 import { addCake, updateCake } from "../../redux/cake/cakeActions";
 import { showNotification } from "../../redux/notification/notificationActions";
-
+import Loader from "../Loader/Loader";
 import { ImageUploaderComponent } from "editorify-dev/imageUploader";
 import "editorify-dev/css/imageUploader";
 
@@ -75,6 +75,10 @@ function AddCake({ addCake, update = false, updateCake, showNotification }) {
 	};
 
 	return (
+		<>
+		{cakeData.loading&&<div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-10">
+			<Loader></Loader>
+		</div>}
 		<div className="w-full container px-6 mt-3">
 			<div className="pb-2 border-b border-gray-400">
 				<h3>{update ? "Update Cake" : "Add Cake"}</h3>
@@ -139,6 +143,8 @@ function AddCake({ addCake, update = false, updateCake, showNotification }) {
 				</div>
 			</form>
 		</div>
+		</>
+		
 	);
 }
 

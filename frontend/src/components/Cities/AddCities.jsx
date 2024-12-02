@@ -4,6 +4,8 @@ import { useNavigate, useParams, useOutletContext } from "react-router-dom";
 import { connect } from "react-redux";
 import { addCity, updateCity } from "../../redux/citiy/cityActions";
 
+import Loader from '../Loader/Loader'
+
 function AddCities({ addCity, update = false, updateCity }) {
 	const navigate = useNavigate();
 	const { id } = useParams();
@@ -50,30 +52,36 @@ function AddCities({ addCity, update = false, updateCity }) {
 	};
 
 	return (
-		<div className="w-full container px-6 mt-3">
-			<div className="pb-2 border-b border-gray-400">
-				<h3>{update ? "Update City" : "Add City"}</h3>
-			</div>
+		<>
+			{citiesData.loading && <div className="fixed inset-0 bg-gray-900 bg-opacity-10">
+				<Loader></Loader></div>}
 
-			<form className="max-w-xl m-auto" onSubmit={handleSubmit}>
-				<div className="outer-box">
-					<div className="input-wrapper">
-						<label htmlFor="name">Name</label>
-						<input type="text" id="name" name="name" placeholder="City Name" value={details.name} onChange={handleChange} required />
-					</div>
-					<div className="input-wrapper">
-						<label htmlFor="status">Status</label>
-						<select id="status" name="status" value={details.status} onChange={handleChange} required>
-							<option value="true">Active</option>
-							<option value="false">In Active</option>
-						</select>
-					</div>
-					<button className="btn btn-1" type="submit">
-						{update ? "Update City" : "Add City"}
-					</button>
+			<div className="w-full container px-6 mt-3">
+				<div className="pb-2 border-b border-gray-400">
+					<h3>{update ? "Update City" : "Add City"}</h3>
 				</div>
-			</form>
-		</div>
+
+				<form className="max-w-xl m-auto" onSubmit={handleSubmit}>
+					<div className="outer-box">
+						<div className="input-wrapper">
+							<label htmlFor="name">Name</label>
+							<input type="text" id="name" name="name" placeholder="City Name" value={details.name} onChange={handleChange} required />
+						</div>
+						<div className="input-wrapper">
+							<label htmlFor="status">Status</label>
+							<select id="status" name="status" value={details.status} onChange={handleChange} required>
+								<option value="true">Active</option>
+								<option value="false">In Active</option>
+							</select>
+						</div>
+						<button className="btn btn-1" type="submit">
+							{update ? "Update City" : "Add City"}
+						</button>
+					</div>
+				</form>
+			</div>
+		</>
+
 	);
 }
 

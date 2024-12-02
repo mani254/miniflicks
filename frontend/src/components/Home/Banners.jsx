@@ -10,6 +10,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import "swiper/css/effect-coverflow";
+import { NavLink } from "react-router-dom";
 
 function Banners({ bannersData }) {
 	const [banner, setBanner] = useState({
@@ -55,9 +56,11 @@ function Banners({ bannersData }) {
 									<p className="text-gray-300 text-md md:text-lg text-center md:text-start" ref={descriptionRef}>
 										{banner.description}
 									</p>
-									<button className="btn-4 btn-white block m-auto md:m-0" ref={buttonRef}>
-										Book Now
-									</button>
+									<NavLink rel="noopener noreferrer" className="block" to={banner.link}>
+										<button className="btn-4 btn-white block m-auto md:m-0" ref={buttonRef}>
+											Book Now
+										</button>
+									</NavLink>
 								</div>
 							</div>
 
@@ -89,7 +92,7 @@ function Banners({ bannersData }) {
 										<SwiperSlide key={index}>
 											<div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden">
 												<img src={banner.image} alt={`Thumbnail ${index + 1}`} className="absolute inset-0 w-full h-full object-cover z-[1]" />
-												<h2 className="absolute py-3 w-full text-sm z-[2] text-white font-ks left-1/2 bottom-0 text-center  -translate-x-1/2 bg-gradient-to-t from-black to-transparent">{banner.title}</h2>
+												<h2 className="absolute py-3 w-full text-sm z-[2] text-white px-5 font-ks left-1/2 bottom-0 text-center  -translate-x-1/2 bg-gradient-to-t from-black to-transparent">{banner.title}</h2>
 											</div>
 										</SwiperSlide>
 									))}

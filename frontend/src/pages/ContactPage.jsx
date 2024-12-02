@@ -170,13 +170,13 @@ function ContactPage() {
 								<FaPhoneAlt /> Phone
 							</h3>
 							<p className="text-center">
-								<a href="tel:+918688014415" className="text-blue-500 hover:underline">
-									+91 8688014415
+								<a href="tel:+919019162002" className="text-blue-500 hover:underline">
+									+91 9019162002
 								</a>
 							</p>
 							<p className="text-center">
-								<a href="tel:+918688014415" className="text-blue-500 hover:underline">
-									+91 8688014415
+								<a href="tel:+918143115899" className="text-blue-500 hover:underline">
+									+91 8143115899
 								</a>
 							</p>
 						</div>

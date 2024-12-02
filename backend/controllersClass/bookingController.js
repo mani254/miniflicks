@@ -51,7 +51,7 @@ async function saveBooking(req, res, status = "pending") {
 
    await booking.fetchOccasion();
    if (!booking.occasion) {
-      res.status(400).json({ error: 'Invalid occasion selection.' });
+      res.status(400).json({ error: 'Select Atlease one Occasion.' });
       return null
    }
 
@@ -61,9 +61,12 @@ async function saveBooking(req, res, status = "pending") {
    // }
 
    await booking.fetchCakes();
-   // if (booking.cakes.length !== bookingData.cakes.length) {
-   //    return res.status(400).json({ error: 'Some selected cakes are invalid.' });
-   // }
+   if(booking?.package.addons.includes('Cake')){
+      if (booking.cakes.length !== bookingData.cakes.length) {
+         return res.status(400).json({ error: 'Select Atlease one Cake' });
+      }
+   }
+
 
    await booking.fetchGifts();
    // if (booking.gifts.length !== bookingData.gifts.length) {

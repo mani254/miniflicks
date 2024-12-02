@@ -41,6 +41,7 @@ function Customers({ getCustomers, customerData, auth }) {
 								<th>S.NO</th>
 								<th>Name</th>
 								<th>Phone No</th>
+								<th>Email</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -50,6 +51,7 @@ function Customers({ getCustomers, customerData, auth }) {
 										<td>{index + 1}</td>
 										<td>{customer.name}</td>
 										<td>{customer.number}</td>
+										<td>{customer.email}</td>
 									</tr>
 								))}
 						</tbody>

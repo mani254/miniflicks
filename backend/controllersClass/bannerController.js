@@ -14,6 +14,7 @@ class BannerController {
 
    async addBanner(req, res) {
       try {
+         console.log('hello from banner starting')
          const bannerData = this.validateBannerData(req);
          const imageFileName = this.handleImageUpload(req);
          bannerData.image = imageFileName;
