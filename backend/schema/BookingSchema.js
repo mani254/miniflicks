@@ -118,6 +118,10 @@ const bookingSchema = new Schema({
          required: true,
          default: 0
       },
+      free:{
+         type:Boolean,
+         default:false
+      }
    }],
    customer: {
       type: Schema.Types.ObjectId,

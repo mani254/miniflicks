@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { createBooking } from "../redux/booking/bookingActions";
+import { createBooking,updateBooking} from "../redux/booking/bookingActions";
 import { useNavigate } from "react-router-dom";
-import { setBookingAdvance, setBookingNote } from "../redux/customerBooking/customerBookingActions";
+import { setBookingAdvance, setBookingNote,setBookingFullPayment } from "../redux/customerBooking/customerBookingActions";
 import Loader from "../components/Loader/Loader";
 
-function paymentPage({ customerBooking, createBooking, auth }) {
+function paymentPage({ customerBooking, createBooking , updateBooking}) {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -13,31 +13,36 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 		advance: 0,
 		note: "",
 		total: 0,
+		fullPayment:false
 	});
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		if (!customerBooking) return;
-		setDetails({ advance: customerBooking.advance, note: customerBooking.note, total: customerBooking.total });
+		setDetails({ advance: customerBooking.advance, note: customerBooking.note, total: customerBooking.total,fullPayment:customerBooking.fullPayment });
 	}, [customerBooking]);
 
-	// useEffect(() => {
-	// 	if (auth.isLoggedIn) return;
-	// 	if (localStorage.getItem("authToken")) return;
-	// 	navigate("/paymentgateway", { replace: true });
-	// }, []);
 
 	function handleChange(e) {
-		const { name, value } = e.target;
-		setDetails((prev) => ({ ...prev, [name]: value }));
-
+		const { name, type, value, checked } = e.target;
+	
+		const newValue = type === "checkbox" ? checked : value;
+	
+		setDetails((prev) => ({ ...prev, [name]: newValue }));
+	
 		if (name === "advance") {
-			dispatch(setBookingAdvance(value));
+			dispatch(setBookingAdvance(newValue));
 		}
 		if (name === "note") {
-			dispatch(setBookingNote(value));
+			dispatch(setBookingNote(newValue));
 		}
+		if(name=="fullPayment"){
+			dispatch(setBookingFullPayment(newValue))
+		}
+
 	}
+
+	console.log(details)
 
 	async function handleBooking() {
 		try {
@@ -55,9 +60,32 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 		}
 	}
 
+	async function handleUpdateBooking() {
+		try {
+			setLoading(true);
+			const res = await updateBooking(customerBooking);
+
+			if (res) {
+				console.log(res);
+				setLoading(false);
+				navigate("/bookingConfirmation", { replace: true });
+			}
+		} catch (err) {
+			setLoading(false);
+			console.log(err);
+		}
+	}
+
+
+
 	function handleSubmit(e) {
 		e.preventDefault();
-		handleBooking();
+		if(!customerBooking.isEditing){
+			handleBooking();
+		}
+		else{
+			handleUpdateBooking();
+		}
 	}
 
 	return (
@@ -79,18 +107,28 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 						<textarea id="note" name="note" placeholder="Add any special notes" value={details.note} onChange={handleChange} />
 					</div>
 
+					{customerBooking.isEditing && (
+						<div className="input-wrapper flex mt-6">
+						<input type="checkbox" id="fullPayment" name="fullPayment" checked={details.fullPayment} onChange={handleChange}/>
+						<label className="ml-2 -mt-1" htmlFor="fullPayment">
+							Payment Completed
+						</label>
+					</div>
+					)}
+
+
 					<div className="flex mb-3 items-center justify-between">
 						<h4>
 							Total: <span className="text-gray-600 text-md">₹ {details.total}</span>{" "}
 						</h4>
 						<h4>
-							Remaining: <span className="text-gray-600 text-md">₹ {parseFloat((details.total - details.advance).toFixed(2))}</span>
+							Remaining: {details.fullPayment?<span className="text-gray-600 text-md">₹ 0</span>:<span className="text-gray-600 text-md">₹ {parseFloat((details.total - details.advance).toFixed(2))}</span>}
 						</h4>
 					</div>
 
 					<div className="book-now-btn w-full">
 						<button className="btn-3 text-center w-full items-center gap-2 m-auto" type="submit">
-							Book Slot
+							{customerBooking.isEditing ?"Update Booking" :"Book Slot"}
 						</button>
 					</div>
 				</form>
@@ -102,13 +140,13 @@ function paymentPage({ customerBooking, createBooking, auth }) {
 const mapStateToProps = (state) => {
 	return {
 		customerBooking: state.customerBooking,
-		auth: state.auth,
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		createBooking: (booking) => dispatch(createBooking(booking)),
+		updateBooking:(booking)=> dispatch(updateBooking(booking))
 	};
 };
 

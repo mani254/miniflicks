@@ -1,5 +1,12 @@
 import customerBookingActionTypes from './customerBookingActionTypes';
 
+export const setCustomerBooking = (data)=>{
+   return{
+      type:customerBookingActionTypes.SET_CUSTOMER_BOOKING,
+      payload:data,
+   }
+}
+
 export const setBookingFromLocalStorage = (data) => {
    return {
       type: customerBookingActionTypes.SET_BOOKING_DATA,
@@ -96,6 +103,18 @@ export const setBookingAdvance = (advance) => {
    return {
       type: customerBookingActionTypes.SET_BOOKING_ADVANCE,
       payload: advance
+   }
+}
+// export const setBookingSpecialDiscount = (discount) => {
+//    return {
+//       type: customerBookingActionTypes.SET_BOOKING_SPECIALDISCOUNT,
+//       payload: discount
+//    }
+// }
+export const setBookingFullPayment = (fullPayment) => {
+   return {
+      type: customerBookingActionTypes.SET_BOOKING_FULLPAYMENT,
+      payload: fullPayment
    }
 }
 

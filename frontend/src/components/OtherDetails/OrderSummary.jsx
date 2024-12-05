@@ -13,18 +13,32 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 
 	// function that will exicute everytime the package change to set the package price
 	useEffect(() => {
+		console.log(customerBooking.package,'package -----')
+		console.log(pricingInfo,'pricingInfo')
 		if (!customerBooking.package) {
 			setPricingInfo((prev) => prev.filter((item) => item.title !== "Package"));
 		} else {
 			setPricingInfo((prev) => {
 				const existingPackageIndex = prev.findIndex((item) => item.title === "Package");
 
+				console.log(existingPackageIndex)
+
 				if (existingPackageIndex !== -1) {
 					const updatedPricingInfo = [...prev];
-					updatedPricingInfo[existingPackageIndex].amount = getPackagePrice(customerBooking.package);
+					if(customerBooking.isEditing){
+						updatedPricingInfo[existingPackageIndex].price = customerBooking.package.price
+					}else{
+						updatedPricingInfo[existingPackageIndex].amount = getPackagePrice(customerBooking.package);
+					}
 					return updatedPricingInfo;
 				} else {
-					return [...prev, { title: "Package", amount: getPackagePrice(customerBooking.package) }];
+					if(customerBooking.isEditing){
+
+						return [...prev, { title: "Package", amount: customerBooking.package.price}];
+					}
+					else{
+						return [...prev, { title: "Package", amount: getPackagePrice(customerBooking.package) }];
+					}
 				}
 			});
 		}
@@ -90,7 +104,7 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 		if (customerBooking.cakes.length == 0) {
 			setPricingInfo((prev) => prev.filter((item) => item.title !== "Cakes"));
 		} else {
-			const amount = customerBooking.cakes.reduce((acc, addon) => acc + addon.price * addon.count, 0);
+			const amount = customerBooking.cakes.reduce((acc, addon) => acc + addon.price , 0);
 			setPricingInfo((prev) => {
 				const existingCakesIndex = prev.findIndex((item) => item.title === "Cakes");
 

@@ -24,12 +24,17 @@ const initialState = {
    advance: 0,
    note: "",
    total: 0,
+   isEditing:false,
+   fullPayment:false,
+   id:null,
 };
 
 const customerBookingReducer = (state = initialState, action) => {
    switch (action.type) {
+      case customerBookingActionTypes.SET_CUSTOMER_BOOKING:
+         return action.payload
+
       case customerBookingActionTypes.SET_BOOKING_DATA:
-         console.log(action.payload, 'in bookinData')
          return action.payload
 
       case customerBookingActionTypes.SET_BOOKING_CITY:
@@ -112,6 +117,11 @@ const customerBookingReducer = (state = initialState, action) => {
          return {
             ...state,
             total: action.payload
+         }
+      case customerBookingActionTypes.SET_BOOKING_FULLPAYMENT:
+         return {
+            ...state,
+            fullPayment: action.payload
          }
       default:
          return state;

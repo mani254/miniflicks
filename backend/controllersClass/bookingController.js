@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Location = require('../schema/locationSchema')
 const Screen = require('../schema/screenSchema')
 const City = require('../schema/citySchema')
+const Coupon = require('../schema/couponSchema.js')
 const crypto = require('crypto')
 
 require('dotenv').config()
@@ -332,13 +333,11 @@ async function getGraphData(req, res) {
    }
 }
 
-
-
 async function getBooking(req, res) {
    try {
       const { id } = req.params;
 
-      const bookedData = await Booking.findById(id).populate({ path: 'location', select: 'name _id' }).populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice', });
+      const bookedData = await Booking.findById(id).populate('customer').populate({ path: 'location', select: 'name _id' }).populate({ path: 'screen', select: 'name _id minPeople extraPersonPrice', });
       if (bookedData) {
          return res.status(200).json({ message: 'Successfully fetched booking', booking: bookedData });
       } else {
@@ -417,6 +416,110 @@ async function createAdminBooking(req, res) {
       } else {
          return res.status(500).json({ error: 'Failed to save booking data.' });
       }
+
+   } catch (error) {
+      console.error('Error:', error);
+      const statusCode = error.code === 11000 ? 400 : 500;
+      return res.status(statusCode).json({ error: error.message || 'An unknown error occurred.' });
+   }
+}
+
+async function updateAdminBooking(req, res) {
+   try {
+     const booking=req.body
+     const currentBooking = await Booking.find({_id:booking.id})
+
+
+     const addons = booking.addons.map((addon)=>{
+      return {
+        _id:addon._id,
+        name:addon.name,
+        price:addon.price,
+        count:addon.count
+      }
+     })
+     
+     const gifts = booking.gifts.map((gift)=>{
+      return {
+         _id:gift._id,
+         name:gift.name,
+         price:gift.price,
+         count:gift.count
+      }
+     })
+
+     const cakes = booking.cakes.map((cake)=>{
+      return{
+         _id:cake._id,
+         name:cake.name,
+         price:cake.price,
+         free:cake.free
+      }
+     })
+
+     
+
+
+     const updatedBooking={
+      city:booking.city,
+      location:booking.location,
+      screen:booking.screen,
+      date:booking.date,
+      slot:booking.slot,
+      package:booking.package,
+      occasion:{_id:booking.occasion._id,name:booking.occasion.name,price:booking.occasion.price},
+      addons:addons.length>0? addons:[],
+      gifts:gifts.length>0? gifts:[],
+      cakes:cakes.length>0?cakes:[],
+      numberOfPeople:booking.otherInfo.numberOfPeople || 0,
+      nameOnCake:booking.otherInfo.nameOnCake || 0,
+      ledName:booking.otherInfo.ledName || "",
+      ledNumber:booking.otherInfo.ledNumber || "",
+      note:booking.otherInfo.note || "",
+      status:'booked',
+      advancePrice:booking.advance,
+      totalPrice:booking.total,
+      remainingAmount:booking.fullPayment?0: parseFloat(booking.total-booking.advance).toFixed(2),
+     }
+
+
+
+     if(currentBooking.couponCode!==booking.couponCode){
+         const couponPrice= async ()=>{
+            if(!booking.couponCode) return 0
+
+            const coupon = await Coupon.findOne({ code: this.couponCode.toUpperCase() })
+
+            if (!coupon) {
+         throw new Error("Invalid coupon code.");
+      }
+
+      if (!coupon.status) {
+         throw new Error("This coupon is inactive.");
+      }
+
+      const currentDate = new Date();
+      if (currentDate > coupon.expireDate) {
+         throw new Error("This coupon has expired.");
+      }
+      let amount = 0
+
+      if (coupon.type === "fixed") {
+         amount = -coupon.discount;
+         this.couponPrice=amount
+         return amount
+      } else {
+         const total = this.calculatePackagePrice() + this.calculateOccasionPrice() + this.calculateAddonsPrice() + this.calculateCakesPrice() + this.calculateGiftsPrice() + this.calculatePeoplePrice();
+         amount = -parseFloat(((coupon.discount / 100) * total).toFixed(2));
+         this.couponPrice=amount
+         return amount
+      }
+         }
+     }
+
+     res.status(200).send('Booking Data')
+      
+     console.log(booking)
 
    } catch (error) {
       console.error('Error:', error);
@@ -651,4 +754,4 @@ async function bookingsFrom360DaysAgo() {
    }
 }
 
-module.exports = { getBookings, getDashboardInfo, getGraphData, createAdminBooking, getBooking, getBookedSlots, yesterdayBookingCustomers, createCustomerBooking, verifyPayment, bookingsFrom360DaysAgo, cancelPayment, delPreviousOrder }
+module.exports = { getBookings, getDashboardInfo, getGraphData, createAdminBooking, getBooking, getBookedSlots, yesterdayBookingCustomers, createCustomerBooking, verifyPayment, bookingsFrom360DaysAgo, cancelPayment, delPreviousOrder,updateAdminBooking}

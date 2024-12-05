@@ -49,7 +49,7 @@ export const getBooking = (id) => async (dispatch) => {
    try {
       const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/${id}`);
       dispatch(getBookingSuccess(response.data.booking));
-      return Promise.resolve();
+      return Promise.resolve(response.data.booking);
    } catch (error) {
       let errMessage = error.response ? error.response.data.error : 'Something went wrong';
       dispatch(getBookingFailure(errMessage));
@@ -86,6 +86,32 @@ export const createBooking = (bookingData) => async (dispatch) => {
    }
 };
 
+const updateBookingRequest = (bookingData) => ({
+   type: bookingTypes.UPDATE_BOOKING_REQUEST,
+});
+
+const updateBookingSuccess = (booking) => ({
+   type: bookingTypes.UPDATE_BOOKING_SUCCESS,
+   payload: booking,
+});
+
+const updateBookingFailure = (error) => ({
+   type: bookingTypes.UPDATE_BOOKING_FAILURE,
+   payload: error,
+});
+export const updateBooking = (bookingData) => async (dispatch) => {
+   dispatch(updateBookingRequest());
+   try {
+      const response = await axios.put(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings`, bookingData);
+      dispatch(updateBookingSuccess(response.data.booking));
+      return Promise.resolve(response.data.booking);
+   } catch (error) {
+      let errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      dispatch(updateBookingFailure(errMessage));
+      dispatch(showNotification(errMessage));
+      return Promise.reject(errMessage);
+   }
+};
 
 
 export const getBookedSlots = ({ currentDate, screenId }) => async (dispatch) => {

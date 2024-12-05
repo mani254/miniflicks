@@ -9,6 +9,7 @@ import SmokeEntry from "../popupts/SmokeEntry";
 import CandlePath from "../popupts/CandlePath";
 
 import { showModal } from "../../redux/modal/modalActions";
+import { showNotification } from "../../redux/notification/notificationActions";
 
 import smokeEntry from "../../assets/gallery/smoke/image-1.jpg";
 import rosePath from "../../assets/gallery/rose-path/image-6.webp";
@@ -16,9 +17,10 @@ import roseHeart from "../../assets/gallery/rose-path/image-9.webp";
 
 const packageAddons = ["4k Dolby Theater", "Decoration", "Cake", "Smoke Entry", "Rose Heart On Table", "Rose With Candle Path"];
 
-function PackagesSection({ screensData, customerBooking }) {
+function PackagesSection({ screensData, customerBooking,showNotification}) {
 	const [screen, setScreen] = useState(null);
 	const [selectedPackage, setSelectedPackage] = useState({});
+	const [changedPackage,setChangedPackage]=useState(null)
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -26,13 +28,29 @@ function PackagesSection({ screensData, customerBooking }) {
 	// useEffect that will select the first package or any particualr package if it is already selected  in the inital render
 	useEffect(() => {
 		const currentScreen = screensData.screens.find((screen) => screen._id === customerBooking.screen);
-		setScreen(currentScreen);
+		if (currentScreen) {
+			const updatedScreen = {
+				...currentScreen,
+				packages: currentScreen.packages.map((pack) => ({
+					...pack,
+					price: getPackagePrice(pack),
+				})),
+			};
+			setScreen(updatedScreen);
+		}
 
 		if (!currentScreen) return;
 
+		console.log(customerBooking.package)
+
 		if (customerBooking.package) {
+			const isPackageAvailable = currentScreen.packages.find((pack) => pack.price === customerBooking.package.price);
 			setSelectedPackage(customerBooking.package);
-		} else {
+			if(!isPackageAvailable){
+				setChangedPackage(customerBooking.package)
+			}
+			
+		} else if(!customerBooking.isEditing){
 			setSelectedPackage(currentScreen.packages[0]);
 			dispatch(setBookingPackage(currentScreen.packages[0]));
 		}
@@ -41,6 +59,27 @@ function PackagesSection({ screensData, customerBooking }) {
 	// function that will handle package select updates the state and updates the  redux
 	const handlePackageSelect = useCallback(
 		(pack) => {
+			const now = new Date();
+			now.setHours(0, 0, 0, 0);
+
+			const bookingDate = new Date(customerBooking.date);
+        	bookingDate.setHours(0, 0, 0, 0);
+
+			if (now.getTime() === bookingDate.getTime()) {
+				const currentTime = new Date();
+				const [slotHour, slotMinute] = customerBooking.slot.from.split(':').map(Number);
+
+				const selectedSlotTime = new Date();
+				selectedSlotTime.setHours(slotHour, slotMinute, 0, 0);
+	
+				const timeDifference = selectedSlotTime - currentTime;
+	
+				if (timeDifference <= 3600000 && timeDifference > 0) {
+					showNotification("Only Basic Package is allowed before 1 hour");
+					return; 
+				}
+			}
+			
 			setSelectedPackage(pack);
 			dispatch(setBookingPackage(pack));
 			navigate("/booking/otherdetails/occasions");
@@ -103,12 +142,12 @@ function PackagesSection({ screensData, customerBooking }) {
 				{screen?.packages &&
 					screen.packages.map((pack, index) => {
 						const selected = pack.name === selectedPackage.name;
-						let price = getPackagePrice(pack);
+						// let price = getPackagePrice(pack);
 						return (
 							<div key={index} className={`p-[1.5px] rounded-lg cursor-pointer selected-1 ${selected ? "selected" : ""}`} onClick={() => handlePackageSelect(pack)}>
 								<div className="p-3 py-4 rounded-lg bg-bright">
 									<h3 className="text-primary">{pack.name}</h3>
-									<h4 className="border-b border-slate-400 border-opacity-50 pb-1">₹ {price}</h4>
+									<h4 className="border-b border-slate-400 border-opacity-50 pb-1">₹ {pack.price}</h4>
 									<ul className="mt-2">
 										{packageAddons.map((addon, index) => {
 											const available = pack.addons.includes(addon);
@@ -124,6 +163,26 @@ function PackagesSection({ screensData, customerBooking }) {
 							</div>
 						);
 					})}
+
+				{changedPackage && customerBooking.isEditing && (
+					<div  className={`p-[1.5px] rounded-lg cursor-pointer selected-1 selected`} onClick={() => handlePackageSelect(pack)}>
+					<div className="p-3 py-4 rounded-lg bg-bright">
+						<h3 className="text-primary">{changedPackage.name}</h3>
+						<h4 className="border-b border-slate-400 border-opacity-50 pb-1">₹ {changedPackage.price}</h4>
+						<ul className="mt-2">
+							{packageAddons.map((addon, index) => {
+								const available = changedPackage.addons.includes(addon);
+								return (
+									<li key={index} className="flex gap-2 mt-1">
+										<img src={available ? addonAvailable : addonUnavailable} alt={available ? "available tick-mark" : "unavailable tick-mark"} />
+										{addon}
+									</li>
+								);
+							})}
+						</ul>
+					</div>
+				</div>
+				)}
 			</div>
 		</section>
 	);
@@ -134,4 +193,8 @@ const mapStateToProps = (state) => ({
 	customerBooking: state.customerBooking,
 });
 
-export default connect(mapStateToProps)(PackagesSection);
+const mapDispatchToProps = (dispatch)=>({
+   showNotification: (message)=>{dispatch(showNotification(message))}
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(PackagesSection);

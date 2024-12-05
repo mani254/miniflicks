@@ -63,8 +63,8 @@ function UsersLayout({ customerBooking, getBanners }) {
 
 				<Footer />
 
-				<div class="whatsapp-icon">
-					<a href="https://wa.me/+919019162002?text=Hello. " class="btn-whatsapp-pulse" target="_blank">
+				<div className="whatsapp-icon">
+					<a href="https://wa.me/+919019162002?text=Hello. " className="btn-whatsapp-pulse" target="_blank">
 						<img src={whatsappColoured} alt="whatsapp icon"/>
 					</a>
 				</div>

@@ -30,6 +30,7 @@ import axios from "axios";
 import Loader from "./components/Loader/Loader";
 
 const BackendLayout = lazy(() => import("./layouts/BackendLayout"));
+import UpdateBooking from "./components/Booking/UpdateBooking";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Notification from "./components/Notifications/Notifications";
 import Modal from "./components/Modal/Modal";
@@ -112,6 +113,7 @@ function App({ modal }) {
 										<BookingLayout />
 									</Suspense>
 								}>
+								<Route path="edit/:id" element={<UpdateBooking edit={true}/>}></Route>
 								<Route path="locations" element={<UserLocations />}></Route>
 								<Route path="screens" element={<UserScreens />}></Route>
 								<Route path="slots" element={<SlotBookingPage />}></Route>

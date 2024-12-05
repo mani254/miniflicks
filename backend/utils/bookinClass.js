@@ -162,6 +162,7 @@ class BookingClass {
             _id: cake._id,
             name: cake.name,
             price: cake.price,
+            free:cakeData.free
          };
       });
       this.cakes = await Promise.all(cakePromises);

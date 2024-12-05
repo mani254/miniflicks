@@ -9,12 +9,11 @@ import { initialLogin } from "../redux/auth/authActions";
 
 import { Helmet } from "react-helmet-async";
 
-function UsersLayout({ customerBooking, auth, initialLogin }) {
+function UsersLayout({ customerBooking,initialLogin }) {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (auth.isLoggedIn) return;
-
+		
 		const fetchInitialData = async () => {
 			try {
 				const token = localStorage.getItem("authToken");
@@ -77,7 +76,6 @@ function UsersLayout({ customerBooking, auth, initialLogin }) {
 const mapStateToProps = (state) => {
 	return {
 		customerBooking: state.customerBooking,
-		auth: state.auth,
 	};
 };
 const mapDispatchToProps = (dispatch) => {
