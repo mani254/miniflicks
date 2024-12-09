@@ -6,7 +6,6 @@ import { validateCoupon } from "../../redux/coupon/couponActions";
 function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
 	const [couponCode, setCouponCode] = useState("");
 	const [showCoupon, setShowCoupon] = useState(false);
-	const [currentCoupon, setCurrentCoupon] = useState(null);
 	const [error, setError] = useState("");
 
 	const dispatch = useDispatch();
@@ -15,12 +14,32 @@ function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
 	useEffect(() => {
 		if (!showCoupon) {
 			setCouponCode("");
-			setCurrentCoupon(null);
 			setError("");
 			dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, couponCode: "" }));
 			setPricingInfo((prev) => prev.filter((item) => item.title !== "Coupon"));
 		}
 	}, [showCoupon]);
+
+	useEffect(()=>{
+		if(showCoupon) return
+		if(!customerBooking.otherInfo.couponCode) return 
+		setShowCoupon(true)
+		setCouponCode(customerBooking.otherInfo.couponCode)
+
+		setPricingInfo((prev) => {
+			const existingIndex = prev.findIndex((item) => item.title === "Coupon");
+
+			if (existingIndex !== -1) {
+				const updatedPricingInfo = [...prev];
+				updatedPricingInfo[existingIndex].amount = customerBooking.otherInfo.couponPrice;
+				return updatedPricingInfo;
+			} else {
+				return [...prev, { title: "Coupon", amount: customerBooking.otherInfo.couponPrice }];
+			}
+		});
+		
+
+	},[customerBooking.otherInfo.couponCode])
 
 	const updateCouponAmount = (coupon) => {
 		if (!coupon) return;
@@ -54,7 +73,6 @@ function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
 
 			if (res && res.coupon) {
 				setError("");
-				setCurrentCoupon(res.coupon);
 				dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, couponCode })); // Dispatch only when coupon is valid
 				updateCouponAmount(res.coupon);
 			}

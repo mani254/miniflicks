@@ -135,7 +135,6 @@ function OccasionsSection({ occasionsData, getAllOccasions, customerBooking }) {
 							);
 						})}
 
-						{console.log(changedOccasion,'---------------')}
 						{changedOccasion && (
 							<div className={`p-[1.5px] rounded-lg cursor-pointer selected-1 ${!isChanged ? "selected" : ""}`} onClick={() => handleSelect(changedOccasion)}>
 							<div className="p-2 rounded-lg bg-bright">

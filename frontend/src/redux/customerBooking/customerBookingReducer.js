@@ -20,6 +20,7 @@ const initialState = {
       ledName: "",
       ledNumber: "", 
       couponCode: "",
+      couponPrice:0,
    },
    advance: 0,
    note: "",

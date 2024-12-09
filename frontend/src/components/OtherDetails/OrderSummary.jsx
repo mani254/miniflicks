@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import CouponComponent from "./CouponComponent";
 import { setBookingTotal } from "../../redux/customerBooking/customerBookingActions";
 import OtherDetailsButton from "../Booking/OtherDetailsButton";
@@ -8,32 +8,27 @@ import OtherDetailsButton from "../Booking/OtherDetailsButton";
 function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions, setActiveIndex }) {
 	const [pricingInfo, setPricingInfo] = useState([]);
 	const [total, setTotal] = useState(0);
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	// function that will exicute everytime the package change to set the package price
 	useEffect(() => {
-		console.log(customerBooking.package,'package -----')
-		console.log(pricingInfo,'pricingInfo')
 		if (!customerBooking.package) {
 			setPricingInfo((prev) => prev.filter((item) => item.title !== "Package"));
 		} else {
 			setPricingInfo((prev) => {
 				const existingPackageIndex = prev.findIndex((item) => item.title === "Package");
 
-				console.log(existingPackageIndex)
-
 				if (existingPackageIndex !== -1) {
 					const updatedPricingInfo = [...prev];
 					if(customerBooking.isEditing){
-						updatedPricingInfo[existingPackageIndex].price = customerBooking.package.price
+						updatedPricingInfo[existingPackageIndex].amount = customerBooking.package.price
 					}else{
 						updatedPricingInfo[existingPackageIndex].amount = getPackagePrice(customerBooking.package);
 					}
 					return updatedPricingInfo;
 				} else {
 					if(customerBooking.isEditing){
-
 						return [...prev, { title: "Package", amount: customerBooking.package.price}];
 					}
 					else{

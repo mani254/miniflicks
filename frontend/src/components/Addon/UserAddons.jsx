@@ -117,17 +117,20 @@ function UserItems({
         ];
 
     //here check weather there is nay any item inisde the selected have a value free == true if so then don't have to do anythign else set the first object inside the updatedSelected and set free=true
-    const hasFreeItem = updatedSelected.some(
-      (current) => current.free === true
-    );
-
-    if (!hasFreeItem && updatedSelected.length > 0) {
-      updatedSelected[0] = {
-        ...updatedSelected[0],
-        free: true,
-        price: updatedSelected[0].specialPrice || 0,
-      };
+    if(type=='cakes'){
+      const hasFreeItem = updatedSelected.some(
+        (current) => current.free === true
+      );
+  
+      if (!hasFreeItem && updatedSelected.length > 0) {
+        updatedSelected[0] = {
+          ...updatedSelected[0],
+          free: true,
+          price: updatedSelected[0].specialPrice || 0,
+        };
+      }
     }
+    
 
     setSelected(updatedSelected);
     dispatch(setBookingAction(updatedSelected));
@@ -190,11 +193,11 @@ function UserItems({
   function ItemCard({ item, isSelected, isFree = false }) {
     return (
       <div
+      key={item._id}
+        onClick={() => handleSelect(item)}
         className={`p-[1.5px] rounded-lg cursor-pointer selected-1 ${
           isSelected ? "selected" : ""
         }  relative w-full`}
-        key={item._id}
-        onClick={() => handleSelect(item)}
       >
         <div className="p-2 rounded-lg bg-bright">
           <div className="w-full aspect-[16/12] relative overflow-hidden rounded-md">
@@ -209,7 +212,7 @@ function UserItems({
             <p className="font-medium text-primary text-md whitespace-nowrap m-auto">
               ₹ {isFree ? item.specialPrice : item.price}
             </p>
-            {type !== "cakes" && (
+            {type !== "cakes" || !item.name.toLowerCase().includes('led')&& (
               <div
                 onClick={(e) => e.stopPropagation()}
                 className="flex w-full items-center justify-between gap-[2px]"

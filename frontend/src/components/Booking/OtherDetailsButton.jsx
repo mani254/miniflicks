@@ -47,7 +47,6 @@ function OtherDetailsButton({ customerBooking, showNotification, activeIndex, na
 	async function handlePayment() {
 		// Check if user is authenticated
 		const authToken = localStorage.getItem("authToken");
-		console.log(authToken, "authToken");
 		if (authToken) {
 			navigate("/booking/payment");
 			return;

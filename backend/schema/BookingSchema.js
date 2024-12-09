@@ -143,6 +143,7 @@ const bookingSchema = new Schema({
    },
    couponCode: {
       type: String,
+      default:null,
    },
    status: {
       type: String,

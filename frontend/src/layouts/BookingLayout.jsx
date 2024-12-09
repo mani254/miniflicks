@@ -29,7 +29,6 @@ function UsersLayout({ customerBooking,initialLogin }) {
 
 	useEffect(() => {
 		const savedBookingData = localStorage.getItem("customerBooking");
-		console.log(savedBookingData, "savedbookingdata");
 		if (savedBookingData) {
 			const bookingData = JSON.parse(savedBookingData);
 			console.log(bookingData);

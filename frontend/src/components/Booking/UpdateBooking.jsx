@@ -40,6 +40,7 @@ const UpdateBooking = ({ initialLogin, getBooking, getScreens, screensData,setCu
             ledName: booking.ledName || "",
             ledNumber: booking.ledNumber || "",
             couponCode: booking.couponCode || "",
+            couponPrice:booking.couponPrice || 0,
             numberOfExtraPeople: 0,
             extraPersonsPrice: 0,  
           },
