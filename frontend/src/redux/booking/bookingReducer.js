@@ -13,6 +13,7 @@ const bookingReducer = (state = initialState, action) => {
       case bookingTypes.GET_BOOKING_REQUEST:
       case bookingTypes.CREATE_BOOKING_REQUEST:
       case bookingTypes.UPDATE_BOOKING_SUCCESS:
+      case bookingTypes.DELETE_BOOKING_REQUEST:
          return {
             ...state,
             loading: true,
@@ -32,10 +33,19 @@ const bookingReducer = (state = initialState, action) => {
             loading: false,
             booking: action.payload,
          };
+      case bookingTypes.DELETE_BOOKING_SUCCESS:
+         return {
+            ...state,
+            loading: false,
+            bookings: state.bookings.filter(
+               (booking) => booking._id !== action.payload
+            ),
+         };
       case bookingTypes.GET_BOOKINGS_FAILURE:
       case bookingTypes.GET_BOOKING_FAILURE:
       case bookingTypes.CREATE_BOOKING_FAILURE:
       case bookingTypes.UPDATE_BOOKING_FAILURE:
+      case bookingTypes.DELETE_BOOKING_FAILURE:
          return {
             ...state,
             loading: false,

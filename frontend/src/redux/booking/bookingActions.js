@@ -113,6 +113,34 @@ export const updateBooking = (bookingData) => async (dispatch) => {
    }
 };
 
+const deleteBookingRequest = () => ({
+   type: bookingTypes.DELETE_BOOKING_REQUEST,
+});
+
+const deleteBookingSuccess = (bookingId) => ({
+   type: bookingTypes.DELETE_BOOKING_SUCCESS,
+   payload: bookingId,
+});
+
+const deleteBookingFailure = (error) => ({
+   type: bookingTypes.DELETE_BOOKING_FAILURE,
+   payload: error,
+});
+
+export const deleteBooking = (bookingId) => async (dispatch) => {
+   dispatch(deleteBookingRequest());
+   try {
+      await axios.delete(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/${bookingId}`);
+      dispatch(deleteBookingSuccess(bookingId));
+      return Promise.resolve(bookingId);
+   } catch (error) {
+      let errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      dispatch(deleteBookingFailure(errMessage));
+      dispatch(showNotification(errMessage));
+      return Promise.reject(errMessage);
+   }
+};
+
 
 export const getBookedSlots = ({ currentDate, screenId }) => async (dispatch) => {
    try {

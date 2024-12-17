@@ -1,18 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import Loader from "../Loader/Loader";
 
 import { connect } from "react-redux";
+import { showModal } from "../../redux/modal/modalActions";
 import { getBookings } from "../../redux/booking/bookingActions";
+import { deleteBooking } from "../../redux/booking/bookingActions";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import BookingsFilter from "./BookingsFilter";
 import Pagination from "../Pagination/Pagination";
+import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
 
-function Bookings({ getBookings, bookingData }) {
+function Bookings({ showModal, getBookings, bookingData, deleteBooking }) {
 	const [params, setParams] = useSearchParams();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [noOfDocuments, setNoOfDocuments] = useState(0);
 	const navigate = useNavigate();
+
+	const alertData = {
+		title: "Are You sure?",
+		info: "if you delete this booking all the bookings will be deleted",
+		confirmFunction: (bookingId) => {
+			deleteBooking(bookingId);
+		},
+	};
 
 	useEffect(() => {
 		(async () => {
@@ -53,7 +65,7 @@ function Bookings({ getBookings, bookingData }) {
 								<th>Advance</th>
 								<th>Remaining</th>
 								<th>Status</th>
-								<th>Actions</th>
+								{/* <th>Actions</th> */}
 							</tr>
 						</thead>
 						<tbody>
@@ -72,13 +84,16 @@ function Bookings({ getBookings, bookingData }) {
 										<td>{booking.advancePrice}</td>
 										<td>{booking.remainingAmount}</td>
 										<td>{booking.status}</td>
-										<td>
-											<div className="flex">
-												<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/admin/locations/edit/${location._id}`)}>
+										{/* <td>
+											<div className="flex" onClick={(e) => e.stopPropagation()}>
+												<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/booking/edit/${booking._id}`)}>
 													<FaEdit className="fill-blue-500" />
 												</span>
+												<span className="cursor-pointer text-2xl" onClick={() => showModal({ ...alertData, id: booking._id }, ConfirmationAlert)}>
+													<MdDelete className="fill-red-500" />
+												</span>
 											</div>
-										</td>
+										</td> */}
 									</tr>
 								))}
 						</tbody>
@@ -99,6 +114,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		getBookings: (params) => dispatch(getBookings(params)),
+		showModal: (props, component) => dispatch(showModal(props, component)),
+		deleteBooking: (bookingId) => dispatch(deleteBooking(bookingId)),
 	};
 };
 
