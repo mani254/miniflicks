@@ -30,7 +30,7 @@ class BookingClass {
       this.ledNumber = bookingData.otherInfo.ledNumber || "";
       this.note = bookingData.note || '';
       // this.status = 'pending';
-      this.couponPrice= 0
+      this.couponPrice = 0
       this.couponCode = bookingData.otherInfo.couponCode || null
       this.totalPrice = 0;
       this.remainingAmount = 0;
@@ -162,7 +162,7 @@ class BookingClass {
             _id: cake._id,
             name: cake.name,
             price: cake.price,
-            free:cakeData.free
+            free: cakeData.free
          };
       });
       this.cakes = await Promise.all(cakePromises);
@@ -237,12 +237,12 @@ class BookingClass {
 
       if (coupon.type === "fixed") {
          amount = -coupon.discount;
-         this.couponPrice=amount
+         this.couponPrice = amount
          return amount
       } else {
          const total = this.calculatePackagePrice() + this.calculateOccasionPrice() + this.calculateAddonsPrice() + this.calculateCakesPrice() + this.calculateGiftsPrice() + this.calculatePeoplePrice();
          amount = -parseFloat(((coupon.discount / 100) * total).toFixed(2));
-         this.couponPrice=amount
+         this.couponPrice = amount
          return amount
       }
    }
@@ -291,7 +291,7 @@ class BookingClass {
          ledNumber: this.ledNumber,
          note: this.note,
          status: status,
-         couponPrice:this.couponPrice,
+         couponPrice: this.couponPrice,
          advancePrice: this.advancePrice,
          totalPrice: this.totalPrice,
          remainingAmount: this.remainingAmount,

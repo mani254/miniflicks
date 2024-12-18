@@ -28,7 +28,11 @@ class CalendarLogic {
             } else {
                const currentDate = new Date(this.year, this.month, date);
                const isUnavailable = this.unavailable.includes(currentDate.getTime()) || currentDate < yesterday;
-               const isSelected = this.selectedDate && currentDate.getTime() === this.selectedDate.getTime();
+               const isSelected =
+                  this.selectedDate &&
+                  currentDate.getDate() === this.selectedDate.getDate() &&
+                  currentDate.getMonth() === this.selectedDate.getMonth() &&
+                  currentDate.getFullYear() === this.selectedDate.getFullYear();
 
                week.push({
                   date: currentDate,

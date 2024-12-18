@@ -27,7 +27,7 @@ const months = ["January", "February", "March", "April", "May", "June", "July", 
 function Calendar({ customerBooking }) {
 	const initialDate = new Date();
 	const [selectedDate, setSelectedDate] = useState();
-	const [unavailableDates] = useState([new Date("2024-10-30T12:00:00.000Z").setHours(0, 0, 0, 0), new Date("2024-10-28T12:00:00.000Z").setHours(0, 0, 0, 0)]);
+	const [unavailableDates] = useState([]);
 	const [calendarLogic, setCalendarLogic] = useState(() => new CalendarLogic(initialDate.getFullYear(), initialDate.getMonth(), unavailableDates, selectedDate));
 
 	const dispatch = useDispatch();
@@ -39,7 +39,6 @@ function Calendar({ customerBooking }) {
 		setCalendarLogic((prevLogic) => new CalendarLogic(prevLogic.year, prevLogic.month, unavailableDates, date));
 	};
 
-	//function to handle month change
 	const handleMonthChange = (increment) => {
 		setCalendarLogic((prevLogic) => {
 			const newLogic = new CalendarLogic(prevLogic.year, prevLogic.month, unavailableDates, selectedDate);
@@ -52,7 +51,7 @@ function Calendar({ customerBooking }) {
 	useEffect(() => {
 		const initialDate = new Date();
 		let date = null;
-		console.log(customerBooking.date);
+		// console.log(customerBooking.date);
 
 		if (customerBooking.date) {
 			date = customerBooking.date instanceof Date ? customerBooking.date : new Date(customerBooking.date);
@@ -60,14 +59,11 @@ function Calendar({ customerBooking }) {
 			date = new Date(initialDate.setHours(0, 0, 0, 0));
 		}
 
-		console.log(date, "---date in initial -setup of calendar-----");
-		console.log(date.getFullYear(), "fullyear");
-
 		setSelectedDate(date);
 		setCalendarLogic(() => new CalendarLogic(date.getFullYear(), date.getMonth(), unavailableDates, date));
 	}, [customerBooking.date]);
 
-	console.log(selectedDate, "--selected date which is currently selected-----");
+	// console.log(selectedDate, "--selected date which is currently selected-----");
 
 	let calendar = calendarLogic.generateCalendar();
 

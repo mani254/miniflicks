@@ -1,9 +1,9 @@
 import customerBookingActionTypes from './customerBookingActionTypes';
 
-export const setCustomerBooking = (data)=>{
-   return{
-      type:customerBookingActionTypes.SET_CUSTOMER_BOOKING,
-      payload:data,
+export const setCustomerBooking = (data) => {
+   return {
+      type: customerBookingActionTypes.SET_CUSTOMER_BOOKING,
+      payload: data,
    }
 }
 
@@ -38,11 +38,12 @@ export const setBookingScreen = (screen) => {
 }
 
 export const setBookingDate = (date) => {
+   const zeroUTCDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
    return {
       type: customerBookingActionTypes.SET_BOOKING_DATE,
-      payload: date
-   }
-}
+      payload: zeroUTCDate.toISOString()
+   };
+};
 
 export const setBookingSlot = (slot) => {
    return {
