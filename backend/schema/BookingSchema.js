@@ -118,9 +118,9 @@ const bookingSchema = new Schema({
          required: true,
          default: 0
       },
-      free:{
-         type:Boolean,
-         default:false
+      free: {
+         type: Boolean,
+         default: false
       }
    }],
    customer: {
@@ -138,21 +138,21 @@ const bookingSchema = new Schema({
    ledName: {
       type: String
    },
-   ledNumber:{
+   ledNumber: {
       type: String
    },
    couponCode: {
       type: String,
-      default:null,
+      default: null,
    },
    status: {
       type: String,
       enum: ['pending', 'booked', 'canceled'],
       default: 'pending'
    },
-   couponPrice:{
-      type:Number,
-      default:0,
+   couponPrice: {
+      type: Number,
+      default: 0,
    },
    note: {
       type: String,

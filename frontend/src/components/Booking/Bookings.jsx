@@ -65,7 +65,7 @@ function Bookings({ showModal, getBookings, bookingData, deleteBooking }) {
 								<th>Advance</th>
 								<th>Remaining</th>
 								<th>Status</th>
-								{/* <th>Actions</th> */}
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -84,7 +84,7 @@ function Bookings({ showModal, getBookings, bookingData, deleteBooking }) {
 										<td>{booking.advancePrice}</td>
 										<td>{booking.remainingAmount}</td>
 										<td>{booking.status}</td>
-										{/* <td>
+										<td>
 											<div className="flex" onClick={(e) => e.stopPropagation()}>
 												<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/booking/edit/${booking._id}`)}>
 													<FaEdit className="fill-blue-500" />
@@ -93,7 +93,7 @@ function Bookings({ showModal, getBookings, bookingData, deleteBooking }) {
 													<MdDelete className="fill-red-500" />
 												</span>
 											</div>
-										</td> */}
+										</td>
 									</tr>
 								))}
 						</tbody>

@@ -9,9 +9,10 @@ import termsAndConditions from "../../utils/termsAndConditions";
 import refundPolicy from "../../utils/refundPolicy";
 
 import { showModal } from "../../redux/modal/modalActions";
+import { showNotification } from "../../redux/notification/notificationActions";
 import Popupts from "../popupts/Popupts";
 
-function CustomerDetails({ customerBooking, screensData, showModal }) {
+function CustomerDetails({ customerBooking, screensData, showModal, showNotification }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate(null);
 
@@ -79,6 +80,12 @@ function CustomerDetails({ customerBooking, screensData, showModal }) {
 	// function to handle form submission
 	function handleSubmit(e) {
 		e.preventDefault();
+
+		if (!details.email.endsWith("@gmail.com")) {
+			showNotification("invalid gmail id");
+			return;
+		}
+
 		dispatch(setBookingCustomer({ name: details.name, email: details.email, number: details.number }));
 
 		const numberOfExtraPeople = details.numberOfPeople - screen?.minPeople;
@@ -173,6 +180,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		showModal: (props, component) => dispatch(showModal(props, component)),
+		showNotification: (message) => dispatch(showNotification(message)),
 	};
 };
 

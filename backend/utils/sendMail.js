@@ -9,14 +9,13 @@ async function sendMail({ subject, html, to }) {
          port: 587,
          secure: false,
          auth: {
-            user: "81f12a001@smtp-brevo.com",
+            user: "8207d1001@smtp-brevo.com",
             pass: process.env.SIB_API_KEY,
          },
       });
 
-
       const mailOptions = {
-         from: 'manikantadev254@gmail.com',
+         from: '"Miniflicks" <miniflicksprivatetheatres@gmail.com>',
          to: to,
          subject: subject,
          html: html,

@@ -445,7 +445,7 @@ async function createAdminBooking(req, res) {
       if (bookedData) {
          const html = await generateBookingHTML(bookedData);
          sendMail({
-            to: bookedData.customer.email,
+            to: [bookedData.customer.email, 'miniflicksprivatetheatres@gmail.com'],
             subject: "Miniflicks Theater Booking Confirmation",
             html,
          });
@@ -754,7 +754,7 @@ async function verifyPayment(req, res) {
 
          const html = await generateBookingHTML(populatedBooking);
          sendMail({
-            to: populatedBooking.customer.email,
+            to: [populatedBooking.customer.email, 'miniflicksprivatetheatres@gmail.com'],
             subject: "Miniflicks Theater Booking Confirmation",
             html,
          });

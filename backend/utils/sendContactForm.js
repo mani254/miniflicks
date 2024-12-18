@@ -29,7 +29,7 @@ async function sendContactForm(req, res) {
       const template = generateContactFormHtml({ name, phone, email, message })
 
       await sendMail({
-         subject: 'Miniflicks Contact Form', html: template, to: 'msmanikanta25@gmail.com'
+         subject: 'Miniflicks Contact Form', html: template, to: 'miniflicksprivatetheatres@gmail.com'
       })
 
       res.status(200).send({ message: 'Form Submitted Successfully' })

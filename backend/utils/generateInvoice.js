@@ -45,8 +45,20 @@ const generateBookingHTML = async (bookingData) => {
 
    // Return HTML as a string
    return `
-     <h1 style="text-align:center; margin-bottom:20px;">Thanks for choosing Miniflicks</h1>
-     <a style="margin-bottom:10px" href=${bookingData.location.addressLink}>Navigate to Location</a>
+     <h2 style="text-align:center; margin-bottom:20px;">Thanks for choosing Miniflicks</h2>
+     <h3 style="text-align:center;">Attached is your booking invoice for Miniflicks. Please review the details, and let us know if you have any questions. We look forward to serving you!</h3>
+
+     <div style="display: flex; align-items: center; justify-content: center;"">
+     <a href="${bookingData.location.addressLink}" 
+         style="display: inline-block; margin-bottom: 10px; padding: 8px 12px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 5px; font-family: Arial, sans-serif; font-size: 17px;" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         aria-label="Navigate to the location on the map">
+         Navigate to Location
+      </a>
+     </div>
+     
+
 		<div style="background-color: #f7fafc; padding: 20px; width: 700px; margin: 0 auto;">
 			<div style="background-color: white; box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 24px;">
 				<h2 style="text-align: center; margin-bottom: 24px;">Invoice</h2>
@@ -280,6 +292,83 @@ const generateBookingHTML = async (bookingData) => {
             </td>
          </tr>
       </table>
+
+<table style="width: 100%; margin-top: 16px; border-collapse: collapse; border: 1px solid #e2e8f0; font-family: Arial, sans-serif;">
+   <thead>
+      <tr>
+         <th colspan="2" style="background-color: #f7fafc; padding: 12px; text-align: left; font-size: 16px; color: #2d3748; border-bottom: 1px solid #e2e8f0;">
+            Booking Details
+         </th>
+      </tr>
+   </thead>
+   <tbody>
+      ${bookingData?.occasion?.celebrantName || bookingData?.nameOnCake
+         ? `
+            <tr>
+               <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; font-weight: 500; color: #2d3748;">
+                  Celebrant Name:
+               </td>
+               <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #4a5568;">
+                  ${bookingData.occasion?.celebrantName || 'N/A'}
+               </td>
+            </tr>
+            <tr>
+               <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; font-weight: 500; color: #2d3748;">
+                  Name On Cake:
+               </td>
+               <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #4a5568;">
+                  ${bookingData?.nameOnCake || 'N/A'}
+               </td>
+            </tr>`
+         : ""
+      }
+      ${bookingData?.ledName || bookingData?.ledNumber
+         ? `
+            <tr>
+               <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; font-weight: 500; color: #2d3748;">
+                  LED Name:
+               </td>
+               <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #4a5568;">
+                  ${bookingData?.ledName || 'N/A'}
+               </td>
+            </tr>
+            <tr>
+               <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; font-weight: 500; color: #2d3748;">
+                  LED Number:
+               </td>
+               <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #4a5568;">
+                  ${bookingData?.ledNumber || 'N/A'}
+               </td>
+            </tr>`
+         : ""
+      }
+      <tr>
+         <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; font-weight: 500; color: #2d3748;">
+            Customer Name:
+         </td>
+         <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #4a5568;">
+            ${bookingData.customer?.name || 'N/A'}
+         </td>
+      </tr>
+      <tr>
+         <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; font-weight: 500; color: #2d3748;">
+            Customer Number:
+         </td>
+         <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #4a5568;">
+            ${bookingData.customer.number || 'N/A'}
+         </td>
+      </tr>
+      <tr>
+         <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; font-weight: 500; color: #2d3748;">
+            Number Of People:
+         </td>
+         <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: left; color: #4a5568;">
+            ${bookingData?.numberOfPeople || 'N/A'}
+         </td>
+      </tr>
+   </tbody>
+</table>
+
 			</div>
 		</div>`;
 };

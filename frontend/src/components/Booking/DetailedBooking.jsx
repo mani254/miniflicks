@@ -39,7 +39,22 @@ const DetailedBooking = ({ bookingData }) => {
 			<div className="bg-white shadow-md rounded-lg p-6">
 				<h2 className="text-center mb-6">Invoice</h2>
 
-				<div className="grid grid-cols-2 gap-2 mb-3">
+				<div className="grid grid-cols-3 gap-2 mb-5 ">
+					<div>
+						<h5 className="">Name:</h5>
+						<p className="text-gray-600">{bookingData.customer.name}</p>
+					</div>
+					<div>
+						<h5 className="">Email:</h5>
+						<p className="text-gray-600">{bookingData.customer.email}</p>
+					</div>
+					<div>
+						<h5 className="">Phone Number:</h5>
+						<p className="text-gray-600">{bookingData.customer.number}</p>
+					</div>
+				</div>
+
+				<div className="grid grid-cols-2 gap-2 mb-5">
 					<div>
 						<h5 className="">Location</h5>
 						<p className="text-gray-600">{bookingData.location.name}</p>
@@ -230,7 +245,6 @@ const DetailedBooking = ({ bookingData }) => {
 									<td className="p-[2px] text-gray-600">₹{bookingData.couponPrice}</td>
 								</tr>
 							)}
-							
 						</tbody>
 					</table>
 					<div className="flex w-full justify-around mt-4">
