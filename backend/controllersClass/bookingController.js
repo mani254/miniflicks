@@ -409,6 +409,8 @@ async function getBookedSlots(req, res) {
       let date = new Date(currentDate);
       date.setHours(0, 0, 0, 0);
 
+      console.log(date, '------')
+
       const bookings = await Booking.find({
          date,
          screen: screenId,
@@ -437,7 +439,7 @@ async function createAdminBooking(req, res) {
             path: "screen",
             select: "name _id minPeople extraPersonPrice",
          })
-         .populate({ path: "customer", select: "name email" });
+         .populate({ path: "customer", select: "name email number" });
 
       // console.log("-------------------------------------------------------------")
       // console.log(bookedData, 'booked Data after fetching the saved booking')
@@ -750,7 +752,7 @@ async function verifyPayment(req, res) {
                path: "screen",
                select: "name _id minPeople extraPersonPrice",
             })
-            .populate({ path: "customer", select: "name email" });
+            .populate({ path: "customer", select: "name email number" });
 
          const html = await generateBookingHTML(populatedBooking);
          sendMail({

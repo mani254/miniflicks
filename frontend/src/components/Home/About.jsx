@@ -21,7 +21,6 @@ function About() {
 				trigger: contentRef.current,
 				start: "top 70%",
 				toggleActions: "play none none reverse",
-				// markers: true,
 			},
 		});
 
@@ -57,7 +56,7 @@ function About() {
 					<div className="flex items-center min-w-[150px] absolute -top-3 md:top-10 gap-5 bg-white shadow-lg px-3 py-1 rounded-xl" ref={(el) => (floatRef.current[0] = el)}>
 						<img src={googleReview} alt="google reviews" className="w-10 h-10 overflow-hidden" />
 						<p className="text-center">
-							Over 500 + <br />
+							Over 700 + <br />
 							google reviews
 						</p>
 					</div>
