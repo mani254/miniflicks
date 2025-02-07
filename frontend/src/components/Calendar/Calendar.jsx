@@ -34,6 +34,14 @@ function Calendar({ customerBooking }) {
 
 	// function that will handle when clicked on certain date
 	const handleDateClick = (date) => {
+		const blockedDate = new Date("2025-02-13").toISOString().split("T")[0];
+		const selected = new Date(date).toISOString().split("T")[0];
+
+		if (selected === blockedDate) {
+			alert("To Book on This Date. Please contact the owners +91 90191 62002.");
+			return;
+		}
+
 		setSelectedDate(date);
 		dispatch(setBookingDate(date));
 		setCalendarLogic((prevLogic) => new CalendarLogic(prevLogic.year, prevLogic.month, unavailableDates, date));

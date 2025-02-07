@@ -11,6 +11,7 @@ import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import "swiper/css/effect-coverflow";
 import { NavLink } from "react-router-dom";
+import ScrollingCoupons from "../../utils/ScrollingCoupon";
 
 function Banners({ bannersData }) {
 	const [banner, setBanner] = useState({
@@ -37,6 +38,9 @@ function Banners({ bannersData }) {
 
 	return (
 		<section className="banner">
+			<div className="absolute w-full z-30">
+				<ScrollingCoupons />
+			</div>
 			<div className="swiper-3">
 				{bannersData.loading ? (
 					<div className="h-screen max-h-[760px]relative">

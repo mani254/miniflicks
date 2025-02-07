@@ -118,14 +118,22 @@ async function getBookings(req, res) {
          ];
       }
 
+
       if (fromDate || toDate) {
          const startDate = fromDate ? new Date(fromDate) : new Date("1970-01-01");
-         const endDate = toDate ? new Date(toDate) : new Date();
-         endDate.setHours(23, 59, 59, 999);
-         bookingQuery.date = {
-            $gte: startDate,
-            $lt: endDate,
-         };
+         if (toDate) {
+            const endDate = new Date(toDate)
+            endDate.setHours(23, 59, 59, 999);
+            bookingQuery.date = {
+               $gte: startDate,
+               $lte: endDate,
+            }
+         }
+         else {
+            bookingQuery.date = {
+               $gte: startDate
+            }
+         }
       }
 
       const totalDocuments = await Booking.aggregate([
@@ -152,7 +160,12 @@ async function getBookings(req, res) {
             },
          },
          { $unwind: { path: "$customer", preserveNullAndEmptyArrays: true } },
-         { $match: bookingQuery },
+         {
+            $match: {
+               ...bookingQuery,
+               status: { $in: ["booked", "pending"] }
+            }
+         },
          {
             $lookup: {
                from: "screens",
@@ -172,9 +185,9 @@ async function getBookings(req, res) {
             },
          },
          { $unwind: { path: "$location", preserveNullAndEmptyArrays: true } },
+         { $sort: { date: -1 } },
          { $skip: parseInt(skip) },
          { $limit: parseInt(limit) },
-         { $sort: { bookingDate: 1 } },
          {
             $addFields: {
                location: {
@@ -205,7 +218,7 @@ async function getBookings(req, res) {
 }
 async function getDashboardInfo(req, res) {
    try {
-      const { location, fromDate, toDate } = req.query;
+      const { location, fromDate, toDate, status = "" } = req.query;
       // console.log(req.query, 'req.query')
 
       let bookingQuery = {};
@@ -225,7 +238,10 @@ async function getDashboardInfo(req, res) {
             $lt: endDate,
          };
       }
-      // console.log(bookingQuery, 'booking Query')
+
+      if (status.length > 0) {
+         bookingQuery.status = status
+      }
 
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
@@ -447,8 +463,8 @@ async function createAdminBooking(req, res) {
       if (bookedData) {
          const html = await generateBookingHTML(bookedData);
          sendMail({
-            to: [bookedData.customer.email, 'miniflicksprivatetheatres@gmail.com'],
-            subject: "Miniflicks Theater Booking Confirmation",
+            to: [bookedData.customer.email],
+            subject: `Miniflicks Theater Booking Confirmation for ${bookedData?.customer?.name || ""}`,
             html,
          });
          return res
@@ -757,7 +773,7 @@ async function verifyPayment(req, res) {
          const html = await generateBookingHTML(populatedBooking);
          sendMail({
             to: [populatedBooking.customer.email, 'miniflicksprivatetheatres@gmail.com'],
-            subject: "Miniflicks Theater Booking Confirmation",
+            subject: `Miniflicks Theater Booking Confirmation for ${populatedBooking?.customer?.name || ""}`,
             html,
          });
 

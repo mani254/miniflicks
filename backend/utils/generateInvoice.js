@@ -77,7 +77,7 @@ const generateBookingHTML = async (bookingData) => {
                <tr>
                   <td style="padding: 8px;">
                      <strong>Date</strong>
-                     <p style="color: #4a5568; margin: 0;">${new Date(bookingData.date).toLocaleDateString()}</p>
+                     <p style="color: #4a5568; margin: 0;">${new Date(bookingData.date).toLocaleDateString("en-GB").replace(/\//g, "-")}</p>
                   </td>
                   <td style="padding: 8px;">
                      <strong>Slot</strong>

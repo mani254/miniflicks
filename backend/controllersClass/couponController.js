@@ -5,6 +5,7 @@ class CouponController {
    constructor() {
       this.addCoupon = this.addCoupon.bind(this);
       this.getCoupons = this.getCoupons.bind(this);
+      this.getUserCoupons = this.getUserCoupons.bind(this);
       this.deleteCoupon = this.deleteCoupon.bind(this);
       this.updateCoupon = this.updateCoupon.bind(this);
       this.validateCoupon = this.validateCoupon.bind(this);
@@ -12,7 +13,7 @@ class CouponController {
 
    async addCoupon(req, res) {
       try {
-         const { code, discount, type, expireDate, status } = req.body;
+         const { code, discount, type, expireDate, status, scrollCoupon, scrollingText } = req.body;
 
          const existed = await Coupon.findOne({ code });
          if (existed) {
@@ -24,7 +25,9 @@ class CouponController {
             discount,
             type,
             expireDate,
-            status
+            status,
+            scrollCoupon,
+            scrollingText
          });
          await coupon.save();
          res.status(200).json({ message: 'Coupon added successfully', coupon });
@@ -41,7 +44,16 @@ class CouponController {
          this.handleError(res, err, 'Error while fetching coupons');
       }
    }
-
+   async getUserCoupons(req, res) {
+      try {
+         const coupons = await Coupon.find({ scrollCoupon: true });
+         console.log(coupons)
+         res.status(200).json({ message: 'Coupons fetched successfully', coupons });
+      } catch (err) {
+         this.handleError(res, err, 'Error while fetching coupons');
+      }
+   }
+ 
    async deleteCoupon(req, res) {
       try {
          const id = req.params.id;
@@ -72,12 +84,14 @@ class CouponController {
             return res.status(404).json({ error: "Coupon does not exist" });
          }
 
-         const { code, discount, type, expireDate, status } = req.body;
+         const { code, discount, type, expireDate, status, scrollCoupon, scrollingText } = req.body;
          if (code) coupon.code = code.toUpperCase();
          if (discount !== undefined) coupon.discount = discount;
          if (type) coupon.type = type;
          if (expireDate) coupon.expireDate = expireDate;
          coupon.status = status !== undefined ? status : coupon.status;
+         coupon.scrollCoupon = scrollCoupon || false;
+         coupon.scrollingText = scrollingText || ''
 
          await coupon.save();
          res.status(200).json({ message: 'Coupon updated successfully', coupon });
@@ -88,7 +102,8 @@ class CouponController {
 
    async validateCoupon(req, res) {
       try {
-         const { code } = req.body;
+         const { code, date } = req.body;
+         const currentDate = date ? new Date(date) : new Date();
 
          const coupon = await Coupon.findOne({ code: code.toUpperCase() });
 
@@ -100,7 +115,6 @@ class CouponController {
             return res.status(400).json({ error: "Invalid coupon: Coupon is not active" });
          }
 
-         const currentDate = new Date();
          if (currentDate > coupon.expireDate) {
             return res.status(400).json({ error: "Coupon expired: The coupon has already expired" });
          }

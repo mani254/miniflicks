@@ -23,6 +23,13 @@ const couponSchema = new mongoose.Schema({
       type: Boolean,
       default: true,
    },
+   scrollCoupon: {
+      type: Boolean,
+      default: false
+   },
+   scrollingText: {
+      type: String,
+   }
 }, { timestamps: true });
 
 couponSchema.pre('save', function (next) {

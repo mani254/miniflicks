@@ -141,16 +141,18 @@ function AddScreens({ addScreen, update = false, updateScreen }) {
 
 	return (
 		<>
-			{screensData.loading && (<div className="fixed inset-0 bg-gray-900 bg-opacity-10">
-				<Loader></Loader>
-			</div>)}
+			{screensData.loading && (
+				<div className="fixed inset-0 bg-gray-900 bg-opacity-10">
+					<Loader></Loader>
+				</div>
+			)}
 
 			<div className="w-full container px-6 mt-3">
 				<div className="pb-2 border-b border-gray-400">
 					<h3>{update ? "Update Screen" : "Add Screen"}</h3>
 				</div>
 
-				<form className="w-full max-w-4xl m-auto mb-10" onSubmit={handleSubmit}>
+				<form className="w-full max-w-4xl m-auto mb-10">
 					<div className="flex gap-5">
 						<div className="w-full">
 							<div className="outer-box">
@@ -262,16 +264,14 @@ function AddScreens({ addScreen, update = false, updateScreen }) {
 								</div>
 							</div>
 
-							<button type="submit" className="btn btn-1">
+							<button type="submit" className="btn btn-1" onClick={handleSubmit}>
 								{update ? "Update Screen" : "Add Screen"}
 							</button>
 						</div>
 					</div>
 				</form>
 			</div>
-
 		</>
-
 	);
 }
 

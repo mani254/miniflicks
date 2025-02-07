@@ -11,7 +11,7 @@ const navlinks = [
 		children: [
 			{ title: "New Booking", to: "/booking/locations" },
 			{ title: "Bookings Today", to: "/admin/bookings?page=1&limit=10&toDate=2024-10-21&fromDate=2024-10-21" },
-			{ title: "Upcoming", to: "/admin/bookings/upcoming" },
+			// { title: "Upcoming", to: "/admin/bookings/upcoming" },
 		],
 	},
 	{ title: "Locations", image: "https://cdn-icons-png.flaticon.com/512/126/126422.png", to: "/admin/locations" },

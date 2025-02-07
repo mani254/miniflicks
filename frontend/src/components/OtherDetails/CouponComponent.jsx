@@ -20,11 +20,11 @@ function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
 		}
 	}, [showCoupon]);
 
-	useEffect(()=>{
-		if(showCoupon) return
-		if(!customerBooking.otherInfo.couponCode) return 
-		setShowCoupon(true)
-		setCouponCode(customerBooking.otherInfo.couponCode)
+	useEffect(() => {
+		if (showCoupon) return;
+		if (!customerBooking.otherInfo.couponCode) return;
+		setShowCoupon(true);
+		setCouponCode(customerBooking.otherInfo.couponCode);
 
 		setPricingInfo((prev) => {
 			const existingIndex = prev.findIndex((item) => item.title === "Coupon");
@@ -37,9 +37,7 @@ function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
 				return [...prev, { title: "Coupon", amount: customerBooking.otherInfo.couponPrice }];
 			}
 		});
-		
-
-	},[customerBooking.otherInfo.couponCode])
+	}, [customerBooking.otherInfo.couponCode]);
 
 	const updateCouponAmount = (coupon) => {
 		if (!coupon) return;
@@ -69,7 +67,7 @@ function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
 		e.preventDefault();
 
 		try {
-			const res = await validateCoupon(couponCode);
+			const res = await validateCoupon(couponCode, customerBooking.date);
 
 			if (res && res.coupon) {
 				setError("");
@@ -77,7 +75,7 @@ function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
 				updateCouponAmount(res.coupon);
 			}
 		} catch (err) {
-			setError(err.message || "An error occurred while validating the coupon.");
+			setError(err || "Coupon Verfication has failed");
 		}
 	}
 

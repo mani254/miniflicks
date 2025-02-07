@@ -61,6 +61,35 @@ export const getCoupons = () => async (dispatch) => {
    }
 };
 
+// Get Coupons Actions
+const getUserCouponsRequest = () => ({
+   type: couponTypes.GET_USERCOUPONS_REQUEST,
+});
+
+const getUserCouponsSuccess = (coupons) => ({
+   type: couponTypes.GET_USERCOUPONS_SUCCESS,
+   payload: coupons,
+});
+
+const getUserCouponsFailure = (error) => ({
+   type: couponTypes.GET_USERCOUPONS_FAILURE,
+   payload: error,
+});
+
+export const getUserCoupons = () => async (dispatch) => {
+   dispatch(getUserCouponsRequest());
+   try {
+      const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/coupons/userCoupons`);
+      dispatch(getUserCouponsSuccess(response.data.coupons));
+      return Promise.resolve();
+   } catch (error) {
+      let errMessage = error.response ? error.response.data.error : 'Something went wrong';
+      dispatch(getUserCouponsFailure(errMessage));
+      dispatch(showNotification(errMessage));
+      return Promise.reject(errMessage);
+   }
+};
+
 // Update Coupon Actions
 const updateCouponRequest = () => ({
    type: couponTypes.UPDATE_COUPON_REQUEST,
@@ -149,9 +178,9 @@ export const changeCouponStatus = (couponId, status) => async (dispatch) => {
 };
 
 
-export const validateCoupon = async (code) => {
+export const validateCoupon = async (code, date) => {
    try {
-      const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/coupons/validate`, { code });
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/coupons/validate`, { code, date });
       return Promise.resolve(response.data);
    } catch (error) {
       const errMessage = error.response ? error.response.data.error : 'Something went wrong';

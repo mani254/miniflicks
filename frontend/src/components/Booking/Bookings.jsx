@@ -11,6 +11,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import BookingsFilter from "./BookingsFilter";
 import Pagination from "../Pagination/Pagination";
 import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
+import { convert12Hours } from "../../utils/index.js";
 
 function Bookings({ showModal, getBookings, bookingData, deleteBooking }) {
 	const [params, setParams] = useSearchParams();
@@ -30,7 +31,6 @@ function Bookings({ showModal, getBookings, bookingData, deleteBooking }) {
 		(async () => {
 			try {
 				const data = await getBookings(Object.fromEntries(params));
-				console.log(data);
 				setNoOfDocuments(data.totalDocuments);
 			} catch (err) {
 				console.log(err);
@@ -77,9 +77,9 @@ function Bookings({ showModal, getBookings, bookingData, deleteBooking }) {
 										<td>{booking.customer.number}</td>
 										<td className={`${booking.location?.name ? "" : "text-gray-500"}`}>{booking.location?.name || "undefined"}</td>
 										<td className={`${booking.screen?.name ? "" : "text-gray-500"}`}>{booking.screen?.name || "undefined"}</td>
-										<td>{new Date(booking.createdAt).toLocaleString().split(",")[0]}</td>
-										<td>{new Date(booking.date).toLocaleString().split(",")[0]}</td>
-										<td>{booking.slot.from + "-" + booking.slot.to}</td>
+										<td>{new Date(booking.createdAt).toLocaleDateString("en-GB").replace(/\//g, "-")}</td>
+										<td>{new Date(booking.date).toLocaleDateString("en-GB").replace(/\//g, "-")}</td>
+										<td>{convert12Hours(booking.slot.from) + "-" + convert12Hours(booking.slot.to)}</td>
 										<td>{booking.totalPrice}</td>
 										<td>{booking.advancePrice}</td>
 										<td>{booking.remainingAmount}</td>

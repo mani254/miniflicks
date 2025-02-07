@@ -21,17 +21,16 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 
 				if (existingPackageIndex !== -1) {
 					const updatedPricingInfo = [...prev];
-					if(customerBooking.isEditing){
-						updatedPricingInfo[existingPackageIndex].amount = customerBooking.package.price
-					}else{
+					if (customerBooking.isEditing) {
+						updatedPricingInfo[existingPackageIndex].amount = customerBooking.package.price;
+					} else {
 						updatedPricingInfo[existingPackageIndex].amount = getPackagePrice(customerBooking.package);
 					}
 					return updatedPricingInfo;
 				} else {
-					if(customerBooking.isEditing){
-						return [...prev, { title: "Package", amount: customerBooking.package.price}];
-					}
-					else{
+					if (customerBooking.isEditing) {
+						return [...prev, { title: "Package", amount: customerBooking.package.price }];
+					} else {
 						return [...prev, { title: "Package", amount: getPackagePrice(customerBooking.package) }];
 					}
 				}
@@ -99,7 +98,7 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 		if (customerBooking.cakes.length == 0) {
 			setPricingInfo((prev) => prev.filter((item) => item.title !== "Cakes"));
 		} else {
-			const amount = customerBooking.cakes.reduce((acc, addon) => acc + addon.price , 0);
+			const amount = customerBooking.cakes.reduce((acc, addon) => acc + addon.price, 0);
 			setPricingInfo((prev) => {
 				const existingCakesIndex = prev.findIndex((item) => item.title === "Cakes");
 
@@ -196,7 +195,7 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 					</button> */}
 					<OtherDetailsButton navOptions={navOptions} setActiveIndex={setActiveIndex} activeIndex={activeIndex} />
 				</div>
-				<CouponComponent pricingInfo={pricingInfo} setPricingInfo={setPricingInfo} />
+				{customerBooking?.package?.name?.toLowerCase() !== "basic" && <CouponComponent pricingInfo={pricingInfo} setPricingInfo={setPricingInfo} />}
 			</div>
 		</div>
 	);

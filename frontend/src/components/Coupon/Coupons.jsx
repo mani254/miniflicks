@@ -53,6 +53,7 @@ function Coupons({ showModal, deleteCoupon, updateCouponStatus }) {
 								<th>Discount</th>
 								<th>Type</th>
 								<th>Expire Date</th>
+								<th>Scroll</th>
 								<th>Status</th>
 								<th>Actions</th>
 							</tr>
@@ -61,6 +62,7 @@ function Coupons({ showModal, deleteCoupon, updateCouponStatus }) {
 							{couponsData.coupons.length >= 1 &&
 								couponsData.coupons.map((coupon, index) => (
 									<tr key={coupon._id}>
+										{console.log(coupon)}
 										<td>{index + 1}</td>
 										<td>{coupon.code}</td>
 										<td>
@@ -68,6 +70,7 @@ function Coupons({ showModal, deleteCoupon, updateCouponStatus }) {
 										</td>
 										<td>{coupon.type}</td>
 										<td>{new Date(coupon.expireDate).toLocaleDateString()}</td>
+										<td>{coupon.scrollCoupon ? "true" : "false"}</td>
 										<td>
 											<Switch status={coupon.status} id={coupon._id} changeHandler={() => handleStatusChange(coupon)} />
 										</td>

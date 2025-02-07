@@ -15,13 +15,20 @@ function AddCoupons({ addCoupon, update = false, updateCoupon }) {
 		type: "percentage",
 		expireDate: "",
 		status: true,
+		scrollCoupon: false, // <-- Add this
+		scrollingText: "",
 	});
 
 	useEffect(() => {
 		if (update) {
 			const currentCoupon = couponsData.coupons.find((coupon) => coupon._id === id);
 			if (!currentCoupon) return;
-			setDetails(currentCoupon);
+			const formattedExpireDate = new Date(currentCoupon.expireDate).toISOString().split("T")[0];
+
+			setDetails({
+				...currentCoupon,
+				expireDate: formattedExpireDate,
+			});
 		}
 	}, [couponsData.coupons, update, id]);
 
@@ -68,10 +75,11 @@ function AddCoupons({ addCoupon, update = false, updateCoupon }) {
 
 	return (
 		<>
-
-			{couponsData.loading&&<div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-10">
-				<Loader></Loader>
-			</div>}
+			{couponsData.loading && (
+				<div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-10">
+					<Loader></Loader>
+				</div>
+			)}
 
 			<div className="w-full container px-6 mt-3">
 				<div className="pb-2 border-b border-gray-400">
@@ -107,15 +115,24 @@ function AddCoupons({ addCoupon, update = false, updateCoupon }) {
 								<option value="false">Inactive</option>
 							</select>
 						</div>
+						<div className="input-wrapper">
+							<label htmlFor="scrollCoupon">Scroll Coupon</label>
+							<select id="scrollCoupon" name="scrollCoupon" value={details.scrollCoupon} onChange={handleChange} required>
+								<option value="true">Show</option>
+								<option value="false">Hide</option>
+							</select>
+						</div>
+						<div className="input-wrapper">
+							<label htmlFor="scrollingText">Scrolling Text</label>
+							<input type="text" id="scrollingText" name="scrollingText" placeholder="Enter scrolling text" value={details.scrollingText} onChange={handleChange} />
+						</div>
 						<button className="btn btn-1" type="submit">
 							{update ? "Update Coupon" : "Add Coupon"}
 						</button>
 					</div>
 				</form>
 			</div>
-
 		</>
-
 	);
 }
 

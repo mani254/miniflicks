@@ -103,6 +103,13 @@ export function validation(action, value) {
 }
 
 
+export function convert12Hours(time) {
+   const [hours, minutes] = time.split(":");
+   const period = hours >= 12 ? "PM" : "AM";
+   const formattedHours = hours % 12 || 12;
+   return `${formattedHours}:${minutes} ${period}`;
+};
+
 const socialMediaLinks = [
    { href: "https://www.instagram.com/miniflicks_marathahalli", title: "Instagram", src: instagramColoured, alt: "Instagram" },
    { href: "https://youtube.com/miniflicks", title: "YouTube", src: youtbeColoured, alt: "YouTube" },

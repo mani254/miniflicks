@@ -229,8 +229,8 @@ class BookingClass {
          throw new Error("This coupon is inactive.");
       }
 
-      const currentDate = new Date();
-      if (currentDate > coupon.expireDate) {
+
+      if (this.date > coupon.expireDate) {
          throw new Error("This coupon has expired.");
       }
       let amount = 0

@@ -158,7 +158,7 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 					<h5 className="text-center mt-2">{item.name}</h5>
 					<div className="flex justify-between mt-1 items-center gap-3">
 						<p className="font-medium text-primary text-md whitespace-nowrap m-auto">₹ {isFree ? item.specialPrice : item.price}</p>
-						{type !== "cakes" && !item.name.toLowerCase().includes("led") && (
+						{type !== "cakes" && !item.name.toLowerCase().includes("led") && !item.name.toLowerCase().includes("photo") && (
 							<div onClick={(e) => e.stopPropagation()} className="flex w-full items-center justify-between gap-[2px]">
 								<button className="min-w-5 h-5 bg-gradient-primary rounded-sm flex items-center justify-center text-lg text-bright font-medium" onClick={() => handleCountChange(item, -1)}>
 									-

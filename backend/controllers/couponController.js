@@ -3,7 +3,7 @@ const { ObjectId } = require('mongoose').Types;
 
 const addCoupon = async (req, res) => {
    try {
-      const { code, discount, type, expireDate, status } = req.body;
+      const { code, discount, type, expireDate, status, scrollCoupon, scrollingText } = req.body;
 
       const existed = await Coupon.findOne({ code });
 
@@ -16,7 +16,9 @@ const addCoupon = async (req, res) => {
          discount,
          type,
          expireDate,
-         status
+         status,
+         scrollCoupon,
+         scrollingText
       });
       await coupon.save();
       res.status(200).json({ message: 'Coupon added successfully', coupon });

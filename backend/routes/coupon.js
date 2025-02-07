@@ -9,5 +9,6 @@ couponRouter.get('/', superAdminAuth, CouponController.getCoupons);
 couponRouter.delete('/:id', superAdminAuth, CouponController.deleteCoupon);
 couponRouter.put('/:id', superAdminAuth, CouponController.updateCoupon);
 couponRouter.post('/validate', CouponController.validateCoupon);
+couponRouter.get('/userCoupons', CouponController.getUserCoupons);
 
 module.exports = couponRouter;

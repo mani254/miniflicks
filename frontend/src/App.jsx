@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { connect } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 
@@ -11,6 +11,8 @@ import Home from "./pages/Home";
 import SlotBookingPage from "./pages/SlotBookingPage";
 import UserLocations from "./components/Locations/UserLocations";
 import UserScreens from "./components/Screen/UserScreens";
+import { showModal } from "./redux/modal/modalActions";
+// import EntryPop from "./components/KnowMore/EntryPop";
 // import BookingLayout from "./layouts/BookingLayout";
 const BookingLayout = lazy(() => import("./layouts/BookingLayout"));
 import OtherDetails from "./components/OtherDetails/OtherDetails";
@@ -83,8 +85,18 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-function App({ modal }) {
+function App({ modal, showModal }) {
 	axios.defaults.withCredentials = true;
+
+	// useEffect(() => {
+	// 	const timer = setTimeout(() => {
+	// 		showModal({}, EntryPop);
+	// 	}, 3000);
+
+	// 	// Cleanup function to clear the timeout if the component unmounts
+	// 	return () => clearTimeout(timer);
+	// }, []);
+
 	return (
 		<React.Fragment>
 			<div className="bg-zinc-100 min-h-screen">
@@ -113,7 +125,7 @@ function App({ modal }) {
 										<BookingLayout />
 									</Suspense>
 								}>
-								<Route path="edit/:id" element={<UpdateBooking edit={true}/>}></Route>
+								<Route path="edit/:id" element={<UpdateBooking edit={true} />}></Route>
 								<Route path="locations" element={<UserLocations />}></Route>
 								<Route path="screens" element={<UserScreens />}></Route>
 								<Route path="slots" element={<SlotBookingPage />}></Route>
@@ -213,4 +225,10 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps, null)(App);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		showModal: (props, component) => dispatch(showModal(props, component)),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

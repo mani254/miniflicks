@@ -1,4 +1,5 @@
 import React from "react";
+import { convert12Hours } from "../../utils";
 
 const DetailedBooking = ({ bookingData }) => {
 	let packagePrice = () => {
@@ -65,12 +66,12 @@ const DetailedBooking = ({ bookingData }) => {
 					</div>
 					<div>
 						<h5 className="">Date</h5>
-						<p className="text-gray-600">{new Date(bookingData.date).toLocaleDateString()}</p>
+						<p className="text-gray-600">{new Date(bookingData.date).toLocaleDateString("en-GB").replace(/\//g, "-")}</p>
 					</div>
 					<div>
 						<h5 className="">Slot</h5>
 						<p className="text-gray-600">
-							{bookingData.slot.from} - {bookingData.slot.to}
+							{convert12Hours(bookingData.slot.from)} - {convert12Hours(bookingData.slot.to)}
 						</p>
 					</div>
 				</div>

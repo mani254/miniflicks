@@ -9,6 +9,7 @@ import { showNotification } from "../../redux/notification/notificationActions";
 import DashboardFilters from "./DashboardFilters";
 import { getLocation } from "../../redux/location/locationActions";
 import { useNavigate } from "react-router-dom";
+import { convert12Hours } from "../../utils";
 
 function Dashboard({ bookingData, getBookings, showNotification, auth, getLocation, locationData }) {
 	const [locations, setLocations] = useState([]);
@@ -28,6 +29,7 @@ function Dashboard({ bookingData, getBookings, showNotification, auth, getLocati
 		fromDate: "",
 		toDate: "",
 		location: "",
+		status: "booked",
 	});
 
 	const [graphLoading, setGraphLoading] = useState(false);
@@ -38,6 +40,7 @@ function Dashboard({ bookingData, getBookings, showNotification, auth, getLocati
 	// useeffect to fetch the upcomming bookings when filter location changed
 	useEffect(() => {
 		const fromDate = new Date();
+		fromDate.setHours(0, 0, 0);
 		const toDate = new Date();
 		toDate.setDate(fromDate.getDate() + 2);
 		(async () => {
@@ -58,7 +61,7 @@ function Dashboard({ bookingData, getBookings, showNotification, auth, getLocati
 
 				const newInfo = [
 					{ count: response.data.totalIncome, title: "Total Income" },
-					{ count: response.data.totalIncome - response.data.pendingAmount, title: "Current Amount" },
+					{ count: parseFloat((response.data.totalIncome - response.data.pendingAmount).toFixed(2)), title: "Current Amount" },
 					{ count: response.data.pendingAmount, title: "Pending Amount" },
 					{ count: response.data.totalBookings, title: "Total Bookings" },
 					{ count: response.data.todayBookings, title: "Today Bookings" },
@@ -215,8 +218,10 @@ function Dashboard({ bookingData, getBookings, showNotification, auth, getLocati
 										<td>{booking.customer?.number}</td>
 										<td className={booking.screen?.name ? "" : "text-gray-500"}>{booking.screen?.name || "undefined"}</td>
 										<td className={booking.location?.name ? "" : "text-gray-500"}>{booking.location?.name || "undefined"}</td>
-										<td>{new Date(booking.date).toLocaleString().split(",")[0]}</td>
-										<td>{`${booking.slot.from}-${booking.slot.to}`}</td>
+
+										<td>{new Date(booking.date).toLocaleDateString("en-GB").replace(/\//g, "-")}</td>
+
+										<td>{`${convert12Hours(booking.slot.from)}-${convert12Hours(booking.slot.to)}`}</td>
 										<td>{booking.totalPrice}</td>
 										<td>{booking.advancePrice}</td>
 										<td>{booking.remainingAmount}</td>
