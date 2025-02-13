@@ -48,7 +48,7 @@ function AddScreens({ addScreen, update = false, updateScreen }) {
 	useEffect(() => {
 		if (update) {
 			const currentScreen = screensData.screens.find((screen) => screen._id === id);
-			console.log(currentScreen);
+			// console.log(currentScreen);
 			if (!currentScreen) return;
 			setDetails({
 				name: currentScreen.name,
@@ -107,6 +107,12 @@ function AddScreens({ addScreen, update = false, updateScreen }) {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		const button = e.nativeEvent.submitter;
+
+		if (button?.id !== "submit-button") {
+			return;
+		}
+
 		const screenData = new FormData();
 		screenData.append("name", details.name);
 		screenData.append("capacity", details.capacity);
@@ -152,7 +158,7 @@ function AddScreens({ addScreen, update = false, updateScreen }) {
 					<h3>{update ? "Update Screen" : "Add Screen"}</h3>
 				</div>
 
-				<form className="w-full max-w-4xl m-auto mb-10">
+				<form className="w-full max-w-4xl m-auto mb-10" onSubmit={handleSubmit}>
 					<div className="flex gap-5">
 						<div className="w-full">
 							<div className="outer-box">
@@ -264,7 +270,7 @@ function AddScreens({ addScreen, update = false, updateScreen }) {
 								</div>
 							</div>
 
-							<button type="submit" className="btn btn-1" onClick={handleSubmit}>
+							<button type="submit" className="btn btn-1" id="submit-button">
 								{update ? "Update Screen" : "Add Screen"}
 							</button>
 						</div>

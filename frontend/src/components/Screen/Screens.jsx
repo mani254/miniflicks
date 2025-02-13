@@ -24,7 +24,7 @@ function Screens({ showModal, deleteScreen, changeScreenStatus, auth }) {
 			return setScreens(screensData.screens);
 		}
 		const filteredScreens = screensData.screens.filter((screen) => {
-			console.log(screen.location._id, location);
+			// console.log(screen.location._id, location);
 			return screen.location._id === location;
 		});
 		setScreens(filteredScreens);

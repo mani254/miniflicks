@@ -18,7 +18,7 @@ function BackendLayout({ initialLogin, auth }) {
 				const token = localStorage.getItem("authToken");
 				if (token) {
 					await initialLogin(token);
-					console.log("code after await initialLogin in try block");
+					// console.log("code after await initialLogin in try block");
 				} else {
 					navigate("/login");
 				}

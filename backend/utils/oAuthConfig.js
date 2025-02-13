@@ -23,7 +23,7 @@ async function getAccessToken() {
    try {
       
       const { token } = await oauth2Client.getAccessToken();
-      console.log('New access token generated:', token);
+      // console.log('New access token generated:', token);
       return token;
    } catch (error) {
       console.error('Error fetching access token:', error.message);

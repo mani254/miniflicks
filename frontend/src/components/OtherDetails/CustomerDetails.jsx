@@ -103,7 +103,7 @@ function CustomerDetails({ customerBooking, screensData, showModal, showNotifica
 	}
 
 	function showPopUP(title, array) {
-		console.log(title, array);
+		// console.log(title, array);
 		showModal({ title, array }, Popupts);
 	}
 

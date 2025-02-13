@@ -38,7 +38,7 @@ function Login({ login, registerSuperAdmin }) {
 				await login(loginDetails);
 				navigate("/admin/dashboard");
 			}
-			console.log("Login details submitted:", loginDetails);
+			// console.log("Login details submitted:", loginDetails);
 		} catch (err) {
 			console.log(err);
 		}

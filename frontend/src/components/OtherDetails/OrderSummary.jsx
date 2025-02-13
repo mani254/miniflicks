@@ -62,7 +62,14 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 		if (customerBooking.addons.length == 0) {
 			setPricingInfo((prev) => prev.filter((item) => item.title !== "Addons"));
 		} else {
-			const amount = customerBooking.addons.reduce((acc, addon) => acc + addon.price * addon.count, 0);
+			console.log(customerBooking.addons, "addons");
+
+			let amount = customerBooking.addons.reduce((acc, addon) => acc + addon.price * addon.count, 0);
+
+			const ledData = customerBooking.addons.find((item) => item.name === "LED Name");
+			if (ledData) {
+				amount = amount + (customerBooking.otherInfo.ledName.length - 8) * 30;
+			}
 			setPricingInfo((prev) => {
 				const existingAddonsIndex = prev.findIndex((item) => item.title === "Addons");
 
@@ -75,7 +82,7 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 				}
 			});
 		}
-	}, [customerBooking.addons]);
+	}, [customerBooking.addons, customerBooking.otherInfo.ledName]);
 
 	useEffect(() => {
 		let amount = customerBooking?.otherInfo.extraPersonsPrice || 0;
@@ -91,7 +98,7 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 				return [...prev, { title: "Extra Persons Amount", amount }];
 			}
 		});
-	}, [customerBooking.otherInfo]);
+	}, [customerBooking.otherInfo.extraPersonsPrice]);
 
 	// Mangage "Cakes in pricingInfo based on customerBooking.cake's existence and value"
 	useEffect(() => {
@@ -152,7 +159,7 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 		const selectedDate = new Date(customerBooking.date).toISOString().split("T")[0];
 		const todayPrice = pack.customPrice.find((custom) => {
 			const customDate = new Date(new Date(custom.date).setHours(0, 0, 0, 0)).toISOString().split("T")[0];
-			console.log(customDate, selectedDate);
+			// console.log(customDate, selectedDate);
 			return customDate === selectedDate;
 		});
 

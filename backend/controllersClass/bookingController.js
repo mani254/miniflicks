@@ -425,7 +425,7 @@ async function getBookedSlots(req, res) {
       let date = new Date(currentDate);
       date.setHours(0, 0, 0, 0);
 
-      console.log(date, '------')
+      // console.log(date, '------')
 
       const bookings = await Booking.find({
          date,
@@ -522,18 +522,18 @@ async function updateAdminBooking(req, res) {
       const occasionPrice = booking.occasion.price || 0;
       const extraPersonsPrice = booking.otherInfo.numberOfExtraPeople * currentBooking.screen.extraPersonPrice
 
-      console.log(addonsPrice, 'addons Price')
-      console.log(giftsPrice, 'gifts Price')
-      console.log(cakesPrice, 'cakesPrice')
-      console.log(packagePrice, 'package Price')
-      console.log(occasionPrice, 'occasion Price')
-      console.log(extraPersonsPrice, 'extraPersonPrice')
+      // console.log(addonsPrice, 'addons Price')
+      // console.log(giftsPrice, 'gifts Price')
+      // console.log(cakesPrice, 'cakesPrice')
+      // console.log(packagePrice, 'package Price')
+      // console.log(occasionPrice, 'occasion Price')
+      // console.log(extraPersonsPrice, 'extraPersonPrice')
 
       let couponCode = currentBooking.couponCode || null
       let couponPrice = currentBooking.couponPrice || 0;
       let total = addonsPrice + giftsPrice + cakesPrice + packagePrice + occasionPrice + extraPersonsPrice;
 
-      console.log(total, 'total')
+      // console.log(total, 'total')
 
       // Handle coupon changes
       if (currentBooking.couponCode !== booking.otherInfo.couponCode) {

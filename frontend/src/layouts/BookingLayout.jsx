@@ -9,11 +9,10 @@ import { initialLogin } from "../redux/auth/authActions";
 
 import { Helmet } from "react-helmet-async";
 
-function UsersLayout({ customerBooking,initialLogin }) {
+function UsersLayout({ customerBooking, initialLogin }) {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		
 		const fetchInitialData = async () => {
 			try {
 				const token = localStorage.getItem("authToken");
@@ -31,7 +30,7 @@ function UsersLayout({ customerBooking,initialLogin }) {
 		const savedBookingData = localStorage.getItem("customerBooking");
 		if (savedBookingData) {
 			const bookingData = JSON.parse(savedBookingData);
-			console.log(bookingData);
+			// console.log(bookingData);
 			dispatch(setBookingFromLocalStorage(bookingData));
 		}
 	}, []);

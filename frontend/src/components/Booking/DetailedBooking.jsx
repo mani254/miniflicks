@@ -11,8 +11,24 @@ const DetailedBooking = ({ bookingData }) => {
 	};
 
 	const addonsPrice = () => {
-		if (bookingData.addons.length === 0) return 0;
-		return bookingData.addons.reduce((sum, addon) => sum + addon.price * addon.count, 0);
+		let amount = bookingData.addons?.reduce((sum, addon) => sum + addon.price * addon.count, 0) || 0;
+		const ledData = bookingData.addons.find((item) => item.name === "LED Name");
+
+		if (ledData) {
+			amount = amount + (bookingData?.ledName.length - 8) * 30;
+		}
+		return amount;
+	};
+
+	const getExactLedPrice = () => {
+		const ledData = bookingData.addons.find((item) => item.name === "LED Name");
+
+		if (ledData) {
+			let amount = ledData.price + (bookingData?.ledName.length - 8) * 30;
+			return amount;
+		} else {
+			return 0;
+		}
 	};
 
 	const giftsPrice = () => {
@@ -129,8 +145,8 @@ const DetailedBooking = ({ bookingData }) => {
 									<tr key={index} className="border-b border-gray-200">
 										<td className="p-[2px] text-gray-600">{addon.name}</td>
 										<td className="p-[2px] text-gray-600">{addon.count}</td>
-										<td className="p-[2px] text-gray-600">₹{addon.price}</td>
-										<td className="p-[2px] text-gray-600">₹{addon.price * addon.count}</td>
+										<td className="p-[2px] text-gray-600">₹{addon.name === "LED Name" ? getExactLedPrice() : addon.price}</td>
+										<td className="p-[2px] text-gray-600">₹{addon.count * (addon.name === "LED Name" ? getExactLedPrice() : addon.price)}</td>
 									</tr>
 								))}
 							</tbody>

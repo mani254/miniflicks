@@ -179,7 +179,7 @@ const changeLocationStatus = async (req, res) => {
    try {
       const { id } = req.params;
       const { status } = req.body;
-      console.log(status)
+      // console.log(status)
 
       const location = await Location.findById(id).populate('city');
       if (!location) {

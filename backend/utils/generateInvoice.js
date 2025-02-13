@@ -4,7 +4,27 @@ const generateBookingHTML = async (bookingData) => {
    // Helper functions to calculate prices
    const packagePrice = () => bookingData.package?.price || 0;
    const occasionPrice = () => bookingData.occasion?.price || 0;
-   const addonsPrice = () => bookingData.addons?.reduce((sum, addon) => sum + addon.price * addon.count, 0) || 0;
+   const addonsPrice = () => {
+      let amount = bookingData.addons?.reduce((sum, addon) => sum + addon.price * addon.count, 0) || 0
+      const ledData = bookingData.addons.find((item) => item.name === "LED Name");
+
+      if (ledData) {
+         amount = amount + (bookingData?.ledName.length - 8) * 30;
+      }
+      return amount
+   };
+
+   const getExactLedPrice = () => {
+      const ledData = bookingData.addons.find((item) => item.name === "LED Name");
+
+      if (ledData) {
+         let amount = ledData.price + (bookingData?.ledName.length - 8) * 30;
+         return amount
+      }
+      else {
+         return 0
+      }
+   }
    const giftsPrice = () => bookingData.gifts?.reduce((sum, gift) => sum + gift.price * gift.count, 0) || 0;
    const cakesPrice = () => bookingData.cakes?.reduce((sum, cake) => sum + cake.price, 0) || 0;
    const peoplePrice = () => {
@@ -140,8 +160,8 @@ const generateBookingHTML = async (bookingData) => {
 								<tr style="border-bottom: 1px solid #e2e8f0;">
 									<td style="padding: 4px; color: #4a5568;">${addon.name}</td>
 									<td style="padding: 4px; color: #4a5568;">${addon.count}</td>
-									<td style="padding: 4px; color: #4a5568;">₹${addon.price}</td>
-									<td style="padding: 4px; color: #4a5568;">₹${addon.price * addon.count}</td>
+									<td style="padding: 4px; color: #4a5568;">₹${addon.name === "LED Name" ? getExactLedPrice() : addon.price}</td>
+									<td style="padding: 4px; color: #4a5568;">₹${addon.count * (addon.name === "LED Name" ? getExactLedPrice() : addon.price)}</td>
 								</tr>
 							`
             )

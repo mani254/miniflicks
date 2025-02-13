@@ -47,7 +47,7 @@ class CouponController {
    async getUserCoupons(req, res) {
       try {
          const coupons = await Coupon.find({ scrollCoupon: true });
-         console.log(coupons)
+         // console.log(coupons)
          res.status(200).json({ message: 'Coupons fetched successfully', coupons });
       } catch (err) {
          this.handleError(res, err, 'Error while fetching coupons');

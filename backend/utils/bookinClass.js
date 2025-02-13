@@ -213,7 +213,13 @@ class BookingClass {
 
    calculateAddonsPrice() {
       if (this.addons.length === 0) return 0
-      return this.addons.reduce((sum, addon) => sum + addon.price * addon.count, 0);
+      let amount = this.addons.reduce((sum, addon) => sum + addon.price * addon.count, 0);
+
+      const ledData = this.addons.find((item) => item.name === "LED Name");
+      if (ledData) {
+         amount = amount + (this.ledName.length - 8) * 30;
+      }
+      return amount
    }
 
    async calculateCouponPrice() {

@@ -147,6 +147,10 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 		}
 	}
 
+	function handleLedNameChange(e) {
+		setLedName(e.target.value);
+	}
+
 	// Function to render each item card
 	function ItemCard({ item, isSelected, isFree = false }) {
 		return (
@@ -262,8 +266,9 @@ function UserItems({ customerBooking, type, addonsData, giftsData, cakesData }) 
 									<label htmlFor="ledName" className="whitespace-nowrap font-medium">
 										Led Name
 									</label>
-									<input type="text" placeholder="Led Name" id="ledName" name="ledName" value={ledName} onChange={(e) => setLedName(e.target.value)} onBlur={handleBlur} onKeyPress={handleKeyPress} />
+									<input type="text" placeholder="Led Name" id="ledName" name="ledName" value={ledName} onChange={handleLedNameChange} onBlur={handleBlur} onKeyPress={handleKeyPress} />
 								</div>
+								{ledName.length > 8 && <p className="-mt-2">For every letter after the first 8, an additional charge of 30 RS applies.</p>}
 							</div>
 						)}
 					</div>

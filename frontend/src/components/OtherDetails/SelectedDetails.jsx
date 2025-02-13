@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
-function SelectedDetails({ customerBooking }) {
+function SelectedDetails({ customerBooking, addonData }) {
 	const [selectedItems, setSelectedItems] = useState([]);
 
 	useEffect(() => {
@@ -36,6 +36,30 @@ function SelectedDetails({ customerBooking }) {
 		setSelectedItems([...selectedAddons, ...selectedGifts, ...selectedCakes]);
 	}, [customerBooking.addons, customerBooking.gifts, customerBooking.cakes]);
 
+	// console.log(selectedItems);
+
+	useEffect(() => {
+		if (!addonData) return;
+
+		// Find LED Name addon
+		const ledData = addonData.find((item) => item.name === "LED Name");
+		if (!ledData) return;
+
+		let ledName = customerBooking.otherInfo.ledName;
+
+		// Update selected items based on LED name length
+		setSelectedItems((prev) =>
+			prev.map((item) =>
+				item.title === "LED Name"
+					? {
+							...item,
+							amount: ledName.length > 8 ? ledData.price + (ledName.length - 8) * 30 : ledData.price,
+					  }
+					: item
+			)
+		);
+	}, [customerBooking.otherInfo.ledName, customerBooking.addons, addonData]);
+
 	if (selectedItems.length === 0) {
 		return null;
 	}
@@ -61,6 +85,7 @@ function SelectedDetails({ customerBooking }) {
 
 const mapStateToProps = (state) => ({
 	customerBooking: state.customerBooking,
+	addonData: state.addons.addons,
 });
 
 export default connect(mapStateToProps, null)(SelectedDetails);

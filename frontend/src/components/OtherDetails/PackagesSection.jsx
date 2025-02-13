@@ -41,7 +41,7 @@ function PackagesSection({ screensData, customerBooking,showNotification}) {
 
 		if (!currentScreen) return;
 
-		console.log(customerBooking.package)
+		// console.log(customerBooking.package)
 
 		if (customerBooking.package) {
 			const isPackageAvailable = currentScreen.packages.find((pack) => pack.price === customerBooking.package.price);

@@ -59,7 +59,7 @@ const updateCity = async (req, res) => {
    try {
       const id = req.params.id;
       const { name, status } = req.body;
-      console.log(name, status)
+      // console.log(name, status)
 
       if (!ObjectId.isValid(id)) {
          return res.status(400).json({ error: "Invalid city ID" });
