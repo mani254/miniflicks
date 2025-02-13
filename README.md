@@ -6,9 +6,9 @@
 ## 📸 Screenshots  
 
 <div align="center">
-  <img src="outputs/screenshot1.jpg" alt="Screenshot 1" width="250"/>
-  <img src="outputs/screenshot2.png" alt="Screenshot 2" width="250"/>
-  <img src="outputs/screenshot3.png" alt="Screenshot 3" width="250"/>
+  <img src="https://github.com/mani254/miniflicks/blob/main/frontend/public/Outputs/homepage.png" alt="Screenshot 1" width="300"/>
+  <img src="https://github.com/mani254/miniflicks/blob/main/frontend/public/Outputs/booking.png" alt="Screenshot 2" width="300"/>
+  <img src="https://github.com/mani254/miniflicks/blob/main/frontend/public/Outputs/admin%20page.png" alt="Screenshot 3" width="300"/>
 </div>
 
 ---
@@ -61,13 +61,13 @@ git clone https://github.com/your-username/miniflicks.git
 ### **2️⃣ Instal Dependencies **
 
 ```bash
- cd frontend
+cd frontend
 npm install
 ```
 
 ```bash
-   cd backend
-  npm install
+cd backend
+npm install
 ```
 ### **3️⃣ add .env files **
 
@@ -107,13 +107,13 @@ VITE_RAZORPAY_KEY_ID="rzp_test_randomKey123"
 
 ### **Run the files finally **
 ```bash
- cd frontend
+cd frontend
 npm run dev
 ```
 
 ```bash
-   cd backend
-  npm run dev
+cd backend
+npm run dev
 ```
 
 
