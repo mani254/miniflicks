@@ -15,7 +15,10 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors({ origin: ["http://localhost:5173", "*"], credentials: true }));
+app.use(cors({
+   origin: ["https://miniflicks.in", "https://www.miniflicks.in", "http://148.135.137.201", "https://148.135.137.201", "https://www.manidev.in", "https://manidev.in"], methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow all necessary methods
+   credentials: true, credentials: true
+}));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());

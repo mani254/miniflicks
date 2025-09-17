@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 // import { useNavigate } from "react-router-dom";
-import CouponComponent from "./CouponComponent";
 import { setBookingTotal } from "../../redux/customerBooking/customerBookingActions";
 import OtherDetailsButton from "../Booking/OtherDetailsButton";
+import CouponComponent from "./CouponComponent";
 
 function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions, setActiveIndex }) {
 	const [pricingInfo, setPricingInfo] = useState([]);
@@ -62,14 +62,14 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 		if (customerBooking.addons.length == 0) {
 			setPricingInfo((prev) => prev.filter((item) => item.title !== "Addons"));
 		} else {
-			console.log(customerBooking.addons, "addons");
-
 			let amount = customerBooking.addons.reduce((acc, addon) => acc + addon.price * addon.count, 0);
-
 			const ledData = customerBooking.addons.find((item) => item.name === "LED Name");
 			if (ledData) {
-				amount = amount + (customerBooking.otherInfo.ledName.length - 8) * 30;
+        if(customerBooking.otherInfo.ledName.length>8){
+				  amount = amount + (customerBooking.otherInfo.ledName.length-8) * 30;
+        }
 			}
+      
 			setPricingInfo((prev) => {
 				const existingAddonsIndex = prev.findIndex((item) => item.title === "Addons");
 

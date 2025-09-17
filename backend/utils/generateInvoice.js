@@ -9,7 +9,12 @@ const generateBookingHTML = async (bookingData) => {
       const ledData = bookingData.addons.find((item) => item.name === "LED Name");
 
       if (ledData) {
-         amount = amount + (bookingData?.ledName.length - 8) * 30;
+        if(bookingData?.ledName.length>8){
+          amount = amount + (bookingData?.ledName.length - 8) * 30;
+        }
+        else{
+          amount = amount
+        }
       }
       return amount
    };
@@ -18,7 +23,13 @@ const generateBookingHTML = async (bookingData) => {
       const ledData = bookingData.addons.find((item) => item.name === "LED Name");
 
       if (ledData) {
-         let amount = ledData.price + (bookingData?.ledName.length - 8) * 30;
+        let amount
+        if(bookingData?.ledName.length>8){
+          amount = ledData.price + (bookingData?.ledName.length - 8) * 30;
+        }
+        else{
+          amount = ledData.price
+        }
          return amount
       }
       else {

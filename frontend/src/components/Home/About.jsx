@@ -1,8 +1,7 @@
-import React, { useEffect, useRef } from "react";
-import { paperEffectImage } from "../../utils";
-import { googleReview, celebration } from "../../utils";
 import gsap from "gsap";
+import React, { useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
+import { celebration, googleReview, paperEffectImage } from "../../utils";
 
 function About() {
 	const contentRef = useRef(null);
@@ -56,7 +55,7 @@ function About() {
 					<div className="flex items-center min-w-[150px] absolute -top-3 md:top-10 gap-5 bg-white shadow-lg px-3 py-1 rounded-xl" ref={(el) => (floatRef.current[0] = el)}>
 						<img src={googleReview} alt="google reviews" className="w-10 h-10 overflow-hidden" />
 						<p className="text-center">
-							Over 800 + <br />
+							Over 900 + <br />
 							google reviews
 						</p>
 					</div>

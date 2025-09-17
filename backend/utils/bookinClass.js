@@ -217,7 +217,12 @@ class BookingClass {
 
       const ledData = this.addons.find((item) => item.name === "LED Name");
       if (ledData) {
-         amount = amount + (this.ledName.length - 8) * 30;
+        if(this.ledName.length>8){
+          amount = amount + (this.ledName.length - 8) * 30;
+        }
+        else{
+          amount = amount
+        }
       }
       return amount
    }
