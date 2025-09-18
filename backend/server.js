@@ -9,14 +9,15 @@ const cron = require('node-cron');
 const { yesterdayBookingCustomers, bookingsFrom360DaysAgo } = require('./controllersClass/bookingController.js')
 const sendMail = require('./utils/sendMail.js')
 const reviewRequestHtml = require('./utils/reviewRequestHtml.js')
-const generateReminderHtml = require('./utils/generateRemainder.js')
+const generateReminderHtml = require('./utils/generateRemainder.js');
+const { testingOrigins } = require('./utils/consts.js');
 
 require('dotenv').config();
 
 const app = express();
 
 app.use(cors({
-   origin: ["https://miniflicks.in", "https://www.miniflicks.in", "http://148.135.137.201", "https://148.135.137.201", "https://www.manidev.in", "https://manidev.in"], methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow all necessary methods
+   origin: testingOrigins, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow all necessary methods
    credentials: true, credentials: true
 }));
 app.use(bodyParser.json());
@@ -107,7 +108,6 @@ app.use((err, req, res, next) => {
    }
    next();
 });
-
 
 const PORT = process.env.PORT || 8080;
 

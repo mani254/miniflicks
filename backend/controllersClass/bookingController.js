@@ -772,7 +772,7 @@ async function verifyPayment(req, res) {
 
          const html = await generateBookingHTML(populatedBooking);
          sendMail({
-            to: [populatedBooking.customer.email, 'miniflicksprivatetheatres@gmail.com'],
+            to: [populatedBooking.customer.email, 'manikantadev254@gmail.com'],
             subject: `Miniflicks Theater Booking Confirmation for ${populatedBooking?.customer?.name || ""}`,
             html,
          });
