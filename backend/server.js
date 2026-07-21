@@ -17,8 +17,8 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-   origin: testingOrigins, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow all necessary methods
-   credentials: true, credentials: true
+   origin: ["http://localhost:5173"], methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow all necessary methods
+   credentials: true,
 }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
