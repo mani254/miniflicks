@@ -1,0 +1,13 @@
+[{
+  "_id": {
+    "$oid": "6748041533bd0d9ca789ab33"
+  },
+  "name": "Bangalore",
+  "status": true,
+  "locations": [
+    {
+      "$oid": "67480a1433bd0d9ca789ab38"
+    }
+  ],
+  "__v": 1
+}]

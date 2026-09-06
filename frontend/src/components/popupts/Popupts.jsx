@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import CloseModelBtn from "../Modal/CloseModelBtn";
-import { connect } from "react-redux";
-import { hideModal } from "../../redux/modal/modalActions";
+import { hideModal } from "../../store/modalStore";
 
-function Popupts({ title, array, hideModal }) {
+function Popupts({ title, array = [] }) {
 	const [visible, setVisible] = useState(false);
 	const modalRef = useRef(null);
 
@@ -26,7 +25,7 @@ function Popupts({ title, array, hideModal }) {
 				<h3 className="text-center">{title}</h3>
 
 				<div className="max-h-[500px] overflow-y-scroll custom-scrollbar">
-					{array.length && (
+					{array.length > 0 && (
 						<div>
 							{array.map((item, index) => {
 								return (
@@ -46,8 +45,4 @@ function Popupts({ title, array, hideModal }) {
 	);
 }
 
-const mapDispatchToProps = (dispatch) => ({
-	hideModal: () => dispatch(hideModal()),
-});
-
-export default connect(null, mapDispatchToProps)(Popupts);
+export default Popupts;

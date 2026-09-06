@@ -1,11 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import CloseModelBtn from "../Modal/CloseModelBtn";
-import { connect } from "react-redux";
-import { hideModal } from "../../redux/modal/modalActions";
-
+import { hideModal } from "../../store/modalStore";
 import roseOnTable from "../../assets/gallery/rose-path/image-9.webp";
 
-function RoseTable({ hideModal }) {
+function RoseTable() {
 	const [visible, setVisible] = useState(false);
 	const modalRef = useRef(null);
 
@@ -37,8 +35,4 @@ function RoseTable({ hideModal }) {
 	);
 }
 
-const mapDispatchToProps = (dispatch) => ({
-	hideModal: () => dispatch(hideModal()),
-});
-
-export default connect(null, mapDispatchToProps)(RoseTable);
+export default RoseTable;

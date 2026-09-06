@@ -1,8 +1,7 @@
 import React from "react";
-import { connect } from "react-redux";
-import { hideModal } from "../../redux/modal/modalActions";
+import { hideModal } from "../../store/modalStore";
 
-function CloseModelBtn({ hideModal, className }) {
+function CloseModelBtn({ className }) {
 	return (
 		<div>
 			<button className={className} onClick={hideModal}>
@@ -14,10 +13,4 @@ function CloseModelBtn({ hideModal, className }) {
 	);
 }
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		hideModal: () => dispatch(hideModal()),
-	};
-};
-
-export default connect(null, mapDispatchToProps)(CloseModelBtn);
+export default CloseModelBtn;

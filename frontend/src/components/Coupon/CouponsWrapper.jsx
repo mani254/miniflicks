@@ -1,34 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-import { connect } from "react-redux";
-import { getCoupons } from "../../redux/coupon/couponActions";
+import { useCoupons } from "../../hooks/useCatalog";
 
-function CouponsWrapper({ getCoupons, couponsData }) {
-	useEffect(() => {
-		(async () => {
-			try {
-				await getCoupons();
-			} catch (err) {
-				console.log(err);
-			}
-		})();
-	}, []);
+function CouponsWrapper() {
+	const { data, isLoading, refetch } = useCoupons();
+	const coupons = data?.coupons || [];
 
 	return (
-		<>
-			<Outlet context={couponsData} />
-		</>
+		<Outlet context={{ coupons, loading: isLoading, refetch }} />
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		couponsData: state.coupons,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-	getCoupons: () => dispatch(getCoupons()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CouponsWrapper);
+export default CouponsWrapper;

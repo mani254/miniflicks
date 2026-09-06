@@ -1,0 +1,82 @@
+[{
+  "_id": {
+    "$oid": "674821a12fa5b6f729cc8c42"
+  },
+  "code": "FREE100",
+  "discount": 10,
+  "type": "percentage",
+  "expireDate": {
+    "$date": "2024-12-31T00:00:00.000Z"
+  },
+  "status": false,
+  "createdAt": {
+    "$date": "2024-11-28T07:54:09.346Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-17T18:38:24.219Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67626509b5d649e463f45c1d"
+  },
+  "code": "FREE300",
+  "discount": 300,
+  "type": "fixed",
+  "expireDate": {
+    "$date": "2025-12-31T00:00:00.000Z"
+  },
+  "status": false,
+  "createdAt": {
+    "$date": "2024-12-18T06:00:41.714Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-20T09:56:29.875Z"
+  },
+  "__v": 0,
+  "scrollCoupon": false,
+  "scrollingText": ""
+},
+{
+  "_id": {
+    "$oid": "678a4f969c730b447e1020c4"
+  },
+  "code": "MFANV500",
+  "discount": 500,
+  "type": "fixed",
+  "expireDate": {
+    "$date": "2025-02-13T00:00:00.000Z"
+  },
+  "status": false,
+  "createdAt": {
+    "$date": "2025-01-17T12:39:50.560Z"
+  },
+  "updatedAt": {
+    "$date": "2025-02-10T06:11:53.385Z"
+  },
+  "__v": 0,
+  "scrollCoupon": false,
+  "scrollingText": "500/- off offer is going on use coupon code MFANV500 to grab the offer"
+},
+{
+  "_id": {
+    "$oid": "67b347c66e2966a17b34cb1c"
+  },
+  "code": "MINI450",
+  "discount": 450,
+  "type": "fixed",
+  "expireDate": {
+    "$date": "2025-12-31T00:00:00.000Z"
+  },
+  "status": true,
+  "scrollCoupon": false,
+  "scrollingText": "",
+  "createdAt": {
+    "$date": "2025-02-17T14:29:26.558Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-15T08:42:50.940Z"
+  },
+  "__v": 0
+}]

@@ -1,34 +1,28 @@
 import React, { useEffect } from "react";
-
 import BackendNav from "../components/BackendNav/BackendNav";
 import BackendHeader from "../components/BackendHeader/BackendHeader";
-
 import { Outlet, useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { initialLogin } from "../redux/auth/authActions";
+import { useAuth } from "../hooks/useAuth";
+import Loader from "../components/Loader/Loader";
 
-function BackendLayout({ initialLogin, auth }) {
+function BackendLayout() {
 	const navigate = useNavigate();
+	const { isLoggedIn, isInitialLoading } = useAuth();
 
 	useEffect(() => {
-		if (auth.isLoggedIn) return;
+		const token = localStorage.getItem("authToken");
+		if (!token) {
+			navigate("/login");
+		}
+	}, [navigate]);
 
-		const fetchInitialData = async () => {
-			try {
-				const token = localStorage.getItem("authToken");
-				if (token) {
-					await initialLogin(token);
-					// console.log("code after await initialLogin in try block");
-				} else {
-					navigate("/login");
-				}
-			} catch (err) {
-				navigate("/login");
-				console.log(err);
-			}
-		};
-		fetchInitialData();
-	}, []);
+	if (isInitialLoading) {
+		return (
+			<div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+				<Loader />
+			</div>
+		);
+	}
 
 	return (
 		<React.Fragment>
@@ -47,16 +41,4 @@ function BackendLayout({ initialLogin, auth }) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		auth: state.auth,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		initialLogin: (token) => dispatch(initialLogin(token)),
-	};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(BackendLayout);
+export default BackendLayout;

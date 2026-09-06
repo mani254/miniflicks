@@ -1,25 +1,23 @@
 import React, { useEffect } from "react";
-
-import { connect, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { setBookingCakes } from "../../redux/customerBooking/customerBookingActions";
+import { useBookingStore } from "../../store/bookingStore";
 import OtherDetailsButton from "../Booking/OtherDetailsButton";
 
-function OtherDetailsNav({ customerBooking, activeIndex, navOptions, setNavOptions, setActiveIndex }) {
+function OtherDetailsNav({ activeIndex, navOptions, setNavOptions, setActiveIndex }) {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const dispatch = useDispatch();
+	const { package: currentPackage, setBookingCakes } = useBookingStore();
 
 	// Update navOptions based on the selected package
 	useEffect(() => {
-		if (!customerBooking.package) return;
+		if (!currentPackage) return;
 		const initialOptions = ["Packages", "Occasions", "Cakes", "Addons", "Gifts"];
-		if (!customerBooking.package?.addons.includes("Cake")) {
-			dispatch(setBookingCakes([]));
+		if (!currentPackage.addons?.includes("Cake")) {
+			setBookingCakes([]);
 		}
-		let newOptions = customerBooking.package?.addons.includes("Cake") ? initialOptions : initialOptions.filter((opt) => opt !== "Cakes");
+		let newOptions = currentPackage.addons?.includes("Cake") ? initialOptions : initialOptions.filter((opt) => opt !== "Cakes");
 		setNavOptions(newOptions);
-	}, [customerBooking.package]);
+	}, [currentPackage, setNavOptions, setBookingCakes]);
 
 	// Set the active index based on the current URL path
 	useEffect(() => {
@@ -32,33 +30,7 @@ function OtherDetailsNav({ customerBooking, activeIndex, navOptions, setNavOptio
 				setActiveIndex(initialActiveIndex);
 			}
 		}
-	}, [location.pathname, navOptions]);
-
-	// Navigate only when activeIndex changes due to user interaction
-	// useEffect(() => {
-	// 	const pathSegments = location.pathname.split("/");
-	// 	const lastSegment = pathSegments[pathSegments.length - 1];
-
-	// 	if (!navOptions[activeIndex]) return;
-
-	// 	if (activeIndex !== null) {
-	// 		if (lastSegment.toLocaleLowerCase === navOptions[activeIndex]) {
-	// 			// navigate(`${navOptions[activeIndex].toLowerCase()}`, { replace: true });
-	// 			return;
-	// 		} else {
-	// 			navigate(`${navOptions[activeIndex].toLowerCase()}`);
-	// 		}
-	// 	}
-	// }, [activeIndex, navOptions]);
-
-	// function handleNext() {
-	// 	if (activeIndex < navOptions.length - 1) {
-	// 		setActiveIndex((prev) => prev + 1);
-	// 		navigate(`${navOptions[activeIndex + 1].toLowerCase()}`);
-	// 	} else {
-	// 		navigate("/booking/payment");
-	// 	}
-	// }
+	}, [location.pathname, navOptions, activeIndex, setActiveIndex]);
 
 	function handleOptionClick(index) {
 		setActiveIndex(index);
@@ -73,19 +45,10 @@ function OtherDetailsNav({ customerBooking, activeIndex, navOptions, setNavOptio
 				</div>
 			))}
 			<div className="book-now-btn">
-				{/* <button className="btn-3 text-center flex w-[100px] items-center gap-2 m-auto" onClick={handleNext}>
-					Next <FaArrowRight className="text-xs" />
-				</button> */}
 				<OtherDetailsButton navOptions={navOptions} setActiveIndex={setActiveIndex} activeIndex={activeIndex} />
 			</div>
 		</div>
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		customerBooking: state.customerBooking,
-	};
-};
-
-export default connect(mapStateToProps, null)(OtherDetailsNav);
+export default OtherDetailsNav;

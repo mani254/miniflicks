@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "674803ea33bd0d9ca789ab25"
+  },
+  "name": "Miniflicks",
+  "email": "miniflicksprivatetheatres@gmail.com",
+  "password": "$2a$10$XHV/M1iA0vuki08Nti/YXeHhmzc2kUFhzD/SQp1kvLr0yD5az/X/e",
+  "superAdmin": true,
+  "createdAt": {
+    "$date": "2024-11-28T05:47:22.387Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-28T05:47:22.387Z"
+  },
+  "__v": 0
+}]

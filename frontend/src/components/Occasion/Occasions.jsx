@@ -1,104 +1,340 @@
-import React, { useState } from "react";
+import {
+  ImageIcon,
+  Loader2,
+  Pencil,
+  Plus,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
+import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import Loader from "../Loader/Loader.jsx";
-import { connect } from "react-redux";
-import { showModal } from "../../redux/modal/modalActions.js";
-import { deleteOccasion } from "../../redux/occasion/occasionActions.js";
-import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
-import Pagination from "../Pagination/Pagination.jsx";
-import GiftsFilter from "../Gift/GiftsFilter.jsx";
+import { toast } from "sonner";
 
-function Occasions({ showModal, deleteOccasion, auth }) {
-	const [currentPage, setCurrentPage] = useState(1);
+import { catalogApi } from "../../api/catalog";
+import { useAuth } from "../../hooks/useAuth";
+import { getImageUrl } from "../../lib/imageUrl";
+import { Badge } from "../ui/badge.jsx";
+import { Button } from "../ui/button.jsx";
+import { Card } from "../ui/card.jsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog.jsx";
+import { Switch } from "../ui/switch.jsx";
 
-	const navigate = useNavigate();
-	const { occasionData, noOfDocuments, params, setParams } = useOutletContext();
-
-	const alertData = {
-		title: "Are You sure?",
-		info: "Deleting this occasion cannot be undone.",
-		confirmFunction: (occasionId) => {
-			deleteOccasion(occasionId);
-		},
-	};
-
-	return (
-		<div className="w-full container px-6 mt-3">
-			<div className="flex justify-between pb-2 border-b border-gray-400">
-				<h3>Occasions</h3>
-				<div>
-					<GiftsFilter params={params} setParams={setParams} auth={auth} />
-				</div>
-				<button className="btn" onClick={() => navigate("/admin/occasions/add")}>
-					Add Occasion
-				</button>
-			</div>
-			{occasionData.loading ? (
-				<div className="h-96 relative">
-					<Loader />
-				</div>
-			) : (
-				<div className="relative">
-					<table className="main-table">
-						<thead>
-							<tr>
-								<th>S.NO</th>
-								<th>Image</th>
-								<th>Name</th>
-								<th>Position</th>
-								<th>Price</th>
-								{auth.admin?.superAdmin && <th>Actions</th>}
-							</tr>
-						</thead>
-						<tbody>
-							{occasionData.occasions.length >= 1 &&
-								occasionData.occasions.map((occasion, index) => (
-									<tr key={occasion._id}>
-										<td>{index + 1}</td>
-										<td>
-											<div className="relative w-12 h-12 overflow-hidden bg-green-200 rounded-md">
-												<img src={occasion.image} alt={occasion.name} className="w-full h-full object-cover" />
-											</div>
-										</td>
-										<td>{occasion.name}</td>
-										<td>{occasion.position}</td>
-										<td>{occasion.price}</td>
-										{auth.admin?.superAdmin && (
-											<td>
-												<div className="flex">
-													<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/admin/occasions/edit/${occasion._id}`)}>
-														<FaEdit className="fill-blue-500" />
-													</span>
-													<span className="cursor-pointer text-2xl" onClick={() => showModal({ ...alertData, id: occasion._id }, ConfirmationAlert)}>
-														<MdDelete className="fill-red-500" />
-													</span>
-												</div>
-											</td>
-										)}
-									</tr>
-								))}
-						</tbody>
-					</table>
-				</div>
-			)}
-			<Pagination noOfDocuments={noOfDocuments} limit={10} currentPage={currentPage} setCurrentPage={setCurrentPage} params={params} setParams={setParams} />
-		</div>
-	);
+/* ─── Empty state ───────────────────────────────────────────────────── */
+function EmptyState({ onAdd }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-20 gap-4">
+      <div className="w-14 h-14 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center">
+        <Sparkles className="w-6 h-6 text-gray-400" />
+      </div>
+      <div className="text-center">
+        <p className="text-sm font-medium text-gray-700">No occasions yet</p>
+        <p className="text-xs text-gray-400 mt-1">
+          Add occasions like Birthday, Anniversary, Romantic Date.
+        </p>
+      </div>
+      <Button size="sm" onClick={onAdd}>
+        <Plus className="w-4 h-4" /> Add Occasion
+      </Button>
+    </div>
+  );
 }
 
-const mapStateToProps = (state) => {
-	return {
-		auth: state.auth,
-	};
-};
+/* ─── Main Component ────────────────────────────────────────────────── */
+function Occasions() {
+  const navigate = useNavigate();
+  const { admin } = useAuth();
+  const { occasionData, refetch } = useOutletContext() || {};
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		showModal: (props, component) => dispatch(showModal(props, component)),
-		deleteOccasion: (occasionId) => dispatch(deleteOccasion(occasionId)), // Adjusted to use deleteOccasion
-	};
-};
+  const occasions = occasionData?.occasions || [];
+  const loading = occasionData?.loading;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Occasions);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [togglingId, setTogglingId] = useState(null);
+
+  function openDelete(occ) {
+    setSelected(occ);
+    setDeleteOpen(true);
+  }
+
+  async function confirmDelete() {
+    if (!selected) return;
+    setDeleting(true);
+    try {
+      await catalogApi.deleteOccasion(selected._id);
+      toast.success("Occasion deleted successfully");
+      refetch?.();
+      setDeleteOpen(false);
+    } catch (err) {
+      toast.error(err.message || "Failed to delete occasion");
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  async function handleStatusChange(occ) {
+    setTogglingId(occ._id);
+    const updatedStatus = !occ.status;
+    try {
+      await catalogApi.updateOccasion(occ._id, {
+        ...occ,
+        status: updatedStatus,
+      });
+      toast.success(`Occasion ${updatedStatus ? "activated" : "deactivated"}`);
+      refetch?.();
+    } catch (err) {
+      toast.error(err.message || "Failed to update occasion status");
+    } finally {
+      setTogglingId(null);
+    }
+  }
+
+  const totalActive = occasions.filter((o) => o.status).length;
+  const totalInactive = occasions.length - totalActive;
+
+  return (
+    <>
+      <div className="p-6 space-y-5">
+        {/* ── Header ── */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-gray-900">Occasions</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Manage celebration themes and occasion setups.
+            </p>
+          </div>
+          <Button onClick={() => navigate("/admin/occasions/add")}>
+            <Plus className="w-4 h-4" />
+            Add Occasion
+          </Button>
+        </div>
+
+        {/* ── Stat pills ── */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 bg-white">
+            <span className="text-sm font-semibold text-gray-800">
+              {occasions.length}
+            </span>
+            <span className="text-xs text-gray-500">Total</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 bg-white">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="text-sm font-semibold text-gray-800">
+              {totalActive}
+            </span>
+            <span className="text-xs text-gray-500">Active</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 bg-white">
+            <span className="w-2 h-2 rounded-full bg-gray-400"></span>
+            <span className="text-sm font-semibold text-gray-800">
+              {totalInactive}
+            </span>
+            <span className="text-xs text-gray-500">Inactive</span>
+          </div>
+        </div>
+
+        {/* ── Table ── */}
+        <Card>
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="flex flex-col items-center gap-2">
+                <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                <p className="text-sm text-gray-500">Loading occasions…</p>
+              </div>
+            </div>
+          ) : occasions.length === 0 ? (
+            <EmptyState onAdd={() => navigate("/admin/occasions/add")} />
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200 bg-gray-50">
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider w-12">
+                      #
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Image
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Description
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Price
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Position
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider w-24">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {occasions.map((occ, index) => (
+                    <tr
+                      key={occ._id}
+                      className="hover:bg-gray-50 transition-colors group"
+                    >
+                      {/* # */}
+                      <td className="px-4 py-3 text-gray-400 font-mono text-xs">
+                        {String(index + 1).padStart(2, "0")}
+                      </td>
+
+                      {/* Image Thumbnail */}
+                      <td className="px-4 py-3">
+                        <div className="w-12 h-12 rounded-lg border border-gray-200 overflow-hidden bg-gray-100 flex items-center justify-center">
+                          {occ.image ? (
+                            <img
+                              src={getImageUrl(occ.image)}
+                              alt={occ.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                                e.currentTarget.nextSibling.style.display =
+                                  "flex";
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            className="w-full h-full items-center justify-center"
+                            style={{ display: occ.image ? "none" : "flex" }}
+                          >
+                            <ImageIcon className="w-4 h-4 text-gray-400" />
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Name */}
+                      <td className="px-4 py-3 font-medium text-gray-900">
+                        {occ.name}
+                      </td>
+
+                      {/* Description */}
+                      <td className="px-4 py-3 max-w-xs">
+                        <span className="text-xs text-gray-500 truncate block">
+                          {occ.description || "—"}
+                        </span>
+                      </td>
+
+                      {/* Price */}
+                      <td className="px-4 py-3 font-semibold text-gray-900">
+                        ₹{occ.price}
+                      </td>
+
+                      {/* Position */}
+                      <td className="px-4 py-3">
+                        <Badge variant="outline" className="font-mono text-xs">
+                          {occ.position}
+                        </Badge>
+                      </td>
+
+                      {/* Status */}
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          {togglingId === occ._id ? (
+                            <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                          ) : (
+                            <Switch
+                              checked={occ.status}
+                              onCheckedChange={() => handleStatusChange(occ)}
+                            />
+                          )}
+                          <span
+                            className={`text-xs font-medium ${occ.status ? "text-emerald-600" : "text-gray-400"}`}
+                          >
+                            {occ.status ? "Active" : "Inactive"}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-1.5">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                            onClick={() =>
+                              navigate(`/admin/occasions/edit/${occ._id}`)
+                            }
+                            title="Edit"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-gray-400 hover:text-red-600 hover:bg-red-50"
+                            onClick={() => openDelete(occ)}
+                            title="Delete"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </Card>
+      </div>
+
+      {/* ── Delete dialog ── */}
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete Occasion</DialogTitle>
+            <DialogDescription className="mt-1">
+              Are you sure you want to delete{" "}
+              <span className="font-medium text-gray-800">
+                &quot;{selected?.name || "this occasion"}&quot;
+              </span>
+              ? Customers will no longer be able to select it during booking.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 mt-4">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setDeleteOpen(false)}
+              disabled={deleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              className="flex-1"
+              onClick={confirmDelete}
+              disabled={deleting}
+            >
+              {deleting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Trash2 className="w-4 h-4" />
+              )}
+              {deleting ? "Deleting…" : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+export default Occasions;

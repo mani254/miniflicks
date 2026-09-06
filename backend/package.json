@@ -1,45 +1,95 @@
 {
-   "name": "miniflicks-private-theator",
-   "version": "1.0.0",
-   "description": "backend for the miniflicks private theator web application",
-   "main": "server.js",
-   "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "dev": "nodemon server.js",
-      "start": "node server.js"
-   },
-   "repository": {
-      "type": "git",
-      "url": "https://github.com/mani254/miniflicks"
-   },
-   "keywords": [
-      "private theator",
-      "private theator backend",
-      "function Hall Booking"
-   ],
-   "author": "Manikanta",
-   "license": "MIT",
-   "bugs": {
-      "url": "https://github.com/mani254/miniflicks/issues"
-   },
-   "homepage": "https://github.com/mani254/miniflicks#readme",
-   "dependencies": {
-      "bcryptjs": "^2.4.3",
-      "body-parser": "^1.20.3",
-      "cookie-parser": "^1.4.6",
-      "cors": "^2.8.5",
-      "crypto": "^1.0.1",
-      "dotenv": "^16.4.5",
-      "express": "^4.21.0",
-      "googleapis": "^144.0.0",
-      "jsonwebtoken": "^9.0.2",
-      "mongoose": "^8.6.2",
-      "multer": "^1.4.5-lts.1",
-      "node-cron": "^3.0.3",
-      "nodemailer": "^6.9.16",
-      "nodemon": "^3.1.4",
-      "razorpay": "^2.9.5",
-      "slugify": "^1.6.6",
-      "uuid": "^11.0.2"
-   }
+  "name": "miniflicks-private-theator",
+  "version": "1.0.0",
+  "description": "backend for the miniflicks private theator web application",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only --project tsconfig.json src/server.ts",
+    "build": "tsc --project tsconfig.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:unit": "jest tests/unit",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src --ext .ts",
+    "seed:admin": "ts-node-dev --transpile-only src/scripts/createAdmin.ts",
+    "migrate:backup": "ts-node-dev --transpile-only src/scripts/migrateBackup.ts",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/tests"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "testMatch": [
+      "**/*.test.ts"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/**/*.d.ts"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mani254/miniflicks"
+  },
+  "keywords": [
+    "private theator",
+    "private theator backend",
+    "function Hall Booking"
+  ],
+  "author": "Manikanta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mani254/miniflicks/issues"
+  },
+  "homepage": "https://github.com/mani254/miniflicks#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "googleapis": "^144.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.6.2",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "ioredis": "^5.6.1",
+    "nodemon": "^3.1.4",
+    "razorpay": "^2.9.5",
+    "slugify": "^1.6.6",
+    "uuid": "^11.0.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^26.2.0",
+    "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^8.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.67.0",
+    "@typescript-eslint/parser": "^8.67.0",
+    "eslint": "^10.9.0",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.12",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^6.0.3"
+  }
 }

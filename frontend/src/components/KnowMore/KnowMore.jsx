@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import CloseModelBtn from "../Modal/CloseModelBtn";
-import { connect } from "react-redux";
-import { hideModal } from "../../redux/modal/modalActions";
+import { hideModal } from "../../store/modalStore";
 
-function KnowMore({ title, info, hideModal }) {
+function KnowMore({ title, info }) {
 	const [visible, setVisible] = useState(false);
 	const modalRef = useRef(null);
 
@@ -22,16 +21,10 @@ function KnowMore({ title, info, hideModal }) {
 					<p className="text-lg font-medium mb-2">{title}</p>
 					<p className="text-xs mb-5">{info}</p>
 				</div>
-				<CloseModelBtn className="absolute top-3 right-4" />
+				<CloseModelBtn className="absolute top-3 right-4" onClick={hideModal} />
 			</div>
 		</div>
 	);
 }
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		hideModal: () => dispatch(hideModal()),
-	};
-};
-
-export default connect(null, mapDispatchToProps)(KnowMore);
+export default KnowMore;

@@ -1,169 +1,123 @@
-import React, { useEffect, useState } from "react";
-import { connect, useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-import { setBookingTotal } from "../../redux/customerBooking/customerBookingActions";
+import React, { useMemo, useEffect } from "react";
+import { useBookingStore } from "../../store/bookingStore";
 import OtherDetailsButton from "../Booking/OtherDetailsButton";
 import CouponComponent from "./CouponComponent";
 
-function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions, setActiveIndex }) {
-	const [pricingInfo, setPricingInfo] = useState([]);
-	const [total, setTotal] = useState(0);
-	// const navigate = useNavigate();
-	const dispatch = useDispatch();
+function OrderSummary({ navOptions, activeIndex, setNavOptions, setActiveIndex }) {
+	const {
+		package: selectedPackage,
+		occasion: selectedOccasion,
+		addons: selectedAddons,
+		gifts: selectedGifts,
+		cakes: selectedCakes,
+		otherInfo,
+		date: bookingDate,
+		slot: bookingSlot,
+		isEditing,
+		setBookingTotal,
+	} = useBookingStore();
 
-	// function that will exicute everytime the package change to set the package price
-	useEffect(() => {
-		if (!customerBooking.package) {
-			setPricingInfo((prev) => prev.filter((item) => item.title !== "Package"));
-		} else {
-			setPricingInfo((prev) => {
-				const existingPackageIndex = prev.findIndex((item) => item.title === "Package");
-
-				if (existingPackageIndex !== -1) {
-					const updatedPricingInfo = [...prev];
-					if (customerBooking.isEditing) {
-						updatedPricingInfo[existingPackageIndex].amount = customerBooking.package.price;
-					} else {
-						updatedPricingInfo[existingPackageIndex].amount = getPackagePrice(customerBooking.package);
-					}
-					return updatedPricingInfo;
-				} else {
-					if (customerBooking.isEditing) {
-						return [...prev, { title: "Package", amount: customerBooking.package.price }];
-					} else {
-						return [...prev, { title: "Package", amount: getPackagePrice(customerBooking.package) }];
-					}
-				}
-			});
-		}
-	}, [customerBooking.package]);
-
-	// Manage "Occasion" in pricingInfo based on customerBooking.occasion's existence and value
-	useEffect(() => {
-		if (!customerBooking.occasion) {
-			setPricingInfo((prev) => prev.filter((item) => item.title !== "Occasion"));
-		} else {
-			setPricingInfo((prev) => {
-				const existingOccasionIndex = prev.findIndex((item) => item.title === "Occasion");
-
-				if (existingOccasionIndex !== -1) {
-					const updatedPricingInfo = [...prev];
-					updatedPricingInfo[existingOccasionIndex].amount = customerBooking.occasion.price;
-					return updatedPricingInfo;
-				} else {
-					return [...prev, { title: "Occasion", amount: customerBooking.occasion.price }];
-				}
-			});
-		}
-	}, [customerBooking.occasion]);
-
-	// Mangage "Addons in pricingInfo based on customerBooking.addons's existence and value"
-	useEffect(() => {
-		if (customerBooking.addons.length == 0) {
-			setPricingInfo((prev) => prev.filter((item) => item.title !== "Addons"));
-		} else {
-			let amount = customerBooking.addons.reduce((acc, addon) => acc + addon.price * addon.count, 0);
-			const ledData = customerBooking.addons.find((item) => item.name === "LED Name");
-			if (ledData) {
-        if(customerBooking.otherInfo.ledName.length>8){
-				  amount = amount + (customerBooking.otherInfo.ledName.length-8) * 30;
-        }
-			}
-      
-			setPricingInfo((prev) => {
-				const existingAddonsIndex = prev.findIndex((item) => item.title === "Addons");
-
-				if (existingAddonsIndex !== -1) {
-					const updatedPricingInfo = [...prev];
-					updatedPricingInfo[existingAddonsIndex].amount = amount;
-					return updatedPricingInfo;
-				} else {
-					return [...prev, { title: "Addons", amount }];
-				}
-			});
-		}
-	}, [customerBooking.addons, customerBooking.otherInfo.ledName]);
-
-	useEffect(() => {
-		let amount = customerBooking?.otherInfo.extraPersonsPrice || 0;
-
-		setPricingInfo((prev) => {
-			const existingIndex = prev.findIndex((item) => item.title === "Extra Persons Amount");
-
-			if (existingIndex !== -1) {
-				const updatedPricingInfo = [...prev];
-				updatedPricingInfo[existingIndex].amount = amount;
-				return updatedPricingInfo;
-			} else {
-				return [...prev, { title: "Extra Persons Amount", amount }];
-			}
+	const getPackagePrice = (pack) => {
+		if (!pack) return 0;
+		if (isEditing) return pack.price || 0;
+		const selectedDate = new Date(bookingDate).toISOString().split("T")[0];
+		const todayPrice = pack.customPrice?.find((custom) => {
+			const customDate = new Date(new Date(custom.date).setHours(0, 0, 0, 0)).toISOString().split("T")[0];
+			return customDate === selectedDate;
 		});
-	}, [customerBooking.otherInfo.extraPersonsPrice]);
+		return todayPrice ? todayPrice.price : pack.price || 0;
+	};
 
-	// Mangage "Cakes in pricingInfo based on customerBooking.cake's existence and value"
-	useEffect(() => {
-		if (customerBooking.cakes.length == 0) {
-			setPricingInfo((prev) => prev.filter((item) => item.title !== "Cakes"));
-		} else {
-			const amount = customerBooking.cakes.reduce((acc, addon) => acc + addon.price, 0);
-			setPricingInfo((prev) => {
-				const existingCakesIndex = prev.findIndex((item) => item.title === "Cakes");
+	const pricingInfo = useMemo(() => {
+		const items = [];
 
-				if (existingCakesIndex !== -1) {
-					const updatedPricingInfo = [...prev];
-					updatedPricingInfo[existingCakesIndex].amount = amount;
-					return updatedPricingInfo;
-				} else {
-					return [...prev, { title: "Cakes", amount }];
-				}
+		// 1. Package
+		if (selectedPackage) {
+			items.push({
+				title: "Package",
+				amount: getPackagePrice(selectedPackage),
 			});
 		}
-	}, [customerBooking.cakes]);
 
-	// Manage "Gifts" in pricingInfo based on customerBooking.gifts' existence and value
-	useEffect(() => {
-		if (customerBooking.gifts.length === 0) {
-			setPricingInfo((prev) => prev.filter((item) => item.title !== "Gifts"));
-		} else {
-			const amount = customerBooking.gifts.reduce((acc, gift) => acc + gift.price * gift.count, 0);
-			setPricingInfo((prev) => {
-				const existingGiftsIndex = prev.findIndex((item) => item.title === "Gifts");
-
-				if (existingGiftsIndex !== -1) {
-					const updatedPricingInfo = [...prev];
-					updatedPricingInfo[existingGiftsIndex].amount = amount;
-					return updatedPricingInfo;
-				} else {
-					return [...prev, { title: "Gifts", amount }];
-				}
+		// 2. Occasion
+		if (selectedOccasion) {
+			items.push({
+				title: "Occasion",
+				amount: selectedOccasion.price || 0,
 			});
 		}
-	}, [customerBooking.gifts]);
 
-	useEffect(() => {
-		const total = pricingInfo.reduce((acc, item) => acc + item.amount, 0);
-		setTotal(total);
-		dispatch(setBookingTotal(total));
+		// 3. Extra Persons
+		if (otherInfo?.extraPersonsPrice) {
+			items.push({
+				title: "Extra Persons Amount",
+				amount: otherInfo.extraPersonsPrice,
+			});
+		}
+
+		// 4. Addons
+		if (selectedAddons?.length > 0) {
+			let addonAmount = selectedAddons.reduce((acc, addon) => acc + (addon.price || 0) * (addon.count || 1), 0);
+			const hasLed = selectedAddons.some((item) => item.name?.toLowerCase().includes("name") || item.name === "LED Name");
+			if (hasLed && otherInfo?.ledName?.length > 8) {
+				addonAmount += (otherInfo.ledName.length - 8) * 30;
+			}
+			items.push({
+				title: "Addons",
+				amount: addonAmount,
+			});
+		}
+
+		// 5. Cakes
+		if (selectedCakes?.length > 0) {
+			const cakeAmount = selectedCakes.reduce((acc, cake) => {
+				if (cake.free) {
+					return acc + (cake.special ? (cake.specialPrice || 0) : 0);
+				}
+				return acc + (cake.price || 0);
+			}, 0);
+			items.push({
+				title: "Cakes",
+				amount: cakeAmount,
+			});
+		}
+
+		// 6. Gifts
+		if (selectedGifts?.length > 0) {
+			const giftAmount = selectedGifts.reduce((acc, gift) => acc + (gift.price || 0) * (gift.count || 1), 0);
+			items.push({
+				title: "Gifts",
+				amount: giftAmount,
+			});
+		}
+
+		// 7. Coupon
+		if (otherInfo?.couponCode && otherInfo?.couponPrice) {
+			items.push({
+				title: "Coupon",
+				amount: -Math.abs(otherInfo.couponPrice),
+			});
+		}
+
+		return items;
+	}, [selectedPackage, selectedOccasion, selectedAddons, selectedGifts, selectedCakes, otherInfo, bookingDate, isEditing]);
+
+	const total = useMemo(() => {
+		const rawTotal = pricingInfo.reduce((acc, item) => acc + item.amount, 0);
+		return Math.max(0, parseFloat(rawTotal.toFixed(2)));
 	}, [pricingInfo]);
 
-	// function to convert slot timing just to show
+	// Sync calculated total to bookingStore
+	useEffect(() => {
+		setBookingTotal(total);
+	}, [total, setBookingTotal]);
+
 	const convertToAMPM = (time) => {
+		if (!time) return "";
 		const [hours, minutes] = time.split(":");
 		const period = hours >= 12 ? "PM" : "AM";
 		const formattedHours = hours % 12 || 12;
 		return `${formattedHours}:${minutes} ${period}`;
-	};
-
-	// function that will get prices by checking the in the customprice
-	const getPackagePrice = (pack) => {
-		const selectedDate = new Date(customerBooking.date).toISOString().split("T")[0];
-		const todayPrice = pack.customPrice.find((custom) => {
-			const customDate = new Date(new Date(custom.date).setHours(0, 0, 0, 0)).toISOString().split("T")[0];
-			// console.log(customDate, selectedDate);
-			return customDate === selectedDate;
-		});
-
-		return todayPrice ? todayPrice.price : pack.price;
 	};
 
 	return (
@@ -171,11 +125,11 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 			<h3 className="pb-2 border-b border-gray-300">Order Summary</h3>
 			<div className="grid grid-cols-[auto_1fr] gap-1 mt-3">
 				<h5 className="min-w-max">Date :</h5>
-				<p>{new Date(customerBooking.date).toLocaleString().split(",")[0]}</p>
+				<p>{new Date(bookingDate).toLocaleString().split(",")[0]}</p>
 				<h5 className="min-w-max">Slot :</h5>
-				{customerBooking.slot?.from && customerBooking.slot?.to && (
+				{bookingSlot?.from && bookingSlot?.to && (
 					<p>
-						{convertToAMPM(customerBooking.slot?.from)} - {convertToAMPM(customerBooking.slot?.to)}
+						{convertToAMPM(bookingSlot.from)} - {convertToAMPM(bookingSlot.to)}
 					</p>
 				)}
 			</div>
@@ -194,24 +148,14 @@ function OrderSummary({ customerBooking, navOptions, activeIndex, setNavOptions,
 					<p className="justify-self-end">{total}</p>
 				</div>
 				<div className="book-now-btn mt-3">
-					{/* <button className="btn-3 text-center flex w-full items-center gap-2 m-auto" onClick={handlePayment}>
-						Payment <FaArrowRight className="text-xs" />
-					</button> */}
-					{/* <button className="btn-3 text-center flex w-full items-center gap-2 m-auto" onClick={handleNext}>
-						{activeIndex < navOptions.length - 1 ? "Next" : "Payment"} <FaArrowRight className="text-xs" />
-					</button> */}
 					<OtherDetailsButton navOptions={navOptions} setActiveIndex={setActiveIndex} activeIndex={activeIndex} />
 				</div>
-				{customerBooking?.package?.name?.toLowerCase() !== "basic" && <CouponComponent pricingInfo={pricingInfo} setPricingInfo={setPricingInfo} />}
+				{selectedPackage?.name?.toLowerCase() !== "basic" && (
+					<CouponComponent subtotalWithoutCoupon={pricingInfo.filter((i) => i.title !== "Coupon").reduce((acc, i) => acc + i.amount, 0)} />
+				)}
 			</div>
 		</div>
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		customerBooking: state.customerBooking,
-	};
-};
-
-export default connect(mapStateToProps, null)(OrderSummary);
+export default OrderSummary;

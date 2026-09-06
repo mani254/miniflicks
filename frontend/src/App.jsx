@@ -1,6 +1,5 @@
-import React, { lazy, Suspense, useEffect } from "react";
-import { connect } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import { HelmetProvider } from "react-helmet-async";
@@ -11,9 +10,6 @@ import Home from "./pages/Home";
 import SlotBookingPage from "./pages/SlotBookingPage";
 import UserLocations from "./components/Locations/UserLocations";
 import UserScreens from "./components/Screen/UserScreens";
-import { showModal } from "./redux/modal/modalActions";
-// import EntryPop from "./components/KnowMore/EntryPop";
-// import BookingLayout from "./layouts/BookingLayout";
 const BookingLayout = lazy(() => import("./layouts/BookingLayout"));
 import OtherDetails from "./components/OtherDetails/OtherDetails";
 import PackagesSection from "./components/OtherDetails/PackagesSection";
@@ -28,14 +24,13 @@ import ContactPage from "./pages/ContactPage";
 import GalleryPage from "./pages/GalleryPage";
 import AboutPage from "./pages/AboutPage";
 
-import axios from "axios";
 import Loader from "./components/Loader/Loader";
 
 const BackendLayout = lazy(() => import("./layouts/BackendLayout"));
 import UpdateBooking from "./components/Booking/UpdateBooking";
 import Dashboard from "./components/Dashboard/Dashboard";
-import Notification from "./components/Notifications/Notifications";
 import Modal from "./components/Modal/Modal";
+import { useModalStore } from "./store/modalStore";
 
 import CitiesWrapper from "./components/Cities/CitiesWrapper";
 import Cities from "./components/Cities/Cities";
@@ -85,22 +80,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-function App({ modal, showModal }) {
-	axios.defaults.withCredentials = true;
-
-	// useEffect(() => {
-	// 	const timer = setTimeout(() => {
-	// 		showModal({}, EntryPop);
-	// 	}, 3000);
-
-	// 	// Cleanup function to clear the timeout if the component unmounts
-	// 	return () => clearTimeout(timer);
-	// }, []);
+function App() {
+	const { isModalOpen, modalComponent: ModalComponent, modalProps } = useModalStore();
 
 	return (
 		<React.Fragment>
 			<div className="bg-zinc-100 min-h-screen">
-				<Notification />
 				<HelmetProvider>
 					<Routes>
 						<Route path="/" element={<UsersLayout />}>
@@ -156,6 +141,7 @@ function App({ modal, showModal }) {
 									<BackendLayout />
 								</Suspense>
 							}>
+							<Route index element={<Navigate to="/admin/dashboard" replace />} />
 							<Route path="dashboard" element={<Dashboard />} />
 							<Route path="cities" element={<CitiesWrapper />}>
 								<Route index element={<Cities />} />
@@ -214,21 +200,9 @@ function App({ modal, showModal }) {
 				</HelmetProvider>
 			</div>
 
-			{modal.showModal && <Modal props={modal.modalProps} component={modal.modalComponent} />}
+			<Modal />
 		</React.Fragment>
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		modal: state.modal,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		showModal: (props, component) => dispatch(showModal(props, component)),
-	};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

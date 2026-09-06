@@ -1,47 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { getBooking } from "../../redux/booking/bookingActions";
+import React from "react";
 import { useParams } from "react-router-dom";
-import Loader from "../Loader/Loader";
+import { Loader2 } from "lucide-react";
 import DetailedBooking from "./DetailedBooking";
+import { useBooking } from "../../hooks/useBookings";
 
-function DetailedView({ bookingsData, getBooking }) {
-	const { id } = useParams();
+function DetailedView() {
+  const { id } = useParams();
+  const { data: booking, isLoading } = useBooking(id);
 
-	useEffect(() => {
-		async function fetchBooking() {
-			try {
-				await getBooking(id);
-			} catch (err) {
-				console.log(err);
-			}
-		}
-		fetchBooking();
-	}, []);
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-gray-500 gap-2">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <p className="text-xs">Loading booking invoice details...</p>
+      </div>
+    );
+  }
 
-	return (
-		<div>
-			{bookingsData.loading ? (
-				<div className="h-96">
-					<Loader />
-				</div>
-			) : (
-				<DetailedBooking bookingData={bookingsData.booking} />
-			)}
-		</div>
-	);
+  return <DetailedBooking bookingData={booking} />;
 }
 
-const mapStateToProps = (state) => {
-	return {
-		bookingsData: state.bookings,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		getBooking: (id) => dispatch(getBooking(id)),
-	};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DetailedView);
+export default DetailedView;

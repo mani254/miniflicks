@@ -1,39 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { connect } from "react-redux";
-import { getCakes } from "../../redux/cake/cakeActions";
-import { useSearchParams } from "react-router-dom";
+import React from "react";
+import { Outlet, useSearchParams } from "react-router-dom";
+import { useCakes } from "../../hooks/useCatalog";
 
-function CakesWrapper({ getCakes, cakeData }) {
-	const [noOfDocuments, setNoOfDocuments] = useState(0);
+function CakesWrapper() {
 	const [params, setParams] = useSearchParams();
+	const queryParams = Object.fromEntries(params);
+	const { data, isLoading, refetch } = useCakes(queryParams);
 
-	useEffect(() => {
-		(async () => {
-			try {
-				const data = await getCakes(params);
-				setNoOfDocuments(data.totalDocuments);
-			} catch (err) {
-				console.log(err);
-			}
-		})();
-	}, [params]);
+	const cakeData = {
+		cakes: data?.cakes || [],
+		loading: isLoading,
+	};
+	const noOfDocuments = data?.totalDocuments || 0;
 
 	return (
-		<>
-			<Outlet context={{ cakeData, noOfDocuments, params, setParams }} />
-		</>
+		<Outlet context={{ cakeData, noOfDocuments, params, setParams, refetch }} />
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		cakeData: state.cakes, // Update state to reference cakes
-	};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-	getCakes: (params) => dispatch(getCakes(params)), // Update to use getCakes action
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CakesWrapper);
+export default CakesWrapper;

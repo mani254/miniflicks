@@ -1,64 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useMemo } from "react";
+import { useBookingStore } from "../../store/bookingStore";
 
-function SelectedDetails({ customerBooking, addonData }) {
-	const [selectedItems, setSelectedItems] = useState([]);
+function SelectedDetails() {
+	const { addons = [], gifts = [], cakes = [], otherInfo } = useBookingStore();
 
-	useEffect(() => {
-		const { addons, gifts, cakes } = customerBooking;
+	const selectedItems = useMemo(() => {
+		const items = [];
 
-		// Combine and map addons and gifts
-		const selectedAddons = addons
+		addons
 			.filter((addon) => addon.count > 0)
-			.map((addon) => ({
-				title: addon.name,
-				count: addon.count,
-				amount: addon.price,
-			}));
+			.forEach((addon) => {
+				let amount = addon.price || 0;
+				if (addon.name === "LED Name" && otherInfo?.ledName?.length > 8) {
+					amount += (otherInfo.ledName.length - 8) * 30;
+				}
+				items.push({
+					title: addon.name,
+					count: addon.count,
+					amount,
+				});
+			});
 
-		const selectedGifts = gifts
+		gifts
 			.filter((gift) => gift.count > 0)
-			.map((gift) => ({
-				title: gift.name,
-				count: gift.count,
-				amount: gift.price,
-			}));
+			.forEach((gift) => {
+				items.push({
+					title: gift.name,
+					count: gift.count,
+					amount: gift.price || 0,
+				});
+			});
 
-		const selectedCakes = cakes
-			.filter((cake) => cake.count > 0)
-			.map((gift) => ({
-				title: gift.name,
-				count: gift.count,
-				amount: gift.price,
-			}));
+		cakes
+			.filter((cake) => (cake.count > 0 || cake.free))
+			.forEach((cake) => {
+				let amount = cake.price || 0;
+				if (cake.free) {
+					amount = cake.special ? (cake.specialPrice || 0) : 0;
+				}
+				items.push({
+					title: cake.name,
+					count: cake.count || 1,
+					amount,
+				});
+			});
 
-		// Combine both lists
-		setSelectedItems([...selectedAddons, ...selectedGifts, ...selectedCakes]);
-	}, [customerBooking.addons, customerBooking.gifts, customerBooking.cakes]);
-
-	// console.log(selectedItems);
-
-	useEffect(() => {
-		if (!addonData) return;
-
-		// Find LED Name addon
-		const ledData = addonData.find((item) => item.name === "LED Name");
-		if (!ledData) return;
-
-		let ledName = customerBooking.otherInfo.ledName;
-
-		// Update selected items based on LED name length
-		setSelectedItems((prev) =>
-			prev.map((item) =>
-				item.title === "LED Name"
-					? {
-							...item,
-							amount: ledName.length > 8 ? ledData.price + (ledName.length - 8) * 30 : ledData.price,
-					  }
-					: item
-			)
-		);
-	}, [customerBooking.otherInfo.ledName, customerBooking.addons, addonData]);
+		return items;
+	}, [addons, gifts, cakes, otherInfo]);
 
 	if (selectedItems.length === 0) {
 		return null;
@@ -83,9 +71,4 @@ function SelectedDetails({ customerBooking, addonData }) {
 	);
 }
 
-const mapStateToProps = (state) => ({
-	customerBooking: state.customerBooking,
-	addonData: state.addons.addons,
-});
-
-export default connect(mapStateToProps, null)(SelectedDetails);
+export default SelectedDetails;

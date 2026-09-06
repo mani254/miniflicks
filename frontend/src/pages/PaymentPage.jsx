@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { connect, useDispatch } from "react-redux";
-import { createBooking, updateBooking } from "../redux/booking/bookingActions";
 import { useNavigate } from "react-router-dom";
-import { setBookingAdvance, setBookingNote, setBookingFullPayment } from "../redux/customerBooking/customerBookingActions";
+import { useBookingStore } from "../store/bookingStore";
+import { useCreateAdminBooking, useUpdateBooking } from "../hooks/useBookings";
 import Loader from "../components/Loader/Loader";
 
-function paymentPage({ customerBooking, createBooking, updateBooking }) {
+function PaymentPage() {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const bookingState = useBookingStore();
+	const {
+		advance: storeAdvance,
+		note: storeNote,
+		total: storeTotal,
+		fullPayment: storeFullPayment,
+		isEditing,
+		setBookingAdvance,
+		setBookingNote,
+		setBookingFullPayment,
+	} = bookingState;
+
+	const createAdminBookingMutation = useCreateAdminBooking();
+	const updateBookingMutation = useUpdateBooking();
 
 	const [details, setDetails] = useState({
 		advance: 0,
@@ -15,82 +27,134 @@ function paymentPage({ customerBooking, createBooking, updateBooking }) {
 		total: 0,
 		fullPayment: false,
 	});
-	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		if (!customerBooking) return;
-		setDetails({ advance: customerBooking.advance, note: customerBooking.note, total: customerBooking.total, fullPayment: customerBooking.fullPayment });
-	}, [customerBooking]);
+		setDetails({
+			advance: storeAdvance || 0,
+			note: storeNote || "",
+			total: storeTotal || 0,
+			fullPayment: Boolean(storeFullPayment),
+		});
+	}, [storeAdvance, storeNote, storeTotal, storeFullPayment]);
 
 	function handleChange(e) {
 		const { name, type, value, checked } = e.target;
-
 		const newValue = type === "checkbox" ? checked : value;
 
 		setDetails((prev) => ({ ...prev, [name]: newValue }));
 
 		if (name === "advance") {
-			dispatch(setBookingAdvance(newValue));
+			setBookingAdvance(Number(newValue) || 0);
 		}
 		if (name === "note") {
-			dispatch(setBookingNote(newValue));
+			setBookingNote(newValue);
 		}
-		if (name == "fullPayment") {
-			dispatch(setBookingFullPayment(newValue));
+		if (name === "fullPayment") {
+			setBookingFullPayment(newValue);
 		}
 	}
 
-	// console.log(details)
-
 	async function handleBooking() {
 		try {
-			setLoading(true);
-			const res = await createBooking(customerBooking);
+			const payload = {
+				city: bookingState.city,
+				location: bookingState.location,
+				screen: bookingState.screen,
+				date: bookingState.date,
+				slot: bookingState.slot,
+				package: {
+					name: typeof bookingState.package === "string" ? bookingState.package : (bookingState.package?.name || ""),
+				},
+				occasion: {
+					_id: bookingState.occasion?._id,
+					celebrantName: bookingState.occasion?.celebrantName || "",
+				},
+				addons: (bookingState.addons || []).map((a) => ({ _id: a._id, count: a.count })),
+				gifts: (bookingState.gifts || []).map((g) => ({ _id: g._id, count: g.count })),
+				cakes: (bookingState.cakes || []).map((c) => ({ _id: c._id, free: Boolean(c.free) })),
+				customer: bookingState.customer || { name: "", email: "", number: "" },
+				otherInfo: {
+					numberOfPeople: bookingState.otherInfo?.numberOfPeople || 0,
+					numberOfExtraPeople: bookingState.otherInfo?.numberOfExtraPeople || 0,
+					nameOnCake: bookingState.otherInfo?.nameOnCake || "",
+					ledName: bookingState.otherInfo?.ledName || "",
+					ledNumber: bookingState.otherInfo?.ledNumber || "",
+					couponCode: bookingState.otherInfo?.couponCode || null,
+				},
+				advance: Number(details.advance) || 0,
+				note: details.note || "",
+			};
 
+			const res = await createAdminBookingMutation.mutateAsync(payload);
 			if (res) {
-				console.log(res);
-				setLoading(false);
 				navigate("/bookingConfirmation", { replace: true });
 			}
 		} catch (err) {
-			setLoading(false);
-			console.log(err);
+			console.error("Admin booking creation error:", err);
 		}
 	}
 
 	async function handleUpdateBooking() {
 		try {
-			setLoading(true);
-			const res = await updateBooking(customerBooking);
+			const payload = {
+				id: bookingState.id,
+				city: bookingState.city,
+				location: bookingState.location,
+				screen: bookingState.screen,
+				date: bookingState.date,
+				slot: bookingState.slot,
+				package: {
+					name: typeof bookingState.package === "string" ? bookingState.package : (bookingState.package?.name || ""),
+				},
+				occasion: {
+					_id: bookingState.occasion?._id,
+					celebrantName: bookingState.occasion?.celebrantName || "",
+				},
+				addons: (bookingState.addons || []).map((a) => ({ _id: a._id, count: a.count })),
+				gifts: (bookingState.gifts || []).map((g) => ({ _id: g._id, count: g.count })),
+				cakes: (bookingState.cakes || []).map((c) => ({ _id: c._id, free: Boolean(c.free) })),
+				customer: bookingState.customer,
+				otherInfo: {
+					numberOfPeople: bookingState.otherInfo?.numberOfPeople || 0,
+					numberOfExtraPeople: bookingState.otherInfo?.numberOfExtraPeople || 0,
+					nameOnCake: bookingState.otherInfo?.nameOnCake || "",
+					ledName: bookingState.otherInfo?.ledName || "",
+					ledNumber: bookingState.otherInfo?.ledNumber || "",
+					couponCode: bookingState.otherInfo?.couponCode || null,
+				},
+				advance: Number(details.advance) || 0,
+				note: details.note || "",
+				fullPayment: Boolean(details.fullPayment),
+			};
 
+			const res = await updateBookingMutation.mutateAsync(payload);
 			if (res) {
-				console.log(res);
-				setLoading(false);
 				navigate("/bookingConfirmation", { replace: true });
 			}
 		} catch (err) {
-			setLoading(false);
-			console.log(err);
+			console.error("Booking update error:", err);
 		}
 	}
 
 	function handleSubmit(e) {
 		e.preventDefault();
-		if (!customerBooking.isEditing) {
+		if (!isEditing) {
 			handleBooking();
 		} else {
 			handleUpdateBooking();
 		}
 	}
 
+	const isLoading = createAdminBookingMutation.isPending || updateBookingMutation.isPending;
+
 	return (
 		<div style={{ height: "calc(100vh - 60px)" }} className="w-full flex flex-col items-center justify-center">
-			{loading && (
+			{isLoading && (
 				<div className="fixed inset-0 bg-black bg-opacity-30 z-50">
 					<Loader />
 				</div>
 			)}
-			{customerBooking && (
+			{bookingState && (
 				<form className="w-full max-w-[400px] bg-white p-5 rounded-lg shadow-md customer-details" onSubmit={handleSubmit}>
 					<div className="input-wrapper">
 						<label htmlFor="advance">Advance</label>
@@ -102,7 +166,7 @@ function paymentPage({ customerBooking, createBooking, updateBooking }) {
 						<textarea id="note" name="note" placeholder="Add any special notes" value={details.note} onChange={handleChange} />
 					</div>
 
-					{customerBooking.isEditing && (
+					{isEditing && (
 						<div className="input-wrapper flex mt-6">
 							<input type="checkbox" id="fullPayment" name="fullPayment" checked={details.fullPayment} onChange={handleChange} />
 							<label className="ml-2 -mt-1" htmlFor="fullPayment">
@@ -119,8 +183,8 @@ function paymentPage({ customerBooking, createBooking, updateBooking }) {
 					</div>
 
 					<div className="book-now-btn w-full">
-						<button className="btn-3 text-center w-full items-center gap-2 m-auto" type="submit">
-							{customerBooking.isEditing ? "Update Booking" : "Book Slot"}
+						<button className="btn-3 text-center w-full items-center gap-2 m-auto" type="submit" disabled={isLoading}>
+							{isEditing ? "Update Booking" : "Book Slot"}
 						</button>
 					</div>
 				</form>
@@ -129,17 +193,4 @@ function paymentPage({ customerBooking, createBooking, updateBooking }) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		customerBooking: state.customerBooking,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		createBooking: (booking) => dispatch(createBooking(booking)),
-		updateBooking: (booking) => dispatch(updateBooking(booking)),
-	};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(paymentPage);
+export default PaymentPage;

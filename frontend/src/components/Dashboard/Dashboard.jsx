@@ -1,301 +1,488 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import PiChart from "./PIChart";
-import Loader from "../Loader/Loader";
-import { getBookings } from "../../redux/booking/bookingActions";
-import { FaEdit } from "react-icons/fa";
-import axios from "axios";
-import { showNotification } from "../../redux/notification/notificationActions";
-import DashboardFilters from "./DashboardFilters";
-import { getLocation } from "../../redux/location/locationActions";
+import React, { useState, useMemo } from "react";
+import DonutChart from "./DonutChart";
+import TrendChart from "./TrendChart";
+import DashboardFilters, { getDatePresetRange } from "./DashboardFilters";
 import { useNavigate } from "react-router-dom";
 import { convert12Hours } from "../../utils";
+import { useAuth } from "../../hooks/useAuth";
+import { useBookings, useDashboardInfo, useGraphData } from "../../hooks/useBookings";
+import { useLocation } from "../../hooks/useCatalog";
+import { getImageUrl } from "../../lib/imageUrl";
+import {
+	IndianRupee,
+	CalendarCheck,
+	CalendarDays,
+	Tv,
+	MapPin,
+	Building2,
+	Eye,
+	Clock,
+	ShieldCheck,
+	Sparkles,
+	TrendingUp,
+} from "lucide-react";
 
-function Dashboard({ bookingData, getBookings, showNotification, auth, getLocation, locationData }) {
-	const [locations, setLocations] = useState([]);
-
-	const [numsInfo, setNumsInfo] = useState([
-		{ count: 0, title: "Total Income" },
-		{ count: 0, title: "Current Amount" },
-		{ count: 0, title: "Pending Amount" },
-		{ count: 0, title: "Total Bookings" },
-		{ count: 0, title: "Today Bookings" },
-		{ count: 0, title: "Total Cities" },
-		{ count: 0, title: "Total Locations" },
-		{ count: 0, title: "Total Screens" },
-	]);
-
-	const [filters, setFilters] = useState({
-		fromDate: "",
-		toDate: "",
-		location: "",
-		status: "booked",
-	});
-
-	const [graphLoading, setGraphLoading] = useState(false);
-	const [countLoading, setCountLoading] = useState(false);
-
+function Dashboard() {
+	const { admin } = useAuth();
 	const navigate = useNavigate();
 
-	// useeffect to fetch the upcomming bookings when filter location changed
-	useEffect(() => {
-		const fromDate = new Date();
-		fromDate.setHours(0, 0, 0);
-		const toDate = new Date();
-		toDate.setDate(fromDate.getDate() + 2);
-		(async () => {
-			try {
-				await getBookings({ fromDate, toDate, location: filters.location });
-			} catch (err) {
-				console.log(err);
-			}
-		})();
-	}, [filters.location]);
+	// Default active preset is "thisMonth"
+	const [activePreset, setActivePreset] = useState("thisMonth");
 
-	// useEffect to fetch the dashboard info when the filters changed
-	useEffect(() => {
-		async function fetchDashboardCount() {
-			setCountLoading(true);
-			try {
-				const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/getDashboardInfo`, { params: filters });
+	// Initialize filters with "thisMonth" date range
+	const [filters, setFilters] = useState(() => {
+		const range = getDatePresetRange("thisMonth");
+		return {
+			fromDate: range.fromDate,
+			toDate: range.toDate,
+			location: "",
+			status: "booked",
+		};
+	});
 
-				const newInfo = [
-					{ count: response.data.totalIncome, title: "Total Income" },
-					{ count: parseFloat((response.data.totalIncome - response.data.pendingAmount).toFixed(2)), title: "Current Amount" },
-					{ count: response.data.pendingAmount, title: "Pending Amount" },
-					{ count: response.data.totalBookings, title: "Total Bookings" },
-					{ count: response.data.todayBookings, title: "Today Bookings" },
-					{ count: response.data.totalScreens, title: "Total Screens" },
-				];
+	// Resolved location ID for Location Admin
+	const locationId = admin?.locationId || admin?.location;
+	const { data: singleLocation, isLoading: locationLoading } = useLocation(locationId);
 
-				if (response.data.totalCities && response.data.totalLocations) {
-					newInfo.push({ count: response.data.totalCities, title: "Total Cities" });
-					newInfo.push({ count: response.data.totalLocations, title: "Total Locations" });
-				}
-
-				setNumsInfo(newInfo);
-
-				setCountLoading(false);
-			} catch (error) {
-				let errMessage = error.response ? error.response.data.error : "Something went wrong";
-				showNotification(errMessage);
-				setCountLoading(false);
-			}
+	// Scoped params for dashboard metrics and graph
+	const metricsParams = useMemo(() => {
+		const params = { ...filters };
+		if (!admin?.superAdmin && locationId) {
+			params.location = locationId;
 		}
-		fetchDashboardCount();
-	}, [filters]);
+		return params;
+	}, [filters, admin, locationId]);
 
-	// useefeect to fetch the graphdata when the date changed only for super admin
-	useEffect(() => {
-		if (!auth.admin?.superAdmin) return;
-		async function fetchGraphData() {
-			setGraphLoading(true);
-			const colors = ["#9061F9", "#3F83F8", "#F05252", "#6875F5", "#C27803", "#E74694", "#0E9F6E"];
-
-			try {
-				const response = await axios.get(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/getGraphData`, { params: filters });
-				let coloredLocations = response.data.map((location, index) => ({
-					...location,
-					color: index < colors.length ? colors[index] : getRandomColor(),
-				}));
-				setLocations(coloredLocations);
-				setGraphLoading(false);
-			} catch (error) {
-				let errMessage = error.response ? error.response.data.error : "Something went wrong";
-				showNotification(errMessage);
-				setGraphLoading(false);
-			}
+	const graphParams = useMemo(() => {
+		const params = {};
+		if (filters.fromDate) params.fromDate = filters.fromDate;
+		if (filters.toDate) params.toDate = filters.toDate;
+		if (admin?.superAdmin) {
+			if (filters.location) params.location = filters.location;
+		} else if (locationId) {
+			params.location = locationId;
 		}
-		fetchGraphData();
-	}, [filters.fromDate, filters.toDate, auth.admin]);
+		return params;
+	}, [filters.fromDate, filters.toDate, filters.location, admin, locationId]);
 
-	// useEffect to fetch the single lcoation for
-	useEffect(() => {
-		if (auth.admin?.superAdmin) return;
-		async function fetchSingleLocation() {
-			try {
-				await getLocation(auth.admin.location);
-			} catch (err) {
-				console.log(err);
-			}
-		}
-		fetchSingleLocation();
-	}, [auth.admin?.location]);
+	// Upcoming bookings params (Next 3 days)
+	const upcomingParams = useMemo(() => {
+		const now = new Date();
+		const fromDate = new Date(now);
+		fromDate.setHours(0, 0, 0, 0);
 
-	const getRandomColor = () => {
-		const letters = "0123456789ABCDEF";
-		let color = "#";
-		for (let i = 0; i < 6; i++) {
-			color += letters[Math.floor(Math.random() * 16)];
+		const toDate = new Date(now);
+		toDate.setDate(fromDate.getDate() + 3);
+		toDate.setHours(23, 59, 59, 999);
+
+		return {
+			fromDate: fromDate.toISOString(),
+			toDate: toDate.toISOString(),
+			location: admin?.superAdmin ? filters.location || undefined : locationId,
+			limit: 15,
+		};
+	}, [filters.location, admin, locationId]);
+
+	// React Query hooks
+	const { data: dashboardInfo, isLoading: countLoading } = useDashboardInfo(metricsParams);
+	const { data: graphResponse, isLoading: graphLoading } = useGraphData(graphParams);
+	const { data: upcomingData, isLoading: bookingsLoading } = useBookings(upcomingParams);
+
+	const upcomingBookings = upcomingData?.bookings || [];
+
+	// Parse graph distribution and timeline data
+	const distributionData = graphResponse?.distribution || [];
+	const timelineData = graphResponse?.timeline || [];
+	const graphType = graphResponse?.type || (admin?.superAdmin && !filters.location ? "location" : "screen");
+
+	// KPI Cards configuration
+	const kpiCards = useMemo(() => {
+		const info = dashboardInfo || {};
+		const totalIncome = Number(info.totalIncome || 0);
+		const pendingAmount = Number(info.pendingAmount || 0);
+		const advanceAmount = Number(info.advanceAmount || (totalIncome - pendingAmount));
+		const currentAmount = Number(info.currentAmount || (totalIncome - pendingAmount));
+
+		const cards = [
+			{
+				title: "Total Revenue",
+				value: `₹${totalIncome.toLocaleString("en-IN")}`,
+				subtitle: activePreset === "allTime" ? "All time" : "In selected period",
+				icon: IndianRupee,
+				iconColor: "text-emerald-600 bg-emerald-50",
+				accentColor: "border-l-emerald-500",
+			},
+			{
+				title: "Advance Collected",
+				value: `₹${advanceAmount.toLocaleString("en-IN")}`,
+				subtitle: "Realized cash",
+				icon: TrendingUp,
+				iconColor: "text-blue-600 bg-blue-50",
+				accentColor: "border-l-blue-500",
+			},
+			{
+				title: "Pending Balance",
+				value: `₹${pendingAmount.toLocaleString("en-IN")}`,
+				subtitle: "To collect at venue",
+				icon: Clock,
+				iconColor: "text-amber-600 bg-amber-50",
+				accentColor: "border-l-amber-500",
+			},
+			{
+				title: "Total Bookings",
+				value: Number(info.totalBookings || 0).toLocaleString("en-IN"),
+				subtitle: activePreset === "allTime" ? "All bookings" : "In selected period",
+				icon: CalendarCheck,
+				iconColor: "text-indigo-600 bg-indigo-50",
+				accentColor: "border-l-indigo-500",
+			},
+			{
+				title: "Today's Bookings",
+				value: Number(info.todayBookings || 0).toLocaleString("en-IN"),
+				subtitle: "Scheduled for today",
+				icon: CalendarDays,
+				iconColor: "text-rose-600 bg-rose-50",
+				accentColor: "border-l-rose-500",
+			},
+			{
+				title: "Active Screens",
+				value: Number(info.totalScreens || 0).toLocaleString("en-IN"),
+				subtitle: admin?.superAdmin && !filters.location ? "Across all locations" : "In this location",
+				icon: Tv,
+				iconColor: "text-cyan-600 bg-cyan-50",
+				accentColor: "border-l-cyan-500",
+			},
+		];
+
+		if (admin?.superAdmin && !filters.location && (info.totalLocations > 0 || info.totalCities > 0)) {
+			cards.push({
+				title: "Active Locations",
+				value: Number(info.totalLocations || 0).toLocaleString("en-IN"),
+				subtitle: "Operating branches",
+				icon: MapPin,
+				iconColor: "text-violet-600 bg-violet-50",
+				accentColor: "border-l-violet-500",
+			});
+			cards.push({
+				title: "Active Cities",
+				value: Number(info.totalCities || 0).toLocaleString("en-IN"),
+				subtitle: "Operating cities",
+				icon: Building2,
+				iconColor: "text-orange-600 bg-orange-50",
+				accentColor: "border-l-orange-500",
+			});
 		}
-		return color;
-	};
+
+		return cards;
+	}, [dashboardInfo, activePreset, admin, filters.location]);
 
 	return (
-		<div className="px-2">
-			<div className="flex w-full items-center justify-between rounded-md border-b border-gray-400">
-				<h3>Dashboard</h3>
-				<DashboardFilters filters={filters} setFilters={setFilters} />
-			</div>
-			<div className="mt-4 flex space-x-3">
-				{auth.admin?.superAdmin ? (
-					graphLoading ? (
-						<div className="min-w-60 border-gray-200 bg-white shadow-sm">
-							<Loader />
-						</div>
-					) : (
-						<div className="graph w-[350px] flex flex-col items-center rounded-2xl border-2 border-gray-200 bg-white p-5 pr-4 shadow-sm">
-							<PiChart locationInfo={locations} />
-							<div>
-								<h5 className="text-center mb-2">Locations & Bookings</h5>
-								<ul className="flex flex-wrap gap-x-3 gap-y-1 justify-between">
-									{locations.map((location, index) => {
-										return (
-											<li key={index} className="flex items-center">
-												<span className="mr-1 block h-3 w-3 rounded-full" style={{ background: location.color }}></span>
-												{location.name}
-												<span className="inline-block text-xs">
-													{location.location}
-													{" ("}
-													{location.percentage}%{") "}
-												</span>
-											</li>
-										);
-									})}
-								</ul>
+		<div className="p-4 md:p-6 space-y-6 max-w-[1600px] mx-auto">
+			{/* Top Header & Role Banner */}
+			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-gray-200">
+				<div>
+					<div className="flex items-center gap-2.5">
+						<h1 className="text-xl font-bold font-sans text-gray-900 tracking-tight">
+							{admin?.superAdmin ? "Super Admin Console" : (singleLocation?.name || "Branch Dashboard")}
+						</h1>
+						<span
+							className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+								admin?.superAdmin
+									? "bg-purple-100 text-purple-800"
+									: "bg-blue-100 text-blue-800"
+							}`}
+						>
+							{admin?.superAdmin ? (
+								<>
+									<ShieldCheck className="w-3.5 h-3.5 mr-1" />
+									Super Admin
+								</>
+							) : (
+								<>
+									<MapPin className="w-3.5 h-3.5 mr-1" />
+									Branch Admin
+								</>
+							)}
+						</span>
+					</div>
+					<p className="text-xs text-gray-500 mt-0.5">
+						{admin?.superAdmin
+							? "Real-time enterprise overview, revenue analytics, and branch operations."
+							: `Managing private screening slots and operations for ${singleLocation?.name || "this location"}.`}
+					</p>
+				</div>
+
+				{/* Location Admin Branch Snapshot Badge */}
+				{!admin?.superAdmin && singleLocation && (
+					<div className="flex items-center gap-3 bg-white border border-gray-200 shadow-sm rounded-xl px-3 py-2">
+						{singleLocation.image ? (
+							<img
+								src={getImageUrl(singleLocation.image)}
+								alt={singleLocation.name}
+								className="w-10 h-10 rounded-lg object-cover border border-gray-100"
+							/>
+						) : (
+							<div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+								{singleLocation.name?.slice(0, 2).toUpperCase()}
 							</div>
-						</div>
-					)
-				) : (
-					<div className="w-[350px] flex flex-col items-center rounded-2xl border-2 border-gray-200 bg-white p-5 pr-4 shadow-sm relative overflow-hidden">
-						<img className="absolute inset-0 w-full h-full object-cover object-center" src={locationData.location.image} alt={locationData.location?.name} />
-						<div className="absolute inset-0 w-ful h-full bg-gray-900 bg-opacity-30 flex items-end justify-center z-10">
-							<h3 className="text-white pb-4">{locationData.location?.name}</h3>
+						)}
+						<div className="text-xs">
+							<p className="font-bold text-gray-800">{singleLocation.name}</p>
+							<p className="text-gray-500 text-[11px] truncate max-w-[200px]">{singleLocation.address}</p>
 						</div>
 					</div>
 				)}
-
-				<div className="grid flex-1 grid-cols-3 gap-3">
-					{numsInfo.map((item, index) => (
-						<IncomeDisplay title={item.title} value={item.count} key={index} countLoading={countLoading} index={index} />
-					))}
-				</div>
 			</div>
 
-			<div className="flex justify-between pb-2 border-b border-gray-400 pt-4">
-				<h3>Up Comming Bookings</h3>
-				{/* <BookingsFilter params={params} setParams={setParams} /> */}
+			{/* Advanced Interactive Filters */}
+			<div className="bg-white rounded-2xl p-3 border border-gray-200 shadow-sm">
+				<DashboardFilters
+					filters={filters}
+					setFilters={setFilters}
+					activePreset={activePreset}
+					setActivePreset={setActivePreset}
+				/>
 			</div>
-			{bookingData.loading ? (
-				<div className="h-96 relative">
-					<Loader />
-				</div>
-			) : (
-				<div className="relative">
-					<table className="main-table">
-						<thead>
-							<tr>
-								<th>S.NO</th>
-								<th>Name</th>
-								<th>Phone no</th>
-								<th>Screen</th>
-								<th>Location</th>
-								<th>Date</th>
-								<th>Slot</th>
-								<th>Total</th>
-								<th>Advance</th>
-								<th>Remaining</th>
-								<th>Status</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{bookingData.bookings.length > 0 ? (
-								bookingData.bookings.map((booking, index) => (
-									<tr key={booking._id} className="cursor-pointer hover:bg-slate-200" onClick={() => navigate(`/admin/bookings/view/${booking._id}`)}>
-										<td>{index + 1}</td>
-										<td>{booking.customer?.name}</td>
-										<td>{booking.customer?.number}</td>
-										<td className={booking.screen?.name ? "" : "text-gray-500"}>{booking.screen?.name || "undefined"}</td>
-										<td className={booking.location?.name ? "" : "text-gray-500"}>{booking.location?.name || "undefined"}</td>
 
-										<td>{new Date(booking.date).toLocaleDateString("en-GB").replace(/\//g, "-")}</td>
-
-										<td>{`${convert12Hours(booking.slot.from)}-${convert12Hours(booking.slot.to)}`}</td>
-										<td>{booking.totalPrice}</td>
-										<td>{booking.advancePrice}</td>
-										<td>{booking.remainingAmount}</td>
-										<td>{booking.status}</td>
-										<td>
-											<div className="flex">
-												<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/admin/locations/edit/${booking.location._id}`)}>
-													<FaEdit className="fill-blue-500" />
-												</span>
-											</div>
-										</td>
-									</tr>
-								))
+			{/* KPI Summary Cards Grid: Balanced 4x2 for SuperAdmin (8 cards) or 3x2 for Location Admin (6 cards) */}
+			<div
+				className={`grid grid-cols-2 sm:grid-cols-2 ${
+					kpiCards.length === 8 ? "lg:grid-cols-4" : "lg:grid-cols-3"
+				} gap-4`}
+			>
+				{kpiCards.map((card, idx) => {
+					const Icon = card.icon;
+					return (
+						<div
+							key={idx}
+							className={`bg-white rounded-2xl p-4 border border-gray-200 border-l-4 ${card.accentColor} shadow-sm hover:shadow transition-all flex flex-col justify-between`}
+						>
+							<div className="flex items-center justify-between mb-2">
+								<span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+									{card.title}
+								</span>
+								<span className={`p-1.5 rounded-lg ${card.iconColor}`}>
+									<Icon className="w-4 h-4" />
+								</span>
+							</div>
+							{countLoading ? (
+								<div className="h-7 bg-gray-200 animate-pulse rounded my-1 w-24"></div>
 							) : (
-								<tr>
-									<td colSpan={12} className="text-center">
-										No bookings available
-									</td>
-								</tr>
+								<div className="text-xl font-extrabold text-gray-900 tracking-tight">
+									{card.value}
+								</div>
 							)}
-						</tbody>
-					</table>
+							<p className="text-[11px] text-gray-400 mt-1 truncate">{card.subtitle}</p>
+						</div>
+					);
+				})}
+			</div>
+
+			{/* Analytics Section: Distribution Donut & Revenue Trajectory Trend */}
+			<div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+				{/* Distribution Donut Card */}
+				<div className="lg:col-span-4 bg-white rounded-2xl p-5 border border-gray-200 shadow-sm flex flex-col justify-between">
+					<div>
+						<div className="flex items-center justify-between pb-3 mb-2 border-b border-gray-100">
+							<div>
+								<h3 className="font-sans text-sm font-bold text-gray-900">
+									{graphType === "location" ? "Location Breakdown" : "Screen Breakdown"}
+								</h3>
+								<p className="font-sans text-[11px] text-gray-400">
+									{graphType === "location"
+										? "Revenue share by branch"
+										: `Screen share for ${singleLocation?.name || "selected branch"}`}
+								</p>
+							</div>
+							<span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full font-sans">
+								{distributionData.length} {graphType === "location" ? "branches" : "screens"}
+							</span>
+						</div>
+
+						{graphLoading ? (
+							<div className="h-64 flex items-center justify-center">
+								<div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+							</div>
+						) : (
+							<DonutChart
+								data={distributionData}
+								title={graphType === "location" ? "Locations" : "Screens"}
+								centerLabel="Revenue"
+								centerValue={`₹${Number(dashboardInfo?.totalIncome || 0).toLocaleString("en-IN")}`}
+								emptyMessage={`No ${graphType} revenue for this period`}
+							/>
+						)}
+					</div>
 				</div>
-			)}
+
+				{/* Revenue & Bookings Trajectory Card */}
+				<div className="lg:col-span-8 bg-white rounded-2xl p-5 border border-gray-200 shadow-sm flex flex-col justify-between">
+					<div className="pb-3 mb-2 border-b border-gray-100 flex items-center justify-between">
+						<div>
+							<h3 className="font-sans text-sm font-bold text-gray-900">Revenue & Bookings Trajectory</h3>
+							<p className="font-sans text-[11px] text-gray-400">
+								Daily income velocity and booking volume across the selected filter period
+							</p>
+						</div>
+						<span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full flex items-center gap-1 font-sans">
+							<Sparkles className="w-3 h-3" />
+							Live Trend
+						</span>
+					</div>
+
+					{graphLoading ? (
+						<div className="h-64 flex items-center justify-center">
+							<div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+						</div>
+					) : (
+						<TrendChart timeline={timelineData} title="Period Revenue" />
+					)}
+				</div>
+			</div>
+
+			{/* Upcoming Bookings Table Section */}
+			<div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+				<div className="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+					<div>
+						<h3 className="font-sans text-base font-bold text-gray-900">Upcoming Bookings</h3>
+						<p className="font-sans text-xs text-gray-500">
+							Arrivals scheduled for the next 3 days
+							{!admin?.superAdmin && singleLocation ? ` at ${singleLocation.name}` : ""}
+						</p>
+					</div>
+					<button
+						type="button"
+						onClick={() => navigate("/admin/bookings")}
+						className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1"
+					>
+						View All Bookings &rarr;
+					</button>
+				</div>
+
+				{bookingsLoading ? (
+					<div className="p-8 text-center">
+						<div className="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-2"></div>
+						<p className="text-xs text-gray-400">Loading scheduled bookings...</p>
+					</div>
+				) : upcomingBookings.length === 0 ? (
+					<div className="p-10 text-center text-gray-400">
+						<CalendarDays className="w-10 h-10 mx-auto mb-2 text-gray-300" />
+						<p className="text-sm font-medium">No bookings scheduled for the next 3 days</p>
+						<p className="text-xs text-gray-400 mt-0.5">Any new bookings will appear here automatically.</p>
+					</div>
+				) : (
+					<div className="overflow-x-auto">
+						<table className="w-full text-left text-xs text-gray-600">
+							<thead className="bg-gray-50/80 text-gray-500 font-semibold border-b border-gray-100 uppercase text-[10px] tracking-wider">
+								<tr>
+									<th className="py-3 px-4">#</th>
+									<th className="py-3 px-4">Customer</th>
+									<th className="py-3 px-4">Screen & Location</th>
+									<th className="py-3 px-4">Date & Slot</th>
+									<th className="py-3 px-4 text-right">Total Price</th>
+									<th className="py-3 px-4 text-right">Advance Paid</th>
+									<th className="py-3 px-4 text-right">Balance Due</th>
+									<th className="py-3 px-4 text-center">Status</th>
+									<th className="py-3 px-4 text-center">Action</th>
+								</tr>
+							</thead>
+							<tbody className="divide-y divide-gray-100">
+								{upcomingBookings.map((booking, idx) => {
+									const isToday =
+										new Date(booking.date).toDateString() === new Date().toDateString();
+
+									return (
+										<tr
+											key={booking._id}
+											onClick={() => navigate(`/admin/bookings/view/${booking._id}`)}
+											className="hover:bg-blue-50/40 cursor-pointer transition-colors"
+										>
+											<td className="py-3 px-4 font-medium text-gray-400">{idx + 1}</td>
+											<td className="py-3 px-4">
+												<div className="font-semibold text-gray-800">
+													{booking.customer?.name || "Walk-in Guest"}
+												</div>
+												<div className="text-[11px] text-gray-400">
+													{booking.customer?.number || "-"}
+												</div>
+											</td>
+											<td className="py-3 px-4">
+												<div className="font-medium text-gray-800">
+													{booking.screen?.name || "Screen"}
+												</div>
+												<div className="text-[11px] text-gray-400">
+													{booking.location?.name || "-"}
+												</div>
+											</td>
+											<td className="py-3 px-4">
+												<div className="flex items-center gap-1.5">
+													<span
+														className={`font-semibold ${
+															isToday ? "text-rose-600 font-bold" : "text-gray-800"
+														}`}
+													>
+														{new Date(booking.date).toLocaleDateString("en-IN", {
+															month: "short",
+															day: "numeric",
+															year: "numeric",
+														})}
+													</span>
+													{isToday && (
+														<span className="bg-rose-100 text-rose-700 text-[10px] px-1.5 py-0.2 rounded font-bold">
+															TODAY
+														</span>
+													)}
+												</div>
+												<div className="text-[11px] text-gray-400">
+													{booking.slot?.from && booking.slot?.to
+														? `${convert12Hours(booking.slot.from)} - ${convert12Hours(
+																booking.slot.to
+														  )}`
+														: "-"}
+												</div>
+											</td>
+											<td className="py-3 px-4 text-right font-mono font-semibold text-gray-800">
+												₹{Number(booking.totalPrice || 0).toLocaleString("en-IN")}
+											</td>
+											<td className="py-3 px-4 text-right font-mono font-medium text-emerald-600">
+												₹{Number(booking.advancePrice || 0).toLocaleString("en-IN")}
+											</td>
+											<td className="py-3 px-4 text-right font-mono font-medium text-amber-600">
+												₹{Number(booking.remainingAmount || 0).toLocaleString("en-IN")}
+											</td>
+											<td className="py-3 px-4 text-center">
+												<span
+													className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+														booking.status === "booked"
+															? "bg-emerald-100 text-emerald-800"
+															: booking.status === "pending"
+															? "bg-amber-100 text-amber-800"
+															: "bg-red-100 text-red-800"
+													}`}
+												>
+													{booking.status || "booked"}
+												</span>
+											</td>
+											<td className="py-3 px-4 text-center" onClick={(e) => e.stopPropagation()}>
+												<button
+													type="button"
+													onClick={() => navigate(`/admin/bookings/view/${booking._id}`)}
+													className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+													title="View Booking Details"
+												>
+													<Eye className="w-4 h-4" />
+												</button>
+											</td>
+										</tr>
+									);
+								})}
+							</tbody>
+						</table>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }
 
-function IncomeDisplay({ title, value, countLoading, index }) {
-	const isAmount = (index) => {
-		if (index == 0 || index == 1 || index == 2) {
-			return true;
-		} else {
-			return false;
-		}
-	};
-
-	return (
-		<div className="w-full rounded-2xl border-2 border-gray-200 bg-white p-4 shadow-sm">
-			<p className="text-md mb-2 text-gray-500">{title}</p>
-			{countLoading ? (
-				<div role="status">
-					<svg aria-hidden="true" className="inline h-5 w-5 animate-spin fill-logo text-gray-200 dark:text-gray-500" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-						<path
-							d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-							fill="currentFill"
-						/>
-					</svg>
-					{/* <span className="sr-only">Loading...</span> */}
-				</div>
-			) : (
-				<>
-					{isAmount(index) && <span className="text-lg font-semibold text-gray-500">₹</span>} <span className="text-lg font-semibold text-gray-500">{value}</span>
-				</>
-			)}
-		</div>
-	);
-}
-
-const mapStateToProps = (state) => {
-	return {
-		bookingData: state.bookings,
-		auth: state.auth,
-		locationData: state.locations,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		getBookings: (params) => dispatch(getBookings(params)),
-		showNotification: (message) => dispatch(showNotification(message)),
-		getLocation: (id) => dispatch(getLocation(id)),
-	};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default Dashboard;

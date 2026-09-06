@@ -1,11 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import CloseModelBtn from "../Modal/CloseModelBtn";
-import { connect } from "react-redux";
-import { hideModal } from "../../redux/modal/modalActions";
-
+import { hideModal } from "../../store/modalStore";
 import offer from "../../assets/popup/offer-banner.jpg";
 
-function EntryPop({ hideModal }) {
+function EntryPop() {
 	const [visible, setVisible] = useState(false);
 	const modalRef = useRef(null);
 
@@ -23,16 +21,10 @@ function EntryPop({ hideModal }) {
 				<div>
 					<img src={offer} alt="offer image" />
 				</div>
-				<CloseModelBtn className="absolute top-3 right-4" />
+				<CloseModelBtn className="absolute top-3 right-4" onClick={hideModal} />
 			</div>
 		</div>
 	);
 }
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		hideModal: () => dispatch(hideModal()),
-	};
-};
-
-export default connect(null, mapDispatchToProps)(EntryPop);
+export default EntryPop;

@@ -1,53 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-
-import { connect, useDispatch } from "react-redux";
-
-import { setBookingFromLocalStorage } from "../redux/customerBooking/customerBookingActions";
-import { getScreens } from "../redux/screen/screenActions";
-import { initialLogin } from "../redux/auth/authActions";
-
 import { Helmet } from "react-helmet-async";
 
-function UsersLayout({ customerBooking, initialLogin }) {
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		const fetchInitialData = async () => {
-			try {
-				const token = localStorage.getItem("authToken");
-				if (token) {
-					await initialLogin(token);
-				}
-			} catch (err) {
-				console.log(err);
-			}
-		};
-		fetchInitialData();
-	}, []);
-
-	useEffect(() => {
-		const savedBookingData = localStorage.getItem("customerBooking");
-		if (savedBookingData) {
-			const bookingData = JSON.parse(savedBookingData);
-			// console.log(bookingData);
-			dispatch(setBookingFromLocalStorage(bookingData));
-		}
-	}, []);
-
-	// useEffect to fetch the screens wheen there is a change in the location
-	useEffect(() => {
-		if (!customerBooking.location) return;
-		async function fetchScreens() {
-			try {
-				await dispatch(getScreens(customerBooking.location));
-			} catch (err) {
-				console.log(err);
-			}
-		}
-		fetchScreens();
-	}, [customerBooking.location]);
-
+function BookingLayout() {
 	return (
 		<>
 			<Helmet>
@@ -71,15 +26,4 @@ function UsersLayout({ customerBooking, initialLogin }) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		customerBooking: state.customerBooking,
-	};
-};
-const mapDispatchToProps = (dispatch) => {
-	return {
-		initialLogin: (token) => dispatch(initialLogin(token)),
-	};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UsersLayout);
+export default BookingLayout;

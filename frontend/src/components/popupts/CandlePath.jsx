@@ -1,12 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import CloseModelBtn from "../Modal/CloseModelBtn";
-import { connect } from "react-redux";
-import { hideModal } from "../../redux/modal/modalActions";
+import { hideModal } from "../../store/modalStore";
 import Ripple from "../Loader/Ripple";
+import candlePathVideo from "../../assets/gallery/rose-path/video-1.mp4";
 
-import canldePathVideo from "../../assets/gallery/rose-path/video-1.mp4";
-
-function smokeEntry({ hideModal }) {
+function CandlePath() {
 	const [visible, setVisible] = useState(false);
 	const [videoLoading, setVideoLoading] = useState(true);
 	const modalRef = useRef(null);
@@ -35,7 +33,7 @@ function smokeEntry({ hideModal }) {
 							<Ripple />
 						</div>
 					)}
-					<video className="absolute w-full h-full object-cover" src={canldePathVideo} controls muted autoPlay loop playsInline onCanPlay={() => setVideoLoading(false)} loading="lazy" />
+					<video className="absolute w-full h-full object-cover" src={candlePathVideo} controls muted autoPlay loop playsInline onCanPlay={() => setVideoLoading(false)} />
 				</div>
 
 				<CloseModelBtn className="absolute top-3 right-4" onClick={hideModal} />
@@ -44,8 +42,4 @@ function smokeEntry({ hideModal }) {
 	);
 }
 
-const mapDispatchToProps = (dispatch) => ({
-	hideModal: () => dispatch(hideModal()),
-});
-
-export default connect(null, mapDispatchToProps)(smokeEntry);
+export default CandlePath;

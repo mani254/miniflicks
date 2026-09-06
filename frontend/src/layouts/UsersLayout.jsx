@@ -1,52 +1,22 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/Header/Header";
-import { useDispatch } from "react-redux";
-import { connect } from "react-redux";
-import { getLocations } from "../redux/location/locationActions";
 import SmoothScroll from "../components/SmoothScroll/SmoothScroll";
-import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
+import { whatsappColoured } from "../utils";
+import { useUserBanners } from "../hooks/useCatalog";
 
-import {whatsappColoured} from '../utils';
-import { getBanners } from "../redux/banner/bannerActions";
-
-function UsersLayout({ customerBooking, getBanners }) {
-	const dispatch = useDispatch();
+function UsersLayout() {
 	const location = useLocation();
-
-	useEffect(() => {
-		async function fetchBanners() {
-			try {
-				await getBanners();
-			} catch (err) {
-				console.log(err);
-			}
-		}
-		fetchBanners();
-	}, []);
-
-	useEffect(() => {
-		if (!customerBooking.city) return;
-
-		async function fetchLocations() {
-			try {
-				await dispatch(getLocations(customerBooking.city));
-			} catch (err) {
-				console.log(err);
-			}
-		}
-		fetchLocations();
-	}, [customerBooking.city]);
+	// Prefetch banners on user layout mount
+	useUserBanners();
 
 	useEffect(() => {
 		const handleScrollToTop = () => {
-			window.scrollTo(0, 0); // Reset scroll position to top
+			window.scrollTo(0, 0);
 		};
 
-		handleScrollToTop(); // Reset scroll position on component mount
-
-		// Add scroll listener for future route changes
+		handleScrollToTop();
 		window.addEventListener("popstate", handleScrollToTop);
 
 		return () => {
@@ -64,8 +34,8 @@ function UsersLayout({ customerBooking, getBanners }) {
 				<Footer />
 
 				<div className="whatsapp-icon">
-					<a href="https://wa.me/+919019162002?text=Hello. " className="btn-whatsapp-pulse" target="_blank">
-						<img src={whatsappColoured} alt="whatsapp icon"/>
+					<a href="https://wa.me/+919019162002?text=Hello. " className="btn-whatsapp-pulse" target="_blank" rel="noopener noreferrer">
+						<img src={whatsappColoured} alt="whatsapp icon" />
 					</a>
 				</div>
 			</main>
@@ -73,16 +43,4 @@ function UsersLayout({ customerBooking, getBanners }) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		customerBooking: state.customerBooking,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		getBanners: () => dispatch(getBanners()),
-	};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UsersLayout);
+export default UsersLayout;

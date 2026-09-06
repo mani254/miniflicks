@@ -1,0 +1,44 @@
+[{
+  "_id": {
+    "$oid": "67485d662fa5b6f729cc8df5"
+  },
+  "name": "LED Name",
+  "description": "Displaying the name using LED lights.",
+  "position": 0,
+  "image": "https://miniflicks.in/uploads/addons/1755359442632-307359892-image.jpg",
+  "price": 299,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67485de02fa5b6f729cc8dfd"
+  },
+  "name": "LED Number",
+  "description": "Displaying the name using LED lights",
+  "position": 1,
+  "image": "https://miniflicks.in/uploads/addons/1732795872196-923539041-ledNumber.webp",
+  "price": 99,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68b019d87255316b1c3c7b50"
+  },
+  "name": "Rose + Candle Path",
+  "description": "specially decorated with original rose patesl surrounded with the candels",
+  "position": 2,
+  "image": "https://miniflicks.in/uploads/addons/1757444633702-451244175-image.jpg",
+  "price": 999,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68c9031d7255316b1c3cef28"
+  },
+  "name": "Smoke Entry",
+  "description": "",
+  "position": 3,
+  "image": "https://miniflicks.in/uploads/addons/1758003997242-796859431-1000226908.jpg",
+  "price": 499,
+  "__v": 0
+}]

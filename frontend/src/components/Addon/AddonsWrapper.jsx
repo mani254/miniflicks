@@ -1,39 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { connect } from "react-redux";
-import { getAddons } from "../../redux/addon/addonActions";
-import { useSearchParams } from "react-router-dom";
+import React from "react";
+import { Outlet, useSearchParams } from "react-router-dom";
+import { useAddons } from "../../hooks/useCatalog";
 
-function AddonWrapper({ getAddons, addonData }) {
-	const [noOfDocuments, setNoOfDocuments] = useState(0);
+function AddonWrapper() {
 	const [params, setParams] = useSearchParams();
+	const queryParams = Object.fromEntries(params);
+	const { data, isLoading, refetch } = useAddons(queryParams);
 
-	useEffect(() => {
-		(async () => {
-			try {
-				const data = await getAddons(params);
-				setNoOfDocuments(data.totalDocuments);
-			} catch (err) {
-				console.log(err);
-			}
-		})();
-	}, [params]);
+	const addonData = {
+		addons: data?.addons || [],
+		loading: isLoading,
+	};
+	const noOfDocuments = data?.totalDocuments || 0;
 
 	return (
-		<>
-			<Outlet context={{ addonData, noOfDocuments, params, setParams }} />
-		</>
+		<Outlet context={{ addonData, noOfDocuments, params, setParams, refetch }} />
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		addonData: state.addons,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-	getAddons: (params) => dispatch(getAddons(params)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddonWrapper);
+export default AddonWrapper;

@@ -5,11 +5,11 @@ import { IoMail } from "react-icons/io5";
 import { socialMediaLinks } from "../utils";
 import { NavLink } from "react-router-dom";
 import gsap from "gsap";
-import axios from "axios";
-import { showNotification } from "../redux/notification/notificationActions";
-import { useDispatch } from "react-redux";
+import apiClient from "../lib/apiClient";
 import Loader from "../components/Loader/Loader";
 import { Helmet } from "react-helmet-async";
+import toast from "react-hot-toast";
+
 function ContactPage() {
 	const phoneCardRef = useRef(null);
 	const socialMediaCardRef = useRef(null);
@@ -17,7 +17,6 @@ function ContactPage() {
 	const balloonRef = useRef(null);
 	const breadcrumbRef = useRef(null);
 	const formInputsRef = useRef([]);
-	const dispatch = useDispatch();
 	const [loading, setLoading] = useState(false);
 
 	const [formData, setFormData] = useState({
@@ -28,7 +27,6 @@ function ContactPage() {
 	});
 
 	useEffect(() => {
-		// Animate breadcrumb
 		if (!breadcrumbRef.current || !socialMediaCardRef.current || !emailCardRef.current || !balloonRef.current || !formInputsRef.current) return;
 
 		gsap.fromTo(
@@ -43,9 +41,9 @@ function ContactPage() {
 			}
 		);
 
-		// Animating cards with fadeInUp effect
 		const fadeInUpCards = [phoneCardRef.current, socialMediaCardRef.current, emailCardRef.current];
 		fadeInUpCards.forEach((card, index) => {
+			if (!card) return;
 			gsap.fromTo(
 				card,
 				{ y: 50, opacity: 0 },
@@ -59,7 +57,6 @@ function ContactPage() {
 			);
 		});
 
-		// Floating animation for balloon
 		gsap.to(balloonRef.current, {
 			y: -20,
 			duration: 2,
@@ -68,8 +65,8 @@ function ContactPage() {
 			ease: "sine.inOut",
 		});
 
-		// Animate form inputs when they come into view
 		formInputsRef.current.forEach((input) => {
+			if (!input) return;
 			gsap.fromTo(
 				input,
 				{ y: 20, opacity: 0 },
@@ -78,41 +75,31 @@ function ContactPage() {
 					opacity: 1,
 					duration: 0.6,
 					ease: "power3.out",
-					scrollTrigger: {
-						trigger: input,
-						start: "top 80%",
-					},
 				}
 			);
 		});
-	}, [breadcrumbRef.current, socialMediaCardRef.current, emailCardRef.current, balloonRef.current, formInputsRef.current]);
+	}, []);
 
-	// Handle form input change
 	const handleInputChange = (e) => {
 		const { id, value } = e.target;
 		setFormData((prev) => ({ ...prev, [id]: value }));
 	};
 
-	// Form submission handler
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
 			setLoading(true);
-			const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/sendContactForm`, formData);
-			if (response.data) {
-				dispatch(showNotification("Message Sent Successfully"));
-				setFormData({
-					name: "",
-					phone: "",
-					email: "",
-					message: "",
-				});
-				setLoading(false);
-			}
+			await apiClient.post("/sendContactForm", formData);
+			toast.success("Message Sent Successfully");
+			setFormData({
+				name: "",
+				phone: "",
+				email: "",
+				message: "",
+			});
 		} catch (error) {
-			let errMessage = error.response ? error.response.data.error : "Something went wrong";
-			console.log(errMessage);
-			dispatch(showNotification(errMessage));
+			toast.error(error.message || "Something went wrong");
+		} finally {
 			setLoading(false);
 		}
 	};
@@ -136,7 +123,7 @@ function ContactPage() {
 			<div>
 				{loading && (
 					<div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[50]">
-						<Loader></Loader>
+						<Loader />
 					</div>
 				)}
 				<div className="relative overflow-hidden">

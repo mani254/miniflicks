@@ -1,46 +1,26 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
-import { connect } from "react-redux";
-import { getCities } from "../../redux/citiy/cityActions";
-import { showNotification } from "../../redux/notification/notificationActions";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useCities } from "../../hooks/useCatalog";
+import { toast } from "sonner";
 
-function CitiesWrapper({ getCities, citiesData, auth, showNotification }) {
+function CitiesWrapper() {
 	const navigate = useNavigate();
-	useEffect(() => {
-		(async () => {
-			try {
-				await getCities();
-			} catch (err) {
-				console.log(err);
-			}
-		})();
-	}, []);
+	const { admin } = useAuth();
+	const { data, isLoading, refetch } = useCities();
 
 	useEffect(() => {
-		if (auth.admin?.superAdmin === false) {
-			navigate("/login", { replace: true });
-			showNotification("Login in as super Admin to access cities");
+		if (admin && admin.role !== "superAdmin" && !admin.superAdmin) {
+			navigate("/admin", { replace: true });
+			toast.error("Super Admin privileges required to manage cities");
 		}
-	}, [auth.admin]);
+	}, [admin, navigate]);
+
+	const cities = data?.cities || [];
 
 	return (
-		<>
-			<Outlet context={citiesData} />
-		</>
+		<Outlet context={{ cities, loading: isLoading, refetch }} />
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		citiesData: state.cities,
-		auth: state.auth,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-	getCities: () => dispatch(getCities()),
-	showNotification: (message) => dispatch(showNotification(message)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CitiesWrapper);
+export default CitiesWrapper;

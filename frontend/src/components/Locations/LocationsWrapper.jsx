@@ -1,34 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-import { connect } from "react-redux";
-import { getLocations } from "../../redux/location/locationActions";
+import { useLocations } from "../../hooks/useCatalog";
 
-function LocationsWrapper({ getLocations, locationsData }) {
-	useEffect(() => {
-		(async () => {
-			try {
-				await getLocations();
-			} catch (err) {
-				console.log(err);
-			}
-		})();
-	}, []);
+function LocationsWrapper() {
+	const { data: locations = [], isLoading, refetch } = useLocations();
 
 	return (
-		<>
-			<Outlet context={locationsData} />
-		</>
+		<Outlet context={{ locations, loading: isLoading, refetch }} />
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		locationsData: state.locations,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-	getLocations: () => dispatch(getLocations()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LocationsWrapper);
+export default LocationsWrapper;

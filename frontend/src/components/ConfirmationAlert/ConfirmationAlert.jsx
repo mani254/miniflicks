@@ -1,10 +1,8 @@
 import React from "react";
-// import "./ConfirmationAlert.css";
 import CloseModelBtn from "../Modal/CloseModelBtn";
-import { hideModal } from "../../redux/modal/modalActions";
-import { connect } from "react-redux";
+import { hideModal } from "../../store/modalStore";
 
-function ConfirmationAlert({ title, info, confirmFunction, hideModal, id }) {
+function ConfirmationAlert({ title, info, confirmFunction, id }) {
 	return (
 		<div className="card bg-white p-6 rounded-lg w-full max-w-xs relative">
 			<div className="">
@@ -29,8 +27,4 @@ function ConfirmationAlert({ title, info, confirmFunction, hideModal, id }) {
 	);
 }
 
-const mapDispatchToProps = (dispatch) => ({
-	hideModal: () => dispatch(hideModal()),
-});
-
-export default connect(null, mapDispatchToProps)(ConfirmationAlert);
+export default ConfirmationAlert;
