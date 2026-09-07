@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
+import { useModalStore } from "../../store/modalStore";
 
-const Modal = ({ props, component }) => {
-	// console.log(props, component, "modalprops");
+const Modal = () => {
+	const { isOpen, props, component: Component } = useModalStore();
 	const modalRoot = document.getElementById("modal-root");
-	const el = document.createElement("div");
 
-	useEffect(() => {
-		modalRoot.appendChild(el);
-		return () => {
-			modalRoot.removeChild(el);
-		};
-	}, [el, modalRoot]);
+	if (!isOpen || !Component || !modalRoot) return null;
 
-	return ReactDOM.createPortal(<section className="modal-section w-full h-screen fixed top-0 left-0 bg-dark bg-opacity-10 flex items-center justify-center z-50">{component && React.createElement(component, props)}</section>, el);
+	return ReactDOM.createPortal(
+		<section className="modal-section w-full h-screen fixed top-0 left-0 bg-dark bg-opacity-10 flex items-center justify-center z-50">
+			{React.createElement(Component, props)}
+		</section>,
+		modalRoot
+	);
 };
 
 export default Modal;

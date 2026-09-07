@@ -1,37 +1,40 @@
-import React, { useState, useEffect,useRef} from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import { connect } from "react-redux";
-import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { showNotification } from "../../redux/notification/notificationActions";
-import axios from "axios";
+import { useBookingStore } from "../../store/bookingStore";
+import { useCreateCustomerBooking } from "../../hooks/useBookings";
+import { usePayments } from "../../hooks/usePayments";
+import { openRazorpayCheckout } from "../../lib/razorpay";
+import toast from "react-hot-toast";
 import Loader from "../Loader/Loader";
 
-function OtherDetailsButton({ customerBooking, showNotification, activeIndex, navOptions, setActiveIndex }) {
-	const dispatch = useDispatch();
+function OtherDetailsButton({ activeIndex, navOptions, setActiveIndex }) {
 	const navigate = useNavigate();
-	const [loading, setLoading] = useState(false);
-	const [verificationLoading, setVerificationLoading] = useState(false);
-	const [isDisabled, setIsDisabled] = useState(false)
 	const location = useLocation();
 
+	const bookingState = useBookingStore();
+	const createCustomerBookingMutation = useCreateCustomerBooking();
+	const { verifyPayment, cancelPayment } = usePayments();
+
+	const [loading, setLoading] = useState(false);
+	const [verificationLoading, setVerificationLoading] = useState(false);
+	const [isDisabled, setIsDisabled] = useState(false);
 
 	useEffect(() => {
-		const disabledPaths = ['/occasions', '/cakes'];
+		const disabledPaths = ["/occasions", "/cakes"];
 		setIsDisabled(disabledPaths.some((path) => location.pathname.endsWith(path)));
 	}, [location.pathname]);
 
-
 	function handleNext() {
-		if(isDisabled) {
-			if(!customerBooking.occasion){
-				showNotification('Select atleast one Occasion')
-				return
+		if (isDisabled) {
+			if (!bookingState.occasion) {
+				toast.error("Select at least one Occasion");
+				return;
 			}
-			if(location.pathname.endsWith('/cakes')){
-				if(!customerBooking.cakes.length>0){
-					showNotification('Select atleast one Cake')
-					return
+			if (location.pathname.endsWith("/cakes")) {
+				if (!bookingState.cakes?.length) {
+					toast.error("Select at least one Cake");
+					return;
 				}
 			}
 		}
@@ -45,7 +48,7 @@ function OtherDetailsButton({ customerBooking, showNotification, activeIndex, na
 	}
 
 	async function handlePayment() {
-		// Check if user is authenticated
+		// If admin is authenticated, navigate to admin PaymentPage
 		const authToken = localStorage.getItem("authToken");
 		if (authToken) {
 			navigate("/booking/payment");
@@ -54,132 +57,74 @@ function OtherDetailsButton({ customerBooking, showNotification, activeIndex, na
 
 		try {
 			setLoading(true);
-			// Step 1: Create the customer booking via backend API
-			const response = await axios.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/customerBooking`, customerBooking);
 
-			if (response.data) {
-				startRazorpayPayment({
-					booking: response.data.booking,
-					razorpayOrderId: response.data.razorpayOrderId,
-				});
-				setLoading(false);
-			} else {
-				console.log("Error: No response data received");
-				setLoading(false);
+			// Format payload for createCustomerBooking matching backend schema
+			const payload = {
+				city: bookingState.city,
+				location: bookingState.location,
+				screen: bookingState.screen,
+				date: bookingState.date,
+				slot: bookingState.slot,
+				package: {
+					name: typeof bookingState.package === "string" ? bookingState.package : (bookingState.package?.name || ""),
+				},
+				occasion: {
+					_id: bookingState.occasion?._id,
+					celebrantName: bookingState.occasion?.celebrantName || "",
+				},
+				addons: (bookingState.addons || []).map((a) => ({ _id: a._id, count: a.count })),
+				gifts: (bookingState.gifts || []).map((g) => ({ _id: g._id, count: g.count })),
+				cakes: (bookingState.cakes || []).map((c) => ({ _id: c._id, free: Boolean(c.free) })),
+				customer: bookingState.customer || { name: "", email: "", number: "" },
+				otherInfo: {
+					numberOfPeople: bookingState.otherInfo?.numberOfPeople || 0,
+					numberOfExtraPeople: bookingState.otherInfo?.numberOfExtraPeople || 0,
+					nameOnCake: bookingState.otherInfo?.nameOnCake || "",
+					ledName: bookingState.otherInfo?.ledName || "",
+					ledNumber: bookingState.otherInfo?.ledNumber || "",
+					couponCode: bookingState.otherInfo?.couponCode || null,
+				},
+				advance: bookingState.advance || 0,
+				note: bookingState.note || "",
+			};
+
+			const result = await createCustomerBookingMutation.mutateAsync(payload);
+			const { booking, razorpayOrderId } = result;
+
+			setLoading(false);
+
+			if (razorpayOrderId) {
+				try {
+					const paymentResponse = await openRazorpayCheckout({
+						orderId: razorpayOrderId,
+						amountPaise: (booking.totalPrice || bookingState.total) * 100,
+						customerName: bookingState.customer?.name,
+						customerEmail: bookingState.customer?.email,
+						customerNumber: bookingState.customer?.number,
+					});
+
+					// Verify payment on backend
+					setVerificationLoading(true);
+					await verifyPayment({
+						razorpay_order_id: paymentResponse.razorpay_order_id,
+						razorpay_payment_id: paymentResponse.razorpay_payment_id,
+						razorpay_signature: paymentResponse.razorpay_signature,
+					});
+					setVerificationLoading(false);
+
+					toast.success("Payment verified successfully!");
+					navigate("/bookingConfirmation", { replace: true });
+				} catch (err) {
+					console.warn("Payment flow cancelled/failed:", err);
+					await cancelPayment(razorpayOrderId).catch(() => {});
+					toast.error(err.message || "Payment cancelled");
+				}
 			}
 		} catch (error) {
 			setLoading(false);
-			const errMessage = error.response ? error.response.data.error : "Something went wrong";
-			console.log(errMessage);
-			dispatch(showNotification(errMessage));
+			console.error("Booking error:", error);
+			toast.error(error.message || "Something went wrong while initiating booking");
 		}
-	}
-
-	function startRazorpayPayment({ booking, razorpayOrderId }) {
-		if (typeof Razorpay === "undefined") {
-			console.error("Razorpay SDK not loaded");
-			return;
-		}
-
-		const options = {
-			key_id: import.meta.env.VITE_RAZORPAY_KEY_ID,
-			amount: booking.totalPrice * 100,
-			currency: "INR",
-			name: "Miniflicks Theater",
-			description: "Booking Payment",
-			order_id: razorpayOrderId,
-			timeout: 10 * 60,
-			handler: function (paymentResponse) {
-				if (paymentResponse && paymentResponse.razorpay_payment_id) {
-					console.log("Payment successful!", paymentResponse);
-					verifyPayment(paymentResponse);
-				}
-			},
-			modal: {
-				ondismiss: function () {
-					console.log(`Razorpay modal closed for order ID: ${razorpayOrderId}`);
-					delPreviousOrder(razorpayOrderId);
-				},
-			},
-
-			prefill: {
-				name: customerBooking.customer.name,
-				email: customerBooking.customer.email,
-				contact: customerBooking.customer.number,
-			},
-		};
-
-		try {
-			const rzp = new Razorpay(options);
-			rzp.on("payment.failed", function (response) {
-				handlePaymentFailure(response);
-			});
-
-			rzp.open();
-		} catch (error) {
-			console.error("Error initializing Razorpay:", error);
-		}
-	}
-
-	function verifyPayment(paymentResponse) {
-		// Send the payment details to the backend for verification
-		setVerificationLoading(true);
-		axios
-			.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/verifyPayment`, {
-				razorpay_payment_id: paymentResponse.razorpay_payment_id,
-				razorpay_order_id: paymentResponse.razorpay_order_id,
-				razorpay_signature: paymentResponse.razorpay_signature,
-			})
-			.then((response) => {
-				if (response.data.success) {
-					navigate("/bookingConfirmation");
-					alert("Payment verified successfully!");
-					// Optionally, navigate to success page
-					setVerificationLoading(false);
-				} else {
-					alert("Payment verification failed!");
-					setVerificationLoading(false);
-				}
-			})
-			.catch((error) => {
-				console.error("Error verifying payment:", error);
-				alert("Error during payment verification.");
-				setVerificationLoading(false);
-			});
-	}
-
-	function delPreviousOrder(orderId) {
-		axios
-			.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/delPreviousOrder`, {
-				orderId,
-			})
-			.then((response) => {
-				console.log("deleted the prev order succesfully", response.data);
-			})
-			.catch((error) => {
-				console.error("Error deletring the previously saved booking", error);
-			});
-	}
-
-	function logPaymentCancellation(orderId, reason) {
-		axios
-			.post(`${import.meta.env.VITE_APP_BACKENDURI}/api/bookings/cancelPayment`, {
-				orderId,
-				reason,
-			})
-			.then((response) => {
-				console.log("Payment cancellation logged successfully:", response.data);
-				dispatch(showNotification("Payment canceled due to timeout or failure."));
-			})
-			.catch((error) => {
-				console.error("Error logging payment cancellation:", error);
-			});
-	}
-
-	function handlePaymentFailure(response) {
-		console.error("Payment failed", response.error);
-		logPaymentCancellation(response.error.metadata.order_id, response.error.description);
-		alert(`Payment failed: ${response.error.description}`);
 	}
 
 	return (
@@ -196,16 +141,4 @@ function OtherDetailsButton({ customerBooking, showNotification, activeIndex, na
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		customerBooking: state.customerBooking,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		showNotification: (message) => dispatch(showNotification(message))
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(OtherDetailsButton);
+export default OtherDetailsButton;

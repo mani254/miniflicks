@@ -1,0 +1,216 @@
+[{
+  "_id": {
+    "$oid": "67484f012fa5b6f729cc8ce5"
+  },
+  "name": "BlackForest",
+  "position": 0,
+  "image": "https://miniflicks.in/uploads/cakes/1733401173290-10785729-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67484f2c2fa5b6f729cc8ced"
+  },
+  "name": "Red velvet Round",
+  "position": 1,
+  "image": "https://miniflicks.in/uploads/cakes/1733401179739-488573202-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67484f512fa5b6f729cc8cf5"
+  },
+  "name": "Red Velvet Heart",
+  "position": 2,
+  "image": "https://miniflicks.in/uploads/cakes/1733401186941-810241016-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674850072fa5b6f729cc8d11"
+  },
+  "name": "Pineapple",
+  "position": 3,
+  "image": "https://miniflicks.in/uploads/cakes/1733401195131-839787226-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674850352fa5b6f729cc8d19"
+  },
+  "name": "Mango Delight",
+  "position": 4,
+  "image": "https://miniflicks.in/uploads/cakes/1733401202869-980223960-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674850652fa5b6f729cc8d21"
+  },
+  "name": "Blueberry",
+  "position": 5,
+  "image": "https://miniflicks.in/uploads/cakes/1733401253743-361874646-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674850972fa5b6f729cc8d31"
+  },
+  "name": "Death by chocolate",
+  "position": 6,
+  "image": "https://miniflicks.in/uploads/cakes/1733401260487-464462337-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674851292fa5b6f729cc8d39"
+  },
+  "name": "Belgian chocolate",
+  "position": 7,
+  "image": "https://miniflicks.in/uploads/cakes/1733401266746-43833714-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674851592fa5b6f729cc8d41"
+  },
+  "name": "Strawberry",
+  "position": 8,
+  "image": "https://miniflicks.in/uploads/cakes/1733401272648-618491079-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674851862fa5b6f729cc8d49"
+  },
+  "name": "Honey Almond",
+  "position": 9,
+  "image": "https://miniflicks.in/uploads/cakes/1733401278604-416696610-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674851c12fa5b6f729cc8d51"
+  },
+  "name": "ButterScotch",
+  "position": 10,
+  "image": "https://miniflicks.in/uploads/cakes/1733401289787-132888882-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674851fe2fa5b6f729cc8d5b"
+  },
+  "name": "WhiteForest",
+  "position": 11,
+  "image": "https://miniflicks.in/uploads/cakes/1733401298225-241390016-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674852332fa5b6f729cc8d65"
+  },
+  "name": "Chocolate",
+  "position": 12,
+  "image": "https://miniflicks.in/uploads/cakes/1733401309311-250954654-image.jpg",
+  "price": 499,
+  "special": false,
+  "specialPrice": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674858202fa5b6f729cc8da1"
+  },
+  "name": "Rasmalai",
+  "position": 13,
+  "image": "https://miniflicks.in/uploads/cakes/1733401326432-69881431-image.jpg",
+  "price": 699,
+  "special": true,
+  "specialPrice": 199,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674858682fa5b6f729cc8dab"
+  },
+  "name": "Fresh Fruit",
+  "position": 14,
+  "image": "https://miniflicks.in/uploads/cakes/1733401359091-829187697-image.jpg",
+  "price": 699,
+  "special": true,
+  "specialPrice": 199,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6748589d2fa5b6f729cc8db3"
+  },
+  "name": "Chocolate Truffle",
+  "position": 15,
+  "image": "https://miniflicks.in/uploads/cakes/1733401376739-211034311-image.jpg",
+  "price": 699,
+  "special": true,
+  "specialPrice": 199,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674858d72fa5b6f729cc8dbd"
+  },
+  "name": "Chocolate Almond",
+  "position": 16,
+  "image": "https://miniflicks.in/uploads/cakes/1733401384849-235604265-image.jpg",
+  "price": 699,
+  "special": true,
+  "specialPrice": 199,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6748590a2fa5b6f729cc8dc5"
+  },
+  "name": "Chocolate Pinata",
+  "position": 17,
+  "image": "https://miniflicks.in/uploads/cakes/1733401392559-594308917-image.jpg",
+  "price": 699,
+  "special": true,
+  "specialPrice": 199,
+  "__v": 0
+}]

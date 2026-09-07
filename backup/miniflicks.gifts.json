@@ -1,0 +1,44 @@
+[{
+  "_id": {
+    "$oid": "674859622fa5b6f729cc8dd5"
+  },
+  "name": "Teddy bear",
+  "description": "A cuddly companion that brings comfort, smiles, and endless hugs—perfect for any special moment.",
+  "image": "https://miniflicks.in/uploads/gifts/1733400960959-774106565-image.jpg",
+  "position": 1,
+  "price": 299,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67485b422fa5b6f729cc8de5"
+  },
+  "name": "Heart",
+  "description": "A sweet symbol of love and care, perfect for showing someone they’re always in your heart.",
+  "image": "https://miniflicks.in/uploads/gifts/1733401818542-758116844-image.jpg",
+  "position": 2,
+  "price": 199,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674860e32fa5b6f729cc8e40"
+  },
+  "name": "Bouquet",
+  "description": "A vibrant arrangement of fresh blooms to brighten their day and bring joy to any occasion.",
+  "image": "https://miniflicks.in/uploads/gifts/1756041100415-159819298-image.jpg",
+  "position": 3,
+  "price": 399,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67519ec0525b3f959ff7c58f"
+  },
+  "name": "Small cat",
+  "description": "",
+  "image": "https://miniflicks.in/uploads/gifts/1733402304139-364497497-catcover.jpg",
+  "position": 4,
+  "price": 299,
+  "__v": 0
+}]

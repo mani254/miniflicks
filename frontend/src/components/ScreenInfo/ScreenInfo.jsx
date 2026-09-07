@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs, Autoplay } from "swiper/modules";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import Loader from "../Loader/Loader";
-
-import { connect } from "react-redux";
 import { BsFillPeopleFill } from "react-icons/bs";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -12,19 +10,18 @@ import "swiper/css/thumbs";
 import "swiper/css/autoplay";
 
 import { star } from "../../utils";
+import { useBookingStore } from "../../store/bookingStore";
+import { useScreen } from "../../hooks/useCatalog";
+import { getImageUrl } from "../../lib/imageUrl";
 
-function ScreenInfo({ customerBooking, screensData }) {
+function ScreenInfo() {
 	const [thumbsSwiper, setThumbsSwiper] = useState(null);
-	const [screen, setScreen] = useState("");
-
-	useEffect(() => {
-		const currentScreen = screensData.screens.find((screen) => screen._id == customerBooking.screen);
-		setScreen(currentScreen);
-	}, [customerBooking.screen, screensData.screens]);
+	const { screen: selectedScreenId } = useBookingStore();
+	const { data: screen, isLoading } = useScreen(selectedScreenId);
 
 	return (
 		<React.Fragment>
-			{screensData.loading || !screen?.name ? (
+			{isLoading || !screen?.name ? (
 				<div className="min-h-[500px] relative">
 					<Loader />
 				</div>
@@ -44,9 +41,9 @@ function ScreenInfo({ customerBooking, screensData }) {
 									autoplay={{ delay: 3000, disableOnInteraction: false }}
 									modules={[Navigation, Thumbs, Autoplay]}
 									loop={true}>
-									{screen.images.map((img, index) => (
+									{screen.images?.map((img, index) => (
 										<SwiperSlide key={index}>
-											<img src={img} alt={`Slide ${index + 1}`} className="w-full object-cover" />
+											<img src={getImageUrl(img)} alt={`Slide ${index + 1}`} className="w-full object-cover" />
 										</SwiperSlide>
 									))}
 								</Swiper>
@@ -68,9 +65,9 @@ function ScreenInfo({ customerBooking, screensData }) {
 
 							<div className="swiper-thumbs mt-[10px]  w-full max-w-[95%] m-auto relative">
 								<Swiper onSwiper={setThumbsSwiper} spaceBetween={10} slidesPerView={4} freeMode={true} watchSlidesProgress={true} modules={[Thumbs]}>
-									{screen.images.map((img, index) => (
+									{screen.images?.map((img, index) => (
 										<SwiperSlide key={index}>
-											<img src={img} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover cursor-pointer aspect-[16/9]" />
+											<img src={getImageUrl(img)} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover cursor-pointer aspect-[16/9]" />
 										</SwiperSlide>
 									))}
 								</Swiper>
@@ -96,7 +93,7 @@ function ScreenInfo({ customerBooking, screensData }) {
 								<div className="mt-3">
 									<h4>Features</h4>
 									<ul className="">
-										{screen.specifications.map((spec, index) => {
+										{screen.specifications?.map((spec, index) => {
 											return (
 												<li key={index} className="flex gap-3 mt-1">
 													<img className="w-6 h-6" src={star} alt="Star Image 3d" />
@@ -115,11 +112,4 @@ function ScreenInfo({ customerBooking, screensData }) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		screensData: state.screens,
-		customerBooking: state.customerBooking,
-	};
-};
-
-export default connect(mapStateToProps, null)(ScreenInfo);
+export default ScreenInfo;

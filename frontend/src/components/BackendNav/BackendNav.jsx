@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { connect } from "react-redux";
+import { useAuth } from "../../hooks/useAuth";
+
+const todayDateStr = new Date().toISOString().split("T")[0];
 
 const navlinks = [
 	{ title: "Dashboard", to: "/admin/dashboard", image: "https://cdn-icons-png.flaticon.com/512/25/25694.png" },
@@ -10,35 +12,34 @@ const navlinks = [
 		image: "https://img.icons8.com/m_rounded/512w/purchase-order.png",
 		children: [
 			{ title: "New Booking", to: "/booking/locations" },
-			{ title: "Bookings Today", to: "/admin/bookings?page=1&limit=10&toDate=2024-10-21&fromDate=2024-10-21" },
-			// { title: "Upcoming", to: "/admin/bookings/upcoming" },
+			{ title: "Bookings Today", to: `/admin/bookings?page=1&limit=20&toDate=${todayDateStr}&fromDate=${todayDateStr}` },
 		],
 	},
-	{ title: "Locations", image: "https://cdn-icons-png.flaticon.com/512/126/126422.png", to: "/admin/locations" },
 	{ title: "Screens", image: "https://cdn-icons-png.flaticon.com/512/126/126422.png", to: "/admin/screens" },
 	{ title: "Customers", to: "/admin/customers", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
 	{ title: "Occasions", to: "/admin/occasions", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
 	{ title: "Addons", to: "/admin/addons", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
 	{ title: "Gifts", to: "/admin/gifts", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
-	{ title: "Addons", to: "/admin/addons", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
 	{ title: "Cakes", to: "/admin/cakes", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
 ];
 
 const superAdminLinks = [
 	{ title: "Cities", image: "https://cdn-icons-png.flaticon.com/512/126/126422.png", to: "/admin/cities" },
+	{ title: "Locations", image: "https://cdn-icons-png.flaticon.com/512/126/126422.png", to: "/admin/locations" },
 	{ title: "Banners", to: "/admin/banners", image: "https://cdn-icons-png.flaticon.com/256/666/666201.png" },
 	{ title: "Coupons", image: "https://cdn-icons-png.freepik.com/512/6977/6977692.png", to: "/admin/coupons" },
 ];
 
-function BackendNav({ auth }) {
+function BackendNav() {
+	const { admin } = useAuth();
 	const location = useLocation();
 
-	const combinedLinks = auth.admin?.superAdmin ? [...navlinks, ...superAdminLinks] : navlinks;
+	const combinedLinks = admin?.superAdmin ? [...navlinks, ...superAdminLinks] : navlinks;
 
 	const orderedNavLinks = ["Dashboard", "Bookings", "Cities", "Locations", "Screens", "Customers", "Banners", "Coupons", "Cakes", "Occasions", "Addons", "Gifts"];
 
 	// Sort combinedLinks based on the predefined order
-	const finalNavLinks = orderedNavLinks.map((title) => combinedLinks.find((link) => link.title === title)).filter(Boolean); // To avoid undefined entries if some links don't exist
+	const finalNavLinks = orderedNavLinks.map((title) => combinedLinks.find((link) => link.title === title)).filter(Boolean);
 
 	return (
 		<nav className="px-2">
@@ -69,10 +70,4 @@ function BackendNav({ auth }) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		auth: state.auth,
-	};
-};
-
-export default connect(mapStateToProps, null)(BackendNav);
+export default BackendNav;

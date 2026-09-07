@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from "react";
-import { connect } from "react-redux";
-import { useDispatch } from "react-redux";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BsFillPeopleFill } from "react-icons/bs";
-import { setBookingScreen } from "../../redux/customerBooking/customerBookingActions";
+import { useBookingStore } from "../../store/bookingStore";
+import { useScreens } from "../../hooks/useCatalog";
+import { getImageUrl } from "../../lib/imageUrl";
 import Loader from "../Loader/Loader";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,32 +13,35 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 
-function UserScreens({ screensData, customerBooking }) {
+function UserScreens() {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
-	const { screens } = screensData;
+	const { location: selectedLocationId, screen: selectedScreenId, setBookingScreen } = useBookingStore();
+	const { data: screens = [], isLoading } = useScreens(selectedLocationId);
 
-	function hanldeScreenClick(screen) {
-		dispatch(setBookingScreen(screen));
+	const activeScreens = React.useMemo(() => {
+		return (screens || []).filter((screen) => screen.status !== false);
+	}, [screens]);
+
+	function hanldeScreenClick(screenId) {
+		setBookingScreen(screenId);
 		return navigate("/booking/slots");
 	}
 
 	return (
 		<section className="py-8 md:py-14 w-full">
 			<h2 className="text-xl font-medium mb-6 text-center">Select Your Screen</h2>
-			{screensData.loading ? (
+			{isLoading ? (
 				<div className="h-96 relative">
 					<Loader />
 				</div>
-			) : (
-				screens.length > 0 && (
-					<div className="flex w-full justify-center gap-6 flex-wrap">
-						{screens.map((screen, index) => {
-							let selected = customerBooking.screen == screen._id;
-							return (
-								<div key={index} className={`location-card card-1 w-full  md:max-w-[310px] p-3 bg-bright rounded-xl shadow-md cursor-pointer ${selected ? "border-2 border-primary shadow-md shadow-primary-400" : ""}`}>
-									<div className="swiper-2 w-full m-auto relative">
-										<Swiper
+			) : activeScreens.length > 0 ? (
+				<div className="flex w-full justify-center gap-6 flex-wrap">
+					{activeScreens.map((screen, index) => {
+						let selected = selectedScreenId === screen._id;
+						return (
+							<div key={index} className={`location-card card-1 w-full  md:max-w-[310px] p-3 bg-bright rounded-xl shadow-md cursor-pointer ${selected ? "border-2 border-primary shadow-md shadow-primary-400" : ""}`}>
+								<div className="swiper-2 w-full m-auto relative">
+									<Swiper
 											spaceBetween={10}
 											slidesPerView={1}
 											navigation={{
@@ -51,7 +54,7 @@ function UserScreens({ screensData, customerBooking }) {
 											loop={true}>
 											{screen.images.map((img, index) => (
 												<SwiperSlide key={index}>
-													<img src={img} alt={`Slide ${index + 1}`} className="w-full object-cover" />
+													<img src={getImageUrl(img)} alt={`Slide ${index + 1}`} className="w-full object-cover" />
 												</SwiperSlide>
 											))}
 										</Swiper>
@@ -60,7 +63,7 @@ function UserScreens({ screensData, customerBooking }) {
 									<div className="flex justify-between items-start mt-4">
 										<div>
 											<p className="text-medium">Prices From</p>
-											<h3 className="-mt-1 text-primary"> ₹ {screen.packages[0].price}</h3>
+											<h3 className="-mt-1 text-primary"> ₹ {screen.packages?.[0]?.price}</h3>
 										</div>
 										<div className="flex gap-x-2 items-center flex-wrap">
 											<BsFillPeopleFill />
@@ -123,17 +126,13 @@ function UserScreens({ screensData, customerBooking }) {
 							);
 						})}
 					</div>
-				)
-			)}
+				) : (
+					<div className="flex flex-col items-center justify-center py-16 text-gray-500">
+						<p className="text-base font-medium">No screens available for this location</p>
+					</div>
+				)}
 		</section>
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		screensData: state.screens,
-		customerBooking: state.customerBooking,
-	};
-};
-
-export default connect(mapStateToProps, null)(UserScreens);
+export default UserScreens;

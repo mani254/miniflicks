@@ -1,104 +1,345 @@
-import React, { useMemo, useState } from "react";
+import {
+  Cake as CakeIcon,
+  ImageIcon,
+  Loader2,
+  Pencil,
+  Plus,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
+import { useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import Loader from "../Loader/Loader.jsx";
-import { connect } from "react-redux";
-import { showModal } from "../../redux/modal/modalActions.js";
-import { deleteCake } from "../../redux/cake/cakeActions.js";
-import ConfirmationAlert from "../ConfirmationAlert/ConfirmationAlert.jsx";
-import Pagination from "../Pagination/Pagination.jsx";
-import GiftsFilter from "../Gift/GiftsFilter.jsx";
+import { toast } from "sonner";
 
-function Cakes({ showModal, deleteCake, auth }) {
-	const [currentPage, setCurrentPage] = useState(1);
+import { catalogApi } from "../../api/catalog";
+import { useAuth } from "../../hooks/useAuth";
+import { getImageUrl } from "../../lib/imageUrl";
+import { Badge } from "../ui/badge.jsx";
+import { Button } from "../ui/button.jsx";
+import { Card } from "../ui/card.jsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog.jsx";
+import { Switch } from "../ui/switch.jsx";
 
-	const navigate = useNavigate();
-	const { cakeData, noOfDocuments, params, setParams } = useOutletContext();
-
-	const alertData = {
-		title: "Are You sure?",
-		info: "Deleting this cake cannot be undone.",
-		confirmFunction: (cakeId) => {
-			deleteCake(cakeId);
-		},
-	};
-
-	return (
-		<div className="w-full container px-6 mt-3">
-			<div className="flex justify-between pb-2 border-b border-gray-400">
-				<h3>Cakes</h3>
-				<div>
-					<GiftsFilter params={params} setParams={setParams} auth={auth} />
-				</div>
-				<button className="btn" onClick={() => navigate("/admin/cakes/add")}>
-					Add Cake
-				</button>
-			</div>
-			{cakeData.loading ? (
-				<div className="h-96 relative">
-					<Loader />
-				</div>
-			) : (
-				<div className="relative">
-					<table className="main-table">
-						<thead>
-							<tr>
-								<th>S.NO</th>
-								<th>Image</th>
-								<th>Name</th>
-								<th>Position</th>
-								<th>Price</th>
-								{auth.admin?.superAdmin && <th>Actions</th>}
-							</tr>
-						</thead>
-						<tbody>
-							{cakeData.cakes.length >= 1 &&
-								cakeData.cakes.map((cake, index) => (
-									<tr key={cake._id}>
-										<td>{index + 1}</td>
-										<td>
-											<div className="relative w-12 h-12 overflow-hidden bg-green-200 rounded-md">
-												<img src={cake.image} alt={cake.name} className="w-full h-full object-cover" />
-											</div>
-										</td>
-										<td>{cake.name}</td>
-										<td>{cake.position}</td>
-										<td>{cake.price}</td>
-										{auth.admin?.superAdmin && (
-											<td>
-												<div className="flex">
-													<span className="mr-3 cursor-pointer text-2xl" onClick={() => navigate(`/admin/cakes/edit/${cake._id}`)}>
-														<FaEdit className="fill-blue-500" />
-													</span>
-													<span className="cursor-pointer text-2xl" onClick={() => showModal({ ...alertData, id: cake._id }, ConfirmationAlert)}>
-														<MdDelete className="fill-red-500" />
-													</span>
-												</div>
-											</td>
-										)}
-									</tr>
-								))}
-						</tbody>
-					</table>
-				</div>
-			)}
-			<Pagination noOfDocuments={noOfDocuments} limit={10} currentPage={currentPage} setCurrentPage={setCurrentPage} params={params} setParams={setParams} />
-		</div>
-	);
+/* ─── Empty state ───────────────────────────────────────────────────── */
+function EmptyState({ onAdd }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-20 gap-4">
+      <div className="w-14 h-14 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center">
+        <CakeIcon className="w-6 h-6 text-gray-400" />
+      </div>
+      <div className="text-center">
+        <p className="text-sm font-medium text-gray-700">No cakes available</p>
+        <p className="text-xs text-gray-400 mt-1">
+          Add birthday and celebration cakes to the catalog.
+        </p>
+      </div>
+      <Button size="sm" onClick={onAdd}>
+        <Plus className="w-4 h-4" /> Add Cake
+      </Button>
+    </div>
+  );
 }
 
-const mapStateToProps = (state) => {
-	return {
-		auth: state.auth,
-	};
-};
+/* ─── Main Component ────────────────────────────────────────────────── */
+function Cakes() {
+  const navigate = useNavigate();
+  const { admin } = useAuth();
+  const { cakeData, refetch } = useOutletContext() || {};
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		showModal: (props, component) => dispatch(showModal(props, component)),
-		deleteCake: (cakeId) => dispatch(deleteCake(cakeId)), // Adjust action for cake
-	};
-};
+  const cakes = cakeData?.cakes || [];
+  const loading = cakeData?.loading;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cakes);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [togglingId, setTogglingId] = useState(null);
+
+  function openDelete(cake) {
+    setSelected(cake);
+    setDeleteOpen(true);
+  }
+
+  async function confirmDelete() {
+    if (!selected) return;
+    setDeleting(true);
+    try {
+      await catalogApi.deleteCake(selected._id);
+      toast.success("Cake deleted successfully");
+      refetch?.();
+      setDeleteOpen(false);
+    } catch (err) {
+      toast.error(err.message || "Failed to delete cake");
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  async function handleStatusChange(cake) {
+    setTogglingId(cake._id);
+    const updatedStatus = !cake.status;
+    try {
+      await catalogApi.updateCake(cake._id, { ...cake, status: updatedStatus });
+      toast.success(`Cake ${updatedStatus ? "activated" : "deactivated"}`);
+      refetch?.();
+    } catch (err) {
+      toast.error(err.message || "Failed to update cake status");
+    } finally {
+      setTogglingId(null);
+    }
+  }
+
+  const totalActive = cakes.filter((c) => c.status).length;
+  const totalInactive = cakes.length - totalActive;
+
+  return (
+    <>
+      <div className="p-6 space-y-5">
+        {/* ── Header ── */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-gray-900">Cakes</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              Manage celebration cakes and premium upgrade pricing.
+            </p>
+          </div>
+          <Button onClick={() => navigate("/admin/cakes/add")}>
+            <Plus className="w-4 h-4" />
+            Add Cake
+          </Button>
+        </div>
+
+        {/* ── Stat pills ── */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 bg-white">
+            <span className="text-sm font-semibold text-gray-800">
+              {cakes.length}
+            </span>
+            <span className="text-xs text-gray-500">Total</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 bg-white">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="text-sm font-semibold text-gray-800">
+              {totalActive}
+            </span>
+            <span className="text-xs text-gray-500">Active</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 bg-white">
+            <span className="w-2 h-2 rounded-full bg-gray-400"></span>
+            <span className="text-sm font-semibold text-gray-800">
+              {totalInactive}
+            </span>
+            <span className="text-xs text-gray-500">Inactive</span>
+          </div>
+        </div>
+
+        {/* ── Table ── */}
+        <Card>
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="flex flex-col items-center gap-2">
+                <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                <p className="text-sm text-gray-500">Loading cakes…</p>
+              </div>
+            </div>
+          ) : cakes.length === 0 ? (
+            <EmptyState onAdd={() => navigate("/admin/cakes/add")} />
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200 bg-gray-50">
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider w-12">
+                      #
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Image
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Price
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Special Upgrade
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Position
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider w-24">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {cakes.map((cake, index) => (
+                    <tr
+                      key={cake._id}
+                      className="hover:bg-gray-50 transition-colors group"
+                    >
+                      {/* # */}
+                      <td className="px-4 py-3 text-gray-400 font-mono text-xs">
+                        {String(index + 1).padStart(2, "0")}
+                      </td>
+
+                      {/* Image Thumbnail */}
+                      <td className="px-4 py-3">
+                        <div className="w-12 h-12 rounded-lg border border-gray-200 overflow-hidden bg-gray-100 flex items-center justify-center">
+                          {cake.image ? (
+                            <img
+                              src={getImageUrl(cake.image)}
+                              alt={cake.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                                e.currentTarget.nextSibling.style.display =
+                                  "flex";
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            className="w-full h-full items-center justify-center"
+                            style={{ display: cake.image ? "none" : "flex" }}
+                          >
+                            <ImageIcon className="w-4 h-4 text-gray-400" />
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Name */}
+                      <td className="px-4 py-3">
+                        <span className="font-medium text-gray-900 block">
+                          {cake.name}
+                        </span>
+                      </td>
+
+                      {/* Regular Price */}
+                      <td className="px-4 py-3 font-semibold text-gray-900">
+                        ₹{cake.price}
+                      </td>
+
+                      {/* Special Upgrade */}
+                      <td className="px-4 py-3">
+                        {cake.special ? (
+                          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200">
+                            <Sparkles className="w-3 h-3 text-amber-600" />₹
+                            {cake.specialPrice}
+                          </div>
+                        ) : (
+                          <span className="text-gray-400 text-xs">—</span>
+                        )}
+                      </td>
+
+                      {/* Position */}
+                      <td className="px-4 py-3">
+                        <Badge variant="outline" className="font-mono text-xs">
+                          {cake.position}
+                        </Badge>
+                      </td>
+
+                      {/* Status */}
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          {togglingId === cake._id ? (
+                            <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                          ) : (
+                            <Switch
+                              checked={cake.status}
+                              onCheckedChange={() => handleStatusChange(cake)}
+                            />
+                          )}
+                          <span
+                            className={`text-xs font-medium ${cake.status ? "text-emerald-600" : "text-gray-400"}`}
+                          >
+                            {cake.status ? "Active" : "Inactive"}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-1.5">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                            onClick={() =>
+                              navigate(`/admin/cakes/edit/${cake._id}`)
+                            }
+                            title="Edit"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-gray-400 hover:text-red-600 hover:bg-red-50"
+                            onClick={() => openDelete(cake)}
+                            title="Delete"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </Card>
+      </div>
+
+      {/* ── Delete dialog ── */}
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete Cake</DialogTitle>
+            <DialogDescription className="mt-1">
+              Are you sure you want to delete{" "}
+              <span className="font-medium text-gray-800">
+                &quot;{selected?.name || "this cake"}&quot;
+              </span>
+              ? Customers will no longer be able to select it during booking.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 mt-4">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setDeleteOpen(false)}
+              disabled={deleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              className="flex-1"
+              onClick={confirmDelete}
+              disabled={deleting}
+            >
+              {deleting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Trash2 className="w-4 h-4" />
+              )}
+              {deleting ? "Deleting…" : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+export default Cakes;

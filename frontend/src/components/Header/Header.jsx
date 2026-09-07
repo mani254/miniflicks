@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { mfLogo } from "../../utils";
-
-import { connect } from "react-redux";
-import { useDispatch } from "react-redux";
-
 import { NavLink, useLocation } from "react-router-dom";
 import CityOptions from "../Cities/CityOptions";
-import { setBookingCity } from "../../redux/customerBooking/customerBookingActions";
+import { useCities } from "../../hooks/useCatalog";
+import { useBookingStore } from "../../store/bookingStore";
 
-function Header({ citiesData }) {
+function Header() {
 	const [isMobileNav, setIsMobileNav] = useState(false);
 	const [location, setLocation] = useState("");
 	const [showCityOptions, setShowCityOptions] = useState(null);
-	const dispatch = useDispatch();
 	const locationUrl = useLocation();
+
+	const { data: citiesResult } = useCities();
+	const cities = citiesResult?.cities || [];
+	const { setBookingCity } = useBookingStore();
 
 	const mobileNavRef = useRef(null);
 	const navLinksRef = useRef([]);
@@ -41,10 +41,10 @@ function Header({ citiesData }) {
 		};
 	}, []);
 
-	const handleCityChange = (event) => {
+	const handleCityChange = useCallback((event) => {
 		setLocation(event.target.value);
-		dispatch(setBookingCity(event.target.value));
-	};
+		setBookingCity(event.target.value);
+	}, [setBookingCity]);
 
 	useEffect(() => {
 		const path = locationUrl.pathname;
@@ -189,9 +189,8 @@ function Header({ citiesData }) {
 					</nav>
 
 					<div className="flex gap-3">
-						{/* {(citiesData.cities.length == 0 || citiesData.cities.length > 1) && ( */}
 						{showCityOptions && (
-							<div className={`top-full right-0 header border-2 rounded-full px-2 border-primary flex items-center ${citiesData.cities.length === 0 || citiesData.cities.length > 1 ? "block" : "hidden"}`}>
+							<div className={`top-full right-0 header border-2 rounded-full px-2 border-primary flex items-center ${cities.length === 0 || cities.length > 1 ? "block" : "hidden"}`}>
 								<svg className="w-4 fill-primary" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 395.71 395.71" xmlSpace="preserve">
 									<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
 									<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
@@ -201,7 +200,7 @@ function Header({ citiesData }) {
 										</g>
 									</g>
 								</svg>
-								<CityOptions value={location} changeHandler={handleCityChange} />
+								<CityOptions value={location} changeHandler={handleCityChange} hideLabel={true} />
 							</div>
 						)}
 
@@ -270,10 +269,4 @@ function Header({ citiesData }) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		citiesData: state.cities,
-	};
-};
-
-export default connect(mapStateToProps, null)(Header);
+export default Header;

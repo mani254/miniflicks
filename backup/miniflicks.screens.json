@@ -1,0 +1,309 @@
+[{
+  "_id": {
+    "$oid": "67481ee02fa5b6f729cc8ba2"
+  },
+  "name": "Friends Theatre",
+  "capacity": 6,
+  "minPeople": 4,
+  "extraPersonPrice": 200,
+  "specifications": [
+    "150-inch 4K Ultra HD display.",
+    "7.1 surround sound system for crisp audio.",
+    "Ambient lighting for a lively atmosphere.",
+    "Soundproof walls for complete privacy."
+  ],
+  "description": "The Friends' Theatre is an energetic space ideal for group hangouts. Perfect for gaming, movie marathons, or live events, it guarantees a fun and dynamic experience.",
+  "status": true,
+  "location": {
+    "$oid": "67480a1433bd0d9ca789ab38"
+  },
+  "images": [
+    "https://miniflicks.in/uploads/screens/1757384320040-529699088-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384320043-295978974-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384320044-418116125-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384320047-176396427-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384320053-688187714-image.jpg"
+  ],
+  "slots": [
+    {
+      "from": "09:30",
+      "to": "11:30"
+    },
+    {
+      "from": "12:15",
+      "to": "14:15"
+    },
+    {
+      "from": "15:00",
+      "to": "17:00"
+    },
+    {
+      "from": "17:45",
+      "to": "19:45"
+    },
+    {
+      "from": "20:30",
+      "to": "22:30"
+    },
+    {
+      "from": "23:00",
+      "to": "01:00"
+    }
+  ],
+  "packages": [
+    {
+      "name": "Basic",
+      "price": 1499,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Decoration"
+      ]
+    },
+    {
+      "name": "Standard",
+      "price": 1999,
+      "customPrice": [],
+      "addons": [
+        "Decoration",
+        "4k Dolby Theater",
+        "Cake"
+      ]
+    },
+    {
+      "name": "Premium",
+      "price": 2399,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Decoration",
+        "Cake",
+        "Smoke Entry"
+      ]
+    },
+    {
+      "name": "Ultra Premium",
+      "price": 2799,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Smoke Entry",
+        "Decoration",
+        "Cake",
+        "Rose Heart On Table"
+      ]
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-11-28T07:42:24.315Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-09T19:04:02.811Z"
+  },
+  "__v": 16
+},
+{
+  "_id": {
+    "$oid": "67481f002fa5b6f729cc8bae"
+  },
+  "name": "Family Theatre",
+  "capacity": 12,
+  "minPeople": 4,
+  "extraPersonPrice": 200,
+  "specifications": [
+    "150-inch 4K Ultra HD display.",
+    "Professional-grade sound system with enhanced bass.",
+    "Climate-controlled environment for comfort.",
+    "Adjustable viewing angles for an optimal experience.",
+    "Soundproof walls for complete privacy."
+  ],
+  "description": "The Family Theatre is a spacious, cozy space designed for family bonding. Its family-friendly features ensure a delightful entertainment experience for all ages.",
+  "status": true,
+  "location": {
+    "$oid": "67480a1433bd0d9ca789ab38"
+  },
+  "images": [
+    "https://miniflicks.in/uploads/screens/1757384293794-553476626-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384293796-233463429-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384293799-281812429-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384293801-846785744-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384293803-864989317-image.jpg"
+  ],
+  "slots": [
+    {
+      "from": "10:00",
+      "to": "12:30"
+    },
+    {
+      "from": "13:15",
+      "to": "15:45"
+    },
+    {
+      "from": "16:30",
+      "to": "18:30"
+    },
+    {
+      "from": "19:15",
+      "to": "21:45"
+    },
+    {
+      "from": "22:30",
+      "to": "01:00"
+    }
+  ],
+  "packages": [
+    {
+      "name": "Basic",
+      "price": 1999,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Decoration"
+      ]
+    },
+    {
+      "name": "Standard",
+      "price": 2499,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Decoration",
+        "Cake"
+      ]
+    },
+    {
+      "name": "Premium",
+      "price": 2899,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Smoke Entry",
+        "Decoration",
+        "Cake"
+      ]
+    },
+    {
+      "name": "Ultra Premium",
+      "price": 3299,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Decoration",
+        "Cake",
+        "Smoke Entry",
+        "Rose Heart On Table"
+      ]
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-11-28T07:42:56.808Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-09T02:18:13.811Z"
+  },
+  "__v": 23
+},
+{
+  "_id": {
+    "$oid": "6748184133bd0d9ca789ab8d"
+  },
+  "name": "Couple Theater",
+  "capacity": 2,
+  "minPeople": 2,
+  "extraPersonPrice": 0,
+  "specifications": [
+    "150-inch 4K Ultra HD display.",
+    "Dolby Atmos surround sound for immersive audio.",
+    "Impressive lighting and decor.",
+    "Soundproof walls for complete privacy."
+  ],
+  "description": "The Couple Theatre is a private, romantic space perfect for two people. It’s designed to offer an intimate ambiance with luxury and comfort for memorable movie experiences.",
+  "status": true,
+  "location": {
+    "$oid": "67480a1433bd0d9ca789ab38"
+  },
+  "images": [
+    "https://miniflicks.in/uploads/screens/1757384267780-712105170-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384267784-249533610-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384267786-626463194-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384267788-599528197-image.jpg",
+    "https://miniflicks.in/uploads/screens/1757384267790-444455777-image.jpg"
+  ],
+  "slots": [
+    {
+      "from": "09:00",
+      "to": "11:00"
+    },
+    {
+      "from": "11:45",
+      "to": "13:45"
+    },
+    {
+      "from": "14:30",
+      "to": "16:30"
+    },
+    {
+      "from": "17:15",
+      "to": "19:15"
+    },
+    {
+      "from": "20:00",
+      "to": "22:00"
+    },
+    {
+      "from": "22:45",
+      "to": "00:45"
+    }
+  ],
+  "packages": [
+    {
+      "name": "Basic",
+      "price": 999,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Decoration"
+      ]
+    },
+    {
+      "name": "Standard",
+      "price": 1499,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Decoration",
+        "Cake"
+      ]
+    },
+    {
+      "name": "Premium",
+      "price": 1899,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Decoration",
+        "Cake",
+        "Smoke Entry"
+      ]
+    },
+    {
+      "name": "Ultra Premium",
+      "price": 2298,
+      "customPrice": [],
+      "addons": [
+        "4k Dolby Theater",
+        "Smoke Entry",
+        "Decoration",
+        "Cake",
+        "Rose Heart On Table"
+      ]
+    }
+  ],
+  "createdAt": {
+    "$date": "2024-11-28T07:14:09.265Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-09T02:17:47.815Z"
+  },
+  "__v": 38
+}]

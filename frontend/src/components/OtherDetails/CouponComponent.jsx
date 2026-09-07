@@ -1,81 +1,67 @@
 import React, { useState, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
-import { setBookingOtherInfo } from "../../redux/customerBooking/customerBookingActions";
-import { validateCoupon } from "../../redux/coupon/couponActions";
+import { useBookingStore } from "../../store/bookingStore";
+import { useValidateCoupon } from "../../hooks/useCatalog";
 
-function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
+function CouponComponent({ subtotalWithoutCoupon }) {
+	const { date: bookingDate, otherInfo, setBookingOtherInfo } = useBookingStore();
+	const validateCouponMutation = useValidateCoupon();
+
 	const [couponCode, setCouponCode] = useState("");
 	const [showCoupon, setShowCoupon] = useState(false);
 	const [error, setError] = useState("");
 
-	const dispatch = useDispatch();
-
-	// Clears the coupon code from local and Redux state when `showCoupon` is false.
+	// Initialize if already applied
 	useEffect(() => {
-		if (!showCoupon) {
+		if (otherInfo?.couponCode) {
+			setShowCoupon(true);
+			setCouponCode(otherInfo.couponCode);
+		}
+	}, [otherInfo?.couponCode]);
+
+	// Toggle coupon input visibility
+	const handleToggleCoupon = () => {
+		if (showCoupon) {
+			// Remove coupon
+			setShowCoupon(false);
 			setCouponCode("");
 			setError("");
-			dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, couponCode: "" }));
-			setPricingInfo((prev) => prev.filter((item) => item.title !== "Coupon"));
-		}
-	}, [showCoupon]);
-
-	useEffect(() => {
-		if (showCoupon) return;
-		if (!customerBooking.otherInfo.couponCode) return;
-		setShowCoupon(true);
-		setCouponCode(customerBooking.otherInfo.couponCode);
-
-		setPricingInfo((prev) => {
-			const existingIndex = prev.findIndex((item) => item.title === "Coupon");
-
-			if (existingIndex !== -1) {
-				const updatedPricingInfo = [...prev];
-				updatedPricingInfo[existingIndex].amount = customerBooking.otherInfo.couponPrice;
-				return updatedPricingInfo;
-			} else {
-				return [...prev, { title: "Coupon", amount: customerBooking.otherInfo.couponPrice }];
-			}
-		});
-	}, [customerBooking.otherInfo.couponCode]);
-
-	const updateCouponAmount = (coupon) => {
-		if (!coupon) return;
-
-		let amount;
-		if (coupon.type === "fixed") {
-			amount = -coupon.discount;
+			setBookingOtherInfo({
+				...otherInfo,
+				couponCode: "",
+				couponPrice: 0,
+			});
 		} else {
-			const total = pricingInfo.reduce((acc, item) => acc + item.amount, 0);
-			amount = -parseFloat(((coupon.discount / 100) * total).toFixed(2));
+			setShowCoupon(true);
 		}
-
-		setPricingInfo((prev) => {
-			const existingIndex = prev.findIndex((item) => item.title === "Coupon");
-
-			if (existingIndex !== -1) {
-				const updatedPricingInfo = [...prev];
-				updatedPricingInfo[existingIndex].amount = amount;
-				return updatedPricingInfo;
-			} else {
-				return [...prev, { title: "Coupon", amount }];
-			}
-		});
 	};
 
 	async function handleCouponCode(e) {
 		e.preventDefault();
+		setError("");
 
 		try {
-			const res = await validateCoupon(couponCode, customerBooking.date);
+			const res = await validateCouponMutation.mutateAsync({ code: couponCode, date: bookingDate });
 
 			if (res && res.coupon) {
+				const coupon = res.coupon;
+				let discount = 0;
+				if (coupon.type === "fixed") {
+					discount = Number(coupon.discount) || 0;
+				} else {
+					discount = parseFloat((((Number(coupon.discount) || 0) / 100) * subtotalWithoutCoupon).toFixed(2));
+				}
+
 				setError("");
-				dispatch(setBookingOtherInfo({ ...customerBooking.otherInfo, couponCode })); // Dispatch only when coupon is valid
-				updateCouponAmount(res.coupon);
+				setBookingOtherInfo({
+					...otherInfo,
+					couponCode: coupon.code || couponCode,
+					couponPrice: discount,
+				});
+			} else {
+				setError("Invalid coupon");
 			}
 		} catch (err) {
-			setError(err || "Coupon Verfication has failed");
+			setError(err.message || "Coupon verification has failed");
 		}
 	}
 
@@ -87,14 +73,16 @@ function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
 						<div className="input-wrapper w-full">
 							<input type="text" placeholder="COUPON CODE" id="couponCode" name="couponCode" value={couponCode} onChange={(e) => setCouponCode(e.target.value)} required />
 						</div>
-						<button className="bg-gradient-primary text-white rounded-md px-4 py-[2px]">Add</button>
+						<button className="bg-gradient-primary text-white rounded-md px-4 py-[2px]" disabled={validateCouponMutation.isPending}>
+							{validateCouponMutation.isPending ? "..." : "Add"}
+						</button>
 					</form>
 					{error && <p className="text-xs text-red-500">{error}</p>}
 				</>
 			)}
 			<div className="flex justify-between">
 				<div></div>
-				<p className="mt-3 font-medium text-primary cursor-pointer" onClick={() => setShowCoupon(!showCoupon)}>
+				<p className="mt-3 font-medium text-primary cursor-pointer" onClick={handleToggleCoupon}>
 					{showCoupon ? "Remove Coupon" : "Apply Coupon"}?
 				</p>
 			</div>
@@ -102,10 +90,4 @@ function CouponComponent({ customerBooking, setPricingInfo, pricingInfo }) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		customerBooking: state.customerBooking,
-	};
-};
-
-export default connect(mapStateToProps, null)(CouponComponent);
+export default CouponComponent;

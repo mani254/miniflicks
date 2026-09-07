@@ -1,0 +1,72 @@
+[{
+  "_id": {
+    "$oid": "67483df62fa5b6f729cc8c8e"
+  },
+  "title": "Birthday celebration",
+  "description": "Make your birthday unforgettable with a private screening, custom decorations, and a premium theatre experience. celebrate with friends and family on a 150-inch screen with dolby atmos sound.",
+  "link": "/booking/locations",
+  "image": "https://miniflicks.in/uploads/banners/1732787700927-57635837-banner-1.jpg",
+  "position": 0,
+  "status": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67483ecf2fa5b6f729cc8c97"
+  },
+  "title": "Proposal night",
+  "description": "Propose in the most romantic way possible—under the stars on a giant screen with your favourite movie and personalized touches to make the moment magical.",
+  "link": "/booking/locations",
+  "image": "https://miniflicks.in/uploads/banners/1732787918608-844882824-banner-5.jpg",
+  "position": 1,
+  "status": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67483f762fa5b6f729cc8c99"
+  },
+  "title": "Romantic date",
+  "description": "Surprise your special someone with a private movie date. enjoy a cozy atmosphere with plush seating, gourmet snacks, and your favourite romantic films.",
+  "link": "/booking/locations",
+  "image": "https://miniflicks.in/uploads/banners/1732788085668-406159429-banner-4.jpg",
+  "position": 2,
+  "status": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67483fe12fa5b6f729cc8c9b"
+  },
+  "title": "Bride-to-be celebration",
+  "description": "Host a memorable bridal shower or bachelorette party with a private screening. custom themes, decorations, and entertainment await you and your closest friends.",
+  "link": "/booking/locations",
+  "image": "https://miniflicks.in/uploads/banners/1732788192493-375124678-banner-2.jpg",
+  "position": 3,
+  "status": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674840332fa5b6f729cc8c9d"
+  },
+  "title": "Anniversary celebration",
+  "description": "Celebrate your love with a private movie night designed just for you. enjoy a tailored experience with your favourite film, snacks, and intimate ambiance.",
+  "link": "/booking/locations",
+  "image": "https://miniflicks.in/uploads/banners/1732788274468-519103839-banner-3.jpg",
+  "position": 4,
+  "status": true,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674840702fa5b6f729cc8c9f"
+  },
+  "title": "Family & friends gathering",
+  "description": "Gather your loved ones for a movie night in our private theatre. watch the latest releases or your old favourites on a giant screen with surround sound for the perfect bonding experience.",
+  "link": "/booking/locations",
+  "image": "https://miniflicks.in/uploads/banners/1732788335733-747201123-family-1.jpg",
+  "position": 5,
+  "status": true,
+  "__v": 0
+}]

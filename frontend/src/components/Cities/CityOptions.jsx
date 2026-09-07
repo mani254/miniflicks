@@ -1,76 +1,91 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
+import { useCities } from "../../hooks/useCatalog";
 
-import { connect } from "react-redux";
-import { getCities } from "../../redux/citiy/cityActions";
+function CityOptions({ value, changeHandler, params = false, setParams, hideLabel = false }) {
+  const { data } = useCities();
+  const cities = useMemo(() => data?.cities || [], [data?.cities]);
+  const [cityValue, setCityValue] = useState("");
+  const initializedRef = useRef(false);
 
-function CityOptions({ city, getCities, value, changeHandler, params = false, setParams }) {
-	const [cityValue, setCityValue] = useState("");
+  useEffect(() => {
+    if (params && params.get("city")) {
+      setCityValue(params.get("city"));
+    } else if (params) {
+      setCityValue("");
+    }
+  }, [params]);
 
-	useEffect(() => {
-		const fetchCities = async () => {
-			try {
-				await getCities();
-			} catch (err) {
-				console.error(err);
-			}
-		};
-		fetchCities();
-	}, []);
+  useEffect(() => {
+    if (value !== undefined && value !== null) {
+      setCityValue(value);
+    }
+  }, [value]);
 
-	useEffect(() => {
-		if (params && params.get("city")) {
-			setCityValue(params.get("city"));
-		} else {
-			setCityValue("");
-		}
-	}, []);
+  useEffect(() => {
+    if (cities.length === 0 || params || initializedRef.current) return;
 
-	useEffect(() => {
-		if (city.cities.length === 0 || params) return;
+    if (value) {
+      setCityValue(value);
+      initializedRef.current = true;
+    } else if (cities[0]?._id && changeHandler) {
+      initializedRef.current = true;
+      setCityValue(cities[0]._id);
+      changeHandler({ target: { name: "cityId", value: cities[0]._id } });
+    }
+  }, [cities, value, params]);
 
-		if (value) {
-			return setCityValue(value);
-		}
-		if (city.cities.length > 0) {
-			changeHandler({ target: { name: "cityId", value: city.cities[0]._id } });
-		}
-	}, [city.cities, value]);
+  function handleCityChange(event) {
+    const { value: selectedVal } = event.target;
+    setCityValue(selectedVal);
 
-	function handleCityChange(event) {
-		const { value } = event.target;
-		setCityValue(value);
+    if (params) {
+      const newParams = new URLSearchParams(params);
+      selectedVal ? newParams.set("city", selectedVal) : newParams.delete("city");
+      setParams(newParams);
+    } else if (changeHandler) {
+      changeHandler(event);
+    }
+  }
 
-		if (params) {
-			const newParams = new URLSearchParams(params);
-			value ? newParams.set("city", value) : newParams.delete("city");
-			setParams(newParams);
-		} else {
-			changeHandler(event);
-		}
-	}
+  const selectElement = (
+    <select
+      id="cityId"
+      name="cityId"
+      value={cityValue}
+      onChange={handleCityChange}
+      required
+      className={
+        hideLabel
+          ? "bg-transparent text-sm font-medium text-gray-800 outline-none cursor-pointer py-1 px-1 border-none focus:ring-0"
+          : "w-full px-3 py-2 text-sm rounded-md border border-gray-200 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+      }
+    >
+      {params && <option value="">All Cities</option>}
+      {cities.length === 0 && (
+        <option value="" disabled>
+          No cities available
+        </option>
+      )}
+      {cities.map((c) => (
+        <option key={c._id} value={c._id}>
+          {c.name}
+        </option>
+      ))}
+    </select>
+  );
 
-	return (
-		<div className="input-wrapper">
-			<label htmlFor="cityId">City</label>
-			{city.cities.length > 0 && (
-				<select id="cityId" name="cityId" value={cityValue} onChange={handleCityChange} required>
-					{params && <option value="">All</option>}
-					{city.cities.map((city) => (
-						<option key={city._id} value={city._id}>
-							{city.name}
-						</option>
-					))}
-				</select>
-			)}
-		</div>
-	);
+  if (hideLabel) {
+    return selectElement;
+  }
+
+  return (
+    <div className="space-y-1.5">
+      <label htmlFor="cityId" className="text-sm font-medium text-gray-700">
+        City <span className="text-red-500">*</span>
+      </label>
+      {selectElement}
+    </div>
+  );
 }
 
-const mapDispatchToProps = (dispatch) => ({
-	getCities: () => dispatch(getCities()),
-});
-const mapStateToProps = (state) => ({
-	city: state.cities,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CityOptions);
+export default CityOptions;

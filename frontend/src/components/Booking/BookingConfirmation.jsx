@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useBookingStore } from "../../store/bookingStore";
+import { useLocation } from "../../hooks/useCatalog";
 
-const BookingConfirmation = ({ customerBooking, locationsData }) => {
+const BookingConfirmation = () => {
 	const [showTick, setShowTick] = useState(false);
-	const [location, setLocation] = useState();
 	const navigate = useNavigate();
+	const { location: locationId, resetBooking } = useBookingStore();
+	const { data: location } = useLocation(locationId);
 
 	useEffect(() => {
-		navigate("/bookingConfirmation", { replace: true });
-
 		const timeoutId = setTimeout(() => {
 			setShowTick(true);
 		}, 100);
@@ -20,11 +19,10 @@ const BookingConfirmation = ({ customerBooking, locationsData }) => {
 		};
 	}, []);
 
-	useEffect(() => {
-		if (!customerBooking.location && locationsData.locations.length > 0) return;
-		let currentLocation = locationsData.locations.find((location) => location._id == customerBooking.location);
-		setLocation(currentLocation);
-	}, [customerBooking.location, locationsData.locations]);
+	const handleGoHome = () => {
+		resetBooking();
+		navigate("/", { replace: true });
+	};
 
 	return (
 		<>
@@ -40,27 +38,29 @@ const BookingConfirmation = ({ customerBooking, locationsData }) => {
 				<div className="booking-success-message">
 					<h1 className="text-xl font-bold text-green-600">Booking Confirmed!</h1>
 					<p className="text-lg">Thank you for choosing our service. Your booking has been successfully confirmed!</p>
-					<p className="mt-2 text-sm">Please check your email for the booking details, including your itinerary. If you don't see it, kindly check your spam or junk folder.</p>
+					<p className="mt-2 text-sm">Please check your email for the booking details, including your itinerary. If you don&apos;t see it, kindly check your spam or junk folder.</p>
 					<div className="flex items-center justify-center gap-20 my-5 flex-wrap">
 						<div className="mt-4 book-now-btn">
-							<button onClick={() => navigate("/", { replace: true })} className="btn-3 font-medium">
+							<button onClick={handleGoHome} className="btn-3 font-medium">
 								Go to Home Page
 							</button>
 						</div>
-						<div className="mt-4 book-now-btn">
-							<button onClick={() => navigate("/", { replace: true })} className="btn-3">
-								<a href={location?.addressLink} target="_blank" rel="noopener noreferrer" className="font-medium">
-									Navigate to Location
-								</a>
-							</button>
-						</div>
+						{location?.addressLink && (
+							<div className="mt-4 book-now-btn">
+								<button className="btn-3">
+									<a href={location.addressLink} target="_blank" rel="noopener noreferrer" className="font-medium">
+										Navigate to Location
+									</a>
+								</button>
+							</div>
+						)}
 					</div>
 				</div>
 				<div className=" mt-6 space-y-4">
 					<p className="text-gray-600">
 						For further assistance, contact us at{" "}
-						<a href="mailto:support@ourservice.com" className="text-blue-600 underline">
-							support@miniflicks.com
+						<a href="mailto:support@miniflicks.in" className="text-blue-600 underline">
+							support@miniflicks.in
 						</a>
 						.
 					</p>
@@ -70,10 +70,4 @@ const BookingConfirmation = ({ customerBooking, locationsData }) => {
 	);
 };
 
-const mapStateToProps = (state) => {
-	return {
-		customerBooking: state.customerBooking,
-		locationsData: state.locations,
-	};
-};
-export default connect(mapStateToProps, null)(BookingConfirmation);
+export default BookingConfirmation;

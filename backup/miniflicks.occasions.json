@@ -1,0 +1,88 @@
+[{
+  "_id": {
+    "$oid": "674849752fa5b6f729cc8cd3"
+  },
+  "name": "Birthday",
+  "description": "Celebrate a day full of joy, laughter, and cherished moments for someone special in your life.",
+  "position": 1,
+  "image": "https://miniflicks.in/uploads/occasions/1732790645657-371519481-29460 (1).webp",
+  "price": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67484b352fa5b6f729cc8cdd"
+  },
+  "name": "Anniversary",
+  "description": "Mark another year of love, togetherness, and unforgettable memories with your partner in crime.",
+  "position": 2,
+  "image": "https://miniflicks.in/uploads/occasions/1732791093728-632177708-2147972067.webp",
+  "price": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67484f5f2fa5b6f729cc8cfd"
+  },
+  "name": "Proposal",
+  "description": "A magical moment to say ‘yes’ to forever, filled with love, excitement, and heartfelt promises.",
+  "position": 3,
+  "image": "https://miniflicks.in/uploads/occasions/1732792159056-476086063-14355 (2).webp",
+  "price": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674850892fa5b6f729cc8d29"
+  },
+  "name": "Romantic Date",
+  "description": "An intimate evening of love and connection, creating memories that linger long after the night ends.",
+  "position": 4,
+  "image": "https://miniflicks.in/uploads/occasions/1732792457323-2816150-2855.webp",
+  "price": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6748524b2fa5b6f729cc8d6d"
+  },
+  "name": "Bride to Be",
+  "description": "Celebrate the journey of love and joy as she steps into a new chapter of life.",
+  "position": 5,
+  "image": "https://miniflicks.in/uploads/occasions/1732792907828-905554911-2151219981.webp",
+  "price": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674853fa2fa5b6f729cc8d79"
+  },
+  "name": "Mom to Be",
+  "description": "Shower her with love and blessings as she prepares to welcome the greatest gift of life.",
+  "position": 6,
+  "image": "https://miniflicks.in/uploads/occasions/1732793551865-358439860-1780.webp",
+  "price": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674856a92fa5b6f729cc8d89"
+  },
+  "name": "Casual",
+  "description": "A laid-back day with good vibes, great company, and no pressure—just fun, laughter, and chill moments!",
+  "position": 0,
+  "image": "https://miniflicks.in/uploads/occasions/1732794025038-268148572-2147651894.webp",
+  "price": 0,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67519be8525b3f959ff7c4cf"
+  },
+  "name": "Groom To Be",
+  "description": "",
+  "position": 7,
+  "image": "https://miniflicks.in/uploads/occasions/1733401737313-656248552-images.jpg",
+  "price": 0,
+  "__v": 0
+}]

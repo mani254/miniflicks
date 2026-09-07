@@ -1,23 +1,14 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { getAllGifts } from "../../redux/gift/giftActions";
+import React from "react";
+import { useAllGifts } from "../../hooks/useCatalog";
 
-const GiftList = React.memo(({ getAllGifts, giftData, handleChange, checkedValues }) => {
-	useEffect(() => {
-		(async () => {
-			try {
-				await getAllGifts();
-			} catch (err) {
-				console.log(err);
-			}
-		})();
-	}, [getAllGifts]);
+const GiftList = React.memo(({ handleChange, checkedValues = [] }) => {
+	const { data: gifts = [] } = useAllGifts();
 
 	return (
 		<div className="w-full flex">
-			{giftData.gifts.length > 0 ? (
+			{gifts.length > 0 ? (
 				<div className="flex w-full flex-wrap">
-					{giftData.gifts.map((gift, index) => {
+					{gifts.map((gift, index) => {
 						const isChecked = checkedValues.includes(gift._id);
 						return (
 							<div className="input-wrapper checkbox flex gap-2 items-center w-1/4" key={index}>
@@ -38,14 +29,4 @@ const GiftList = React.memo(({ getAllGifts, giftData, handleChange, checkedValue
 	);
 });
 
-const mapStateToProps = (state) => {
-	return {
-		giftData: state.gifts,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-	getAllGifts: () => dispatch(getAllGifts()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(GiftList);
+export default GiftList;

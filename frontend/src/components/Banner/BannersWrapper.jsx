@@ -1,34 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-import { connect } from "react-redux";
-import { getBanners } from "../../redux/banner/bannerActions";
+import { useBanners } from "../../hooks/useCatalog";
 
-function BannerWrapper({ getBanners, bannerData }) {
-	useEffect(() => {
-		(async () => {
-			try {
-				await getBanners();
-			} catch (err) {
-				console.log(err);
-			}
-		})();
-	}, [getBanners]);
+function BannerWrapper() {
+	const { data, isLoading, refetch } = useBanners();
+	const banners = data?.banners || [];
 
 	return (
-		<>
-			<Outlet context={bannerData} />
-		</>
+		<Outlet context={{ banners, loading: isLoading, refetch }} />
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		bannerData: state.banners,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-	getBanners: () => dispatch(getBanners()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(BannerWrapper);
+export default BannerWrapper;

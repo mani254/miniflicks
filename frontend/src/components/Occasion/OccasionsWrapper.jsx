@@ -1,39 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { connect } from "react-redux";
-import { getOccasions } from "../../redux/occasion/occasionActions";
-import { useSearchParams } from "react-router-dom";
+import React from "react";
+import { Outlet, useSearchParams } from "react-router-dom";
+import { useOccasions } from "../../hooks/useCatalog";
 
-function OccasionsWrapper({ getOccasions, occasionData }) {
-	const [noOfDocuments, setNoOfDocuments] = useState(0);
+function OccasionsWrapper() {
 	const [params, setParams] = useSearchParams();
+	const queryParams = Object.fromEntries(params);
+	const { data, isLoading, refetch } = useOccasions(queryParams);
 
-	useEffect(() => {
-		(async () => {
-			try {
-				const data = await getOccasions(params);
-				setNoOfDocuments(data.totalDocuments);
-			} catch (err) {
-				console.log(err);
-			}
-		})();
-	}, [params]);
+	const occasionData = {
+		occasions: data?.occasions || [],
+		loading: isLoading,
+	};
+	const noOfDocuments = data?.totalDocuments || 0;
 
 	return (
-		<>
-			<Outlet context={{ occasionData, noOfDocuments, params, setParams }} />
-		</>
+		<Outlet context={{ occasionData, noOfDocuments, params, setParams, refetch }} />
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		occasionData: state.occasions,
-	};
-};
-
-const mapDispatchToProps = (dispatch) => ({
-	getOccasions: (params) => dispatch(getOccasions(params)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OccasionsWrapper);
+export default OccasionsWrapper;

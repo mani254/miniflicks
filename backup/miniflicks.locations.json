@@ -1,0 +1,30 @@
+[{
+  "_id": {
+    "$oid": "67480a1433bd0d9ca789ab38"
+  },
+  "name": "Marathahalli",
+  "address": "1st A cross, Anantharama reddy layout, The Summit, #13, Outer Ring Rd, Chinnapanahalli, Marathahalli, Bengaluru, Karnataka 560037",
+  "addressLink": "https://maps.app.goo.gl/zA74bFMKeNF1imRE9",
+  "image": "https://miniflicks.in/uploads/locations/1738243962274-836259219-image.jpg",
+  "status": true,
+  "city": {
+    "$oid": "6748041533bd0d9ca789ab33"
+  },
+  "addons": [],
+  "gifts": [],
+  "admin": {
+    "name": "Marathahalli",
+    "email": "miniflicksprivatetheatres@gmail.com",
+    "number": "8688014415",
+    "password": "$2a$10$qmOQ.Q99KMCCkRe8qoqb8emWcdVjIbvk9zaH/EMqqHO.P4mINmAKG"
+  },
+  "screens": [
+    {
+      "$oid": "67481ee02fa5b6f729cc8ba2"
+    },
+    {
+      "$oid": "67481f002fa5b6f729cc8bae"
+    }
+  ],
+  "__v": 7
+}]

@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import CalendarLogic from "./CalendarUtils";
-import { useDispatch } from "react-redux";
-import { setBookingDate } from "../../redux/customerBooking/customerBookingActions";
+import { useBookingStore } from "../../store/bookingStore";
 import "./calendar.css";
-
-import { connect } from "react-redux";
 
 const cInfo = [
 	{
@@ -24,13 +21,13 @@ const cInfo = [
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function Calendar({ customerBooking }) {
+function Calendar() {
 	const initialDate = new Date();
 	const [selectedDate, setSelectedDate] = useState();
 	const [unavailableDates] = useState([]);
 	const [calendarLogic, setCalendarLogic] = useState(() => new CalendarLogic(initialDate.getFullYear(), initialDate.getMonth(), unavailableDates, selectedDate));
 
-	const dispatch = useDispatch();
+	const { date: bookingDate, setBookingDate } = useBookingStore();
 
 	// function that will handle when clicked on certain date
 	const handleDateClick = (date) => {
@@ -43,7 +40,7 @@ function Calendar({ customerBooking }) {
 		}
 
 		setSelectedDate(date);
-		dispatch(setBookingDate(date));
+		setBookingDate(date);
 		setCalendarLogic((prevLogic) => new CalendarLogic(prevLogic.year, prevLogic.month, unavailableDates, date));
 	};
 
@@ -55,23 +52,20 @@ function Calendar({ customerBooking }) {
 		});
 	};
 
-	//useeffect that wil initially set the current date based on the selected date
+	// useeffect that will initially set the current date based on the selected date
 	useEffect(() => {
 		const initialDate = new Date();
 		let date = null;
-		// console.log(customerBooking.date);
 
-		if (customerBooking.date) {
-			date = customerBooking.date instanceof Date ? customerBooking.date : new Date(customerBooking.date);
+		if (bookingDate) {
+			date = bookingDate instanceof Date ? bookingDate : new Date(bookingDate);
 		} else {
 			date = new Date(initialDate.setHours(0, 0, 0, 0));
 		}
 
 		setSelectedDate(date);
 		setCalendarLogic(() => new CalendarLogic(date.getFullYear(), date.getMonth(), unavailableDates, date));
-	}, [customerBooking.date]);
-
-	// console.log(selectedDate, "--selected date which is currently selected-----");
+	}, [bookingDate]);
 
 	let calendar = calendarLogic.generateCalendar();
 
@@ -127,9 +121,4 @@ function Calendar({ customerBooking }) {
 	);
 }
 
-const mapStateToProps = (state) => {
-	return {
-		customerBooking: state.customerBooking,
-	};
-};
-export default connect(mapStateToProps, null)(Calendar);
+export default Calendar;
