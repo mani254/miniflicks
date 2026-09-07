@@ -45,10 +45,6 @@ const couponSchema = new Schema<ICoupon>(
       type: Boolean,
       default: false,
     },
-    showInHeader: {
-      type: Boolean,
-      default: false,
-    },
     scrollingText: {
       type: String,
     },
@@ -56,16 +52,10 @@ const couponSchema = new Schema<ICoupon>(
   { timestamps: true },
 );
 
-couponSchema.pre('save', function (next) {
+couponSchema.pre('save', async function (this: ICoupon) {
   if (this.code) {
     this.code = this.code.toUpperCase();
   }
-  if (this.scrollCoupon !== undefined && this.showInHeader === undefined) {
-    this.showInHeader = this.scrollCoupon;
-  } else if (this.showInHeader !== undefined && this.scrollCoupon === undefined) {
-    this.scrollCoupon = this.showInHeader;
-  }
-  next();
 });
 
 couponSchema.index({ expireDate: 1 });

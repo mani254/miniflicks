@@ -16,7 +16,7 @@ const ScrollingCoupons = () => {
 			: [];
 		const now = new Date();
 		return list.filter((c) => {
-			const isHeader = Boolean(c.scrollCoupon || c.showInHeader);
+			const isHeader = Boolean(c.scrollCoupon);
 			const isActive = c.status !== false;
 			const notExpired = c.expireDate ? new Date(c.expireDate) >= now : true;
 			return isHeader && isActive && notExpired;

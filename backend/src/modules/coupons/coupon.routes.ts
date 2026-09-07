@@ -11,7 +11,7 @@ couponRouter.get('/getUserCoupons', async (_req: Request, res: Response, next: N
     const now = new Date();
     const coupons = await Coupon.find({
       status: true,
-      $or: [{ scrollCoupon: true }, { showInHeader: true }],
+      scrollCoupon: true,
       expireDate: { $gte: now },
     }).sort({ createdAt: -1 });
 
