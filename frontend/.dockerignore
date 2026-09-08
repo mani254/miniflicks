@@ -1,0 +1,10 @@
+node_modules
+build
+dist
+.env
+.env.*
+*.swp
+.git
+.gitignore
+README.md
+package-lock.json
