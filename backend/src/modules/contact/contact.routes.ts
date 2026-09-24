@@ -94,7 +94,7 @@ async function handleContactSubmission(req: Request, res: Response, next: NextFu
     }
 
     const { name, phone, email, message } = parseResult.data;
-    const recipientEmail = 'msmanikanta25@gmail.com';
+    const recipientEmail = 'miniflicksprivatetheatres@gmail.com';
 
     const htmlContent = generateContactEmailHtml({ name, phone, email, message });
 

@@ -2,9 +2,15 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
-const todayDateStr = new Date().toISOString().split("T")[0];
+function getTodayDateStr() {
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = String(now.getMonth() + 1).padStart(2, "0");
+	const day = String(now.getDate()).padStart(2, "0");
+	return `${year}-${month}-${day}`;
+}
 
-const navlinks = [
+const navlinks = (todayDateStr) => [
 	{ title: "Dashboard", to: "/admin/dashboard", image: "https://cdn-icons-png.flaticon.com/512/25/25694.png" },
 	{
 		title: "Bookings",
@@ -34,7 +40,9 @@ function BackendNav() {
 	const { admin } = useAuth();
 	const location = useLocation();
 
-	const combinedLinks = admin?.superAdmin ? [...navlinks, ...superAdminLinks] : navlinks;
+	const todayDateStr = getTodayDateStr();
+	const baseLinks = navlinks(todayDateStr);
+	const combinedLinks = admin?.superAdmin ? [...baseLinks, ...superAdminLinks] : baseLinks;
 
 	const orderedNavLinks = ["Dashboard", "Bookings", "Cities", "Locations", "Screens", "Customers", "Banners", "Coupons", "Cakes", "Occasions", "Addons", "Gifts"];
 

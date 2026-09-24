@@ -126,7 +126,7 @@ export type UpdateBookingDto = z.infer<typeof UpdateBookingSchema>;
 
 /** Query params for listing bookings */
 export const GetBookingsQuerySchema = z.object({
-  location: objectIdString.optional(),
+  location: optionalObjectIdString,
   search: z.string().optional(),
   fromDate: z.string().optional(),
   toDate: z.string().optional(),

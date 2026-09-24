@@ -824,7 +824,7 @@ async function sendBookingConfirmationEmail(bookingId: Types.ObjectId): Promise<
     const customerDoc = booking.customer as any;
     const customerEmail = customerDoc?.email;
     const customerPhone = customerDoc?.number || '';
-    const adminNotificationEmail = 'msmanikanta25@gmail.com';
+    const adminNotificationEmail = 'miniflicksprivatetheatres@gmail.com';
 
     const recipients: string[] = [];
     if (customerEmail && typeof customerEmail === 'string' && customerEmail.includes('@')) {
@@ -1000,6 +1000,7 @@ export async function getBookingsService(
 
   if (fromDate || toDate) {
     const startDate = fromDate ? new Date(fromDate) : new Date('1970-01-01');
+    if (fromDate) startDate.setHours(0, 0, 0, 0);
     const endDate = toDate ? new Date(toDate) : new Date();
     if (toDate) endDate.setHours(23, 59, 59, 999);
     matchConditions['date'] = { $gte: startDate, $lte: endDate };
@@ -1225,6 +1226,7 @@ export async function getDashboardInfoService(
 
   if (fromDate || toDate) {
     const start = fromDate ? new Date(fromDate) : new Date('1970-01-01');
+    if (fromDate) start.setHours(0, 0, 0, 0);
     const end = toDate ? new Date(toDate) : new Date();
     end.setHours(23, 59, 59, 999);
     matchConditions['date'] = { $gte: start, $lte: end };
@@ -1295,6 +1297,7 @@ export async function getGraphDataService(
 
   if (fromDate || toDate) {
     const start = fromDate ? new Date(fromDate) : new Date('1970-01-01');
+    if (fromDate) start.setHours(0, 0, 0, 0);
     const end = toDate ? new Date(toDate) : new Date();
     end.setHours(23, 59, 59, 999);
     matchConditions['date'] = { $gte: start, $lte: end };

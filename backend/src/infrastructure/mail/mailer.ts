@@ -135,7 +135,7 @@ export function buildBookingConfirmationHtml(params: BookingConfirmationEmailPar
       year: 'numeric',
     });
 
-  const logoUrl = params.logoUrl || 'https://miniflicks.in/logos/mf-logos/mf-logo.png';
+  const logoUrl = params.logoUrl || 'https://miniflicks.in/assets/mf-logo-D8ebzm12.png';
 
   // Build itemized invoice lines
   interface InvoiceLine {
@@ -333,11 +333,22 @@ export function buildBookingConfirmationHtml(params: BookingConfirmationEmailPar
                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                   <tr>
                     <td valign="top" style="width: 52%;">
-                      <a href="https://miniflicks.in" target="_blank" style="text-decoration: none;">
-                        <img src="${logoUrl}" alt="MiniFlicks" width="165" style="display: block; width: 165px; max-width: 165px; height: auto; border: 0; outline: none;" />
-                      </a>
-                      <div style="font-size: 11px; color: #64748b; letter-spacing: 0.8px; text-transform: uppercase; margin-top: 8px; font-weight: 700;">Private Theater & Celebrations</div>
-                      <div style="font-size: 11px; color: #94a3b8; margin-top: 3px;">
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td valign="middle" style="padding-right: 12px;">
+                            <a href="https://miniflicks.in" target="_blank" style="text-decoration: none; display: block;">
+                              <img src="${logoUrl}" alt="MiniFlicks" width="60" style="display: block; width: 60px; max-width: 60px; height: auto; border: 0; outline: none;" />
+                            </a>
+                          </td>
+                          <td valign="middle">
+                            <a href="https://miniflicks.in" target="_blank" style="text-decoration: none;">
+                              <div style="font-size: 26px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; line-height: 1; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-transform: lowercase;">miniflicks</div>
+                            </a>
+                            <div style="font-size: 10px; color: #64748b; letter-spacing: 0.8px; text-transform: uppercase; margin-top: 4px; font-weight: 700;">Private Theater &amp; Celebrations</div>
+                          </td>
+                        </tr>
+                      </table>
+                      <div style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
                         Website: <a href="https://miniflicks.in" target="_blank" style="color: #6461ae; text-decoration: none; font-weight: 600;">miniflicks.in</a>
                       </div>
                     </td>
