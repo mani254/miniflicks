@@ -10,11 +10,16 @@ function UserItems({ type }) {
 		gifts: selectedGifts,
 		cakes: selectedCakes,
 		otherInfo,
+		package: selectedPackage,
 		setBookingAddons,
 		setBookingGifts,
 		setBookingCakes,
 		setBookingOtherInfo,
 	} = useBookingStore();
+
+	const packageIncludesCake = useMemo(() => {
+		return Boolean(selectedPackage?.addons?.some((addon) => addon.toLowerCase().includes("cake")));
+	}, [selectedPackage]);
 
 	const addonsQuery = useAllAddons();
 	const giftsQuery = useAllGifts();
@@ -48,6 +53,17 @@ function UserItems({ type }) {
 	const [ledNumber, setLedNumber] = useState("");
 	const [nameOnCake, setNameOnCake] = useState("");
 
+	useEffect(() => {
+		if (type !== "cakes" || !selectedCakes?.length) return;
+		if (!packageIncludesCake && selectedCakes.some((c) => c.free)) {
+			setBookingCakes(selectedCakes.map((c) => ({ ...c, free: false })));
+		} else if (packageIncludesCake && !selectedCakes.some((c) => c.free)) {
+			const updated = [...selectedCakes];
+			updated[0] = { ...updated[0], free: true };
+			setBookingCakes(updated);
+		}
+	}, [type, packageIncludesCake, selectedCakes, setBookingCakes]);
+
 	// Derived list of items preserved during editing if removed from catalog
 	const changedData = useMemo(() => {
 		if (!selected || selected.length === 0 || !stateData || stateData.length === 0) return [];
@@ -63,18 +79,24 @@ function UserItems({ type }) {
 
 		let updatedSelected = existed
 			? selected.filter((current) => item._id !== current._id)
-			: [...selected, { ...item, count: 1, free: selected.length === 0 }];
+			: [...selected, { ...item, count: 1, free: type === "cakes" && packageIncludesCake && selected.length === 0 }];
 
-		// If cakes, ensure first cake has free: true
+		// If cakes, ensure first cake has free: true ONLY IF packageIncludesCake is true
 		if (type === "cakes") {
-			const hasFreeItem = updatedSelected.some((current) => current.free === true);
+			if (packageIncludesCake) {
+				const hasFreeItem = updatedSelected.some((current) => current.free === true);
 
-			if (!hasFreeItem && updatedSelected.length > 0) {
-				updatedSelected[0] = {
-					...updatedSelected[0],
-					free: true,
-					price: updatedSelected[0].special ? (updatedSelected[0].specialPrice || 0) : updatedSelected[0].price,
-				};
+				if (!hasFreeItem && updatedSelected.length > 0) {
+					updatedSelected[0] = {
+						...updatedSelected[0],
+						free: true,
+					};
+				}
+			} else {
+				updatedSelected = updatedSelected.map((current) => ({
+					...current,
+					free: false,
+				}));
 			}
 		}
 
@@ -175,7 +197,7 @@ function UserItems({ type }) {
 		<section className="option-section pt-6 mt-4 border-t border-white">
 			{type === "cakes" && (
 				<p className="bg-bright bg-opacity-80 inline-block px-4 py-[2px] rounded-md -mt-2 mb-2">
-					<span className="font-medium">Note:</span> Select any 1 cake for free; special cakes include an additional package cost.
+					<span className="font-medium">Note:</span> {packageIncludesCake ? "Select any 1 regular cake for free; special cakes include an additional package cost." : "Selected package does not include cake. Regular cake prices apply."}
 				</p>
 			)}
 

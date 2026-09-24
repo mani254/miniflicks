@@ -31,17 +31,27 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message =
+    let message =
       error.response?.data?.error?.message ||
       error.response?.data?.error ||
       error.response?.data?.message ||
       error.message ||
       'Something went wrong';
     const status = error.response?.status ?? 0;
+    const details = error.response?.data?.error?.details;
+
+    // If validation issues are attached, enrich the message so the exact field is obvious
+    if (Array.isArray(details) && details.length > 0) {
+      const detailStr = details
+        .map((d) => (d.path && d.path.length ? `${d.path.join('.')}: ${d.message}` : d.message || JSON.stringify(d)))
+        .join(', ');
+      message = `${message} (${detailStr})`;
+    }
 
     // Attach a normalized message so callers can use error.message safely
     const normalized = new Error(typeof message === 'string' ? message : JSON.stringify(message));
     normalized.status = status;
+    normalized.details = details;
     normalized.originalError = error;
     return Promise.reject(normalized);
   },

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { authApi } from '../api/auth';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 export const AUTH_KEYS = {
   me: ['auth', 'me'],

@@ -56,7 +56,74 @@ export const RedisKeys = {
 
   /** Cached booked slots for a screen on a specific date */
   slotCache: (screenId: string, dateIso: string) => `slots:${screenId}:${dateIso}`,
+
+  /** Distributed lock for reserving a slot during payment */
+  slotLock: (screenId: string, dateIso: string, slotTime: string) =>
+    `lock:slot:${screenId}:${dateIso}:${slotTime}`,
 } as const;
+
+/**
+ * Atomically acquires a distributed lock on a slot using Redis SET NX EX.
+ * Returns true if the lock was acquired, false if the slot is already locked.
+ */
+export async function acquireSlotLock(
+  screenId: string,
+  dateIso: string,
+  slotTime: string,
+  bookingId: string,
+  ttlSeconds = 600,
+): Promise<boolean> {
+  try {
+    const client = getRedisClient();
+    const key = RedisKeys.slotLock(screenId, dateIso, slotTime);
+    const result = await client.set(key, bookingId, 'EX', ttlSeconds, 'NX');
+    return result === 'OK';
+  } catch (err) {
+    console.error('[Redis] acquireSlotLock error:', err);
+    // If Redis has an issue, allow booking to proceed to DB checks rather than crashing
+    return true;
+  }
+}
+
+/**
+ * Releases a slot lock in Redis.
+ */
+export async function releaseSlotLock(
+  screenId: string,
+  dateIso: string,
+  slotTime: string,
+  bookingId?: string,
+): Promise<void> {
+  try {
+    const client = getRedisClient();
+    const key = RedisKeys.slotLock(screenId, dateIso, slotTime);
+    if (bookingId) {
+      const currentHolder = await client.get(key);
+      if (currentHolder === bookingId) {
+        await client.del(key);
+      }
+    } else {
+      await client.del(key);
+    }
+  } catch (err) {
+    console.error('[Redis] releaseSlotLock error:', err);
+  }
+}
+
+/**
+ * Invalidates the slot availability cache for a given screen and date.
+ */
+export async function invalidateSlotCache(
+  screenId: string,
+  dateIso: string,
+): Promise<void> {
+  try {
+    const client = getRedisClient();
+    await client.del(RedisKeys.slotCache(screenId, dateIso));
+  } catch (err) {
+    console.error('[Redis] invalidateSlotCache error:', err);
+  }
+}
 
 export function getRedisStatus(): 'ready' | 'connecting' | 'disconnected' {
   if (!redisClient) return 'disconnected';
@@ -65,3 +132,4 @@ export function getRedisStatus(): 'ready' | 'connecting' | 'disconnected' {
   if (status === 'connecting' || status === 'reconnecting') return 'connecting';
   return 'disconnected';
 }
+

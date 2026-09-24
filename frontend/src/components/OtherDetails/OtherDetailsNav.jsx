@@ -6,18 +6,27 @@ import OtherDetailsButton from "../Booking/OtherDetailsButton";
 function OtherDetailsNav({ activeIndex, navOptions, setNavOptions, setActiveIndex }) {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { package: currentPackage, setBookingCakes } = useBookingStore();
+	const { package: currentPackage, cakes: currentCakes, setBookingCakes } = useBookingStore();
 
-	// Update navOptions based on the selected package
+	// Ensure all tabs are always available so users can order cakes even if not included in package
 	useEffect(() => {
-		if (!currentPackage) return;
 		const initialOptions = ["Packages", "Occasions", "Cakes", "Addons", "Gifts"];
-		if (!currentPackage.addons?.includes("Cake")) {
-			setBookingCakes([]);
+		setNavOptions(initialOptions);
+	}, [setNavOptions]);
+
+	// Sync cake free status when package changes
+	useEffect(() => {
+		if (!currentPackage || !currentCakes || currentCakes.length === 0) return;
+		const pkgIncludesCake = Boolean(currentPackage.addons?.some((a) => typeof a === "string" && a.toLowerCase().includes("cake")));
+
+		if (!pkgIncludesCake && currentCakes.some((c) => c.free)) {
+			setBookingCakes(currentCakes.map((c) => ({ ...c, free: false })));
+		} else if (pkgIncludesCake && !currentCakes.some((c) => c.free)) {
+			const updated = [...currentCakes];
+			updated[0] = { ...updated[0], free: true };
+			setBookingCakes(updated);
 		}
-		let newOptions = currentPackage.addons?.includes("Cake") ? initialOptions : initialOptions.filter((opt) => opt !== "Cakes");
-		setNavOptions(newOptions);
-	}, [currentPackage, setNavOptions, setBookingCakes]);
+	}, [currentPackage, currentCakes, setBookingCakes]);
 
 	// Set the active index based on the current URL path
 	useEffect(() => {

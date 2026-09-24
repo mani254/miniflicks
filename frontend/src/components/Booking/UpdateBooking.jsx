@@ -40,6 +40,9 @@ const UpdateBooking = () => {
 				return;
 			}
 
+			const numberOfExtraPeople = Math.max(0, (booking.numberOfPeople || 0) - (currentScreen.minPeople || 0));
+			const extraPersonsPrice = numberOfExtraPeople * (currentScreen.extraPersonPrice || 0);
+
 			const localBooking = {
 				city: cityId,
 				location: locationId,
@@ -62,8 +65,8 @@ const UpdateBooking = () => {
 					ledNumber: booking.ledNumber || "",
 					couponCode: booking.couponCode || "",
 					couponPrice: booking.couponPrice || 0,
-					numberOfExtraPeople: currentScreen.numberOfExtraPeople || 0,
-					extraPersonsPrice: currentScreen.extraPersonsPrice || 0,
+					numberOfExtraPeople,
+					extraPersonsPrice,
 				},
 				isEditing: true,
 				fullPayment: booking.remainingAmount === 0,

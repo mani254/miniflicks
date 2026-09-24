@@ -16,6 +16,16 @@ export const bookingsApi = {
   },
 
   /**
+   * Check slot availability before initiating booking/payment
+   * @param {{ screenId: string, date: string|Date, slot: { from: string, to: string } }} payload
+   * @returns {Promise<{ available: boolean, reason?: string, message?: string, conflictingSlot?: object }>}
+   */
+  async checkSlotAvailability(payload) {
+    const res = await apiClient.post('/api/bookings/check-slot', payload);
+    return res.data?.data || res.data;
+  },
+
+  /**
    * Create customer booking (triggers Razorpay order creation)
    * @param {object} bookingData
    * @returns {Promise<{ booking: object, razorpayOrderId: string }>}

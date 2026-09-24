@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useBookingStore } from "../../store/bookingStore";
 import { useScreen } from "../../hooks/useCatalog";
 import { showModal } from "../../store/modalStore";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 import termsAndConditions from "../../utils/termsAndConditions";
 import refundPolicy from "../../utils/refundPolicy";
@@ -88,12 +88,22 @@ function CustomerDetails() {
 	function handleSubmit(e) {
 		e.preventDefault();
 
-		if (!details.email.endsWith("@gmail.com")) {
-			toast.error("Invalid Gmail ID");
+		const cleanName = details.name?.trim() || "";
+		const cleanEmail = details.email?.trim() || "";
+		const cleanNumber = String(details.number || "").replace(/[\s-]/g, "").trim();
+
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(cleanEmail)) {
+			toast.error("Please enter a valid email address");
 			return;
 		}
 
-		setBookingCustomer({ name: details.name, email: details.email, number: details.number });
+		if (!/^\+?[0-9]{10,15}$/.test(cleanNumber)) {
+			toast.error("Please enter a valid 10-digit phone number");
+			return;
+		}
+
+		setBookingCustomer({ name: cleanName, email: cleanEmail, number: cleanNumber });
 
 		const numberOfExtraPeople = Math.max(0, Number(details.numberOfPeople) - (screen?.minPeople || 0));
 		const extraPersonsPrice = numberOfExtraPeople * (screen?.extraPersonPrice || 0);

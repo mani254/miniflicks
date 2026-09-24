@@ -15,6 +15,7 @@ function OrderSummary({ navOptions, activeIndex, setNavOptions, setActiveIndex }
 		slot: bookingSlot,
 		isEditing,
 		setBookingTotal,
+		setBookingOtherInfo,
 	} = useBookingStore();
 
 	const getPackagePrice = (pack) => {
@@ -91,12 +92,20 @@ function OrderSummary({ navOptions, activeIndex, setNavOptions, setActiveIndex }
 			});
 		}
 
+		const subtotalWithoutCoupon = items.reduce((acc, i) => acc + i.amount, 0);
+
 		// 7. Coupon
-		if (otherInfo?.couponCode && otherInfo?.couponPrice) {
-			items.push({
-				title: "Coupon",
-				amount: -Math.abs(otherInfo.couponPrice),
-			});
+		if (otherInfo?.couponCode) {
+			let discount = otherInfo.couponPrice || 0;
+			if (otherInfo.couponType === "percentage" && otherInfo.couponDiscount) {
+				discount = parseFloat((((otherInfo.couponDiscount) / 100) * subtotalWithoutCoupon).toFixed(2));
+			}
+			if (discount > 0) {
+				items.push({
+					title: "Coupon",
+					amount: -Math.abs(discount),
+				});
+			}
 		}
 
 		return items;
@@ -111,6 +120,20 @@ function OrderSummary({ navOptions, activeIndex, setNavOptions, setActiveIndex }
 	useEffect(() => {
 		setBookingTotal(total);
 	}, [total, setBookingTotal]);
+
+	// Sync coupon discount if subtotal changed
+	useEffect(() => {
+		if (otherInfo?.couponCode && otherInfo?.couponType === "percentage" && otherInfo?.couponDiscount) {
+			const subtotal = pricingInfo.filter((i) => i.title !== "Coupon").reduce((acc, i) => acc + i.amount, 0);
+			const expectedDiscount = parseFloat((((otherInfo.couponDiscount) / 100) * subtotal).toFixed(2));
+			if (otherInfo.couponPrice !== expectedDiscount) {
+				setBookingOtherInfo({
+					...otherInfo,
+					couponPrice: expectedDiscount,
+				});
+			}
+		}
+	}, [pricingInfo, otherInfo, setBookingOtherInfo]);
 
 	const convertToAMPM = (time) => {
 		if (!time) return "";

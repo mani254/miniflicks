@@ -8,7 +8,7 @@ import CandlePath from "../popupts/CandlePath";
 import { showModal } from "../../store/modalStore";
 import { useBookingStore } from "../../store/bookingStore";
 import { useScreen } from "../../hooks/useCatalog";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 import smokeEntry from "../../assets/gallery/smoke/image-1.jpg";
 import rosePath from "../../assets/gallery/rose-path/image-6.webp";

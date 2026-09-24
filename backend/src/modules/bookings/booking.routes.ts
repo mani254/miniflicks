@@ -8,6 +8,7 @@ import {
   updateBooking,
   deleteBooking,
   getBookedSlots,
+  checkSlotAvailability,
   getDashboardInfo,
   getGraphData,
 } from './booking.controller';
@@ -16,6 +17,7 @@ const bookingRouter = Router();
 
 // ─── Public routes (no auth required) ────────────────────────────────────────
 bookingRouter.post('/getBookedSlots', getBookedSlots);  // Used by customer booking form
+bookingRouter.post('/check-slot', checkSlotAvailability); // Pre-flight slot check before payment
 bookingRouter.post('/customerBooking', createCustomerBooking);  // Customer Razorpay flow
 
 // ─── Admin routes (any authenticated admin) ───────────────────────────────────

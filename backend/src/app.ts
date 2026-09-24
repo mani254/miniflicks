@@ -20,6 +20,7 @@ import locationRouter from './modules/locations/location.routes';
 import occasionRouter from './modules/occasions/occasion.routes';
 import paymentRouter from './modules/payments/payment.routes';
 import screenRouter from './modules/screens/screen.routes';
+import contactRouter from './modules/contact/contact.routes';
 
 export function createApp(): Application {
   const app = express();
@@ -47,10 +48,6 @@ export function createApp(): Application {
   // ─── Rate limiting ───────────────────────────────────────────────────────────
   app.use(generalRateLimiter);
 
-  // ─── Webhook route — must be BEFORE express.json() ───────────────────────────
-  // The webhook route uses express.raw() internally (defined in payment.routes.ts)
-  app.use('/api/payments', paymentRouter);
-
   // ─── Body parsing ────────────────────────────────────────────────────────────
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true }));
@@ -74,6 +71,7 @@ export function createApp(): Application {
 
   // ─── Modular TypeScript API Routes ───────────────────────────────────────────
   app.use('/api/auth', authRouter);
+  app.use('/api/payments', paymentRouter);
   app.use('/api/bookings', bookingRouter);
   app.use('/api/cities', cityRouter);
   app.use('/api/locations', locationRouter);
@@ -85,6 +83,8 @@ export function createApp(): Application {
   app.use('/api/occasions', occasionRouter);
   app.use('/api/cakes', cakeRouter);
   app.use('/api/customers', customerRouter);
+  app.use('/api/contact', contactRouter);
+  app.use('/sendContactForm', contactRouter);
 
   // ─── 404 + Global error handler (must be last) ────────────────────────────────
   app.use(notFoundMiddleware);

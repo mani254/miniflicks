@@ -28,6 +28,8 @@ function CouponComponent({ subtotalWithoutCoupon }) {
 			setBookingOtherInfo({
 				...otherInfo,
 				couponCode: "",
+				couponType: "",
+				couponDiscount: 0,
 				couponPrice: 0,
 			});
 		} else {
@@ -55,6 +57,8 @@ function CouponComponent({ subtotalWithoutCoupon }) {
 				setBookingOtherInfo({
 					...otherInfo,
 					couponCode: coupon.code || couponCode,
+					couponType: coupon.type || "fixed",
+					couponDiscount: Number(coupon.discount) || 0,
 					couponPrice: discount,
 				});
 			} else {

@@ -4,11 +4,13 @@ import { sendSuccess } from '../../shared/utils/response';
 import { ValidationError } from '../../shared/errors/AppError';
 import {
   createAdminBookingService,
+  updateBookingService,
   createCustomerBookingService,
   getBookingsService,
   getBookingByIdService,
   deleteBookingService,
   getBookedSlotsService,
+  checkSlotAvailabilityService,
   getDashboardInfoService,
   getGraphDataService,
 } from './booking.service';
@@ -17,6 +19,7 @@ import {
   UpdateBookingSchema,
   GetBookingsQuerySchema,
   GetBookedSlotsSchema,
+  CheckSlotAvailabilitySchema,
 } from './booking.validators';
 import { Types } from 'mongoose';
 
@@ -78,17 +81,8 @@ export const updateBooking = asyncHandler(async (req: Request, res: Response): P
     throw new ValidationError('Invalid booking data', parsed.error.issues);
   }
 
-  // For updates, rebuild using price recalculation
-  // Map the update DTO to the create format for price calculation
-  const createCompatible = CreateBookingSchema.safeParse({
-    ...parsed.data,
-    customer: req.body.customer ?? { name: 'Admin Update', number: '0000000000', email: 'update@miniflicks.in' },
-  });
-  if (!createCompatible.success) {
-    throw new ValidationError('Invalid booking data for update', createCompatible.error.issues);
-  }
-  const booking = await createAdminBookingService(createCompatible.data);
-  sendSuccess(res, { booking });
+  const booking = await updateBookingService(parsed.data);
+  sendSuccess(res, { booking, message: 'Booking updated successfully' });
 });
 
 /** DELETE /api/bookings/:id — delete booking (admin) */
@@ -107,6 +101,21 @@ export const getBookedSlots = asyncHandler(async (req: Request, res: Response): 
 
   const slots = await getBookedSlotsService(parsed.data.screenId, parsed.data.currentDate);
   sendSuccess(res, { bookedSlots: slots });
+});
+
+/** POST /api/bookings/check-slot — pre-flight check to verify if a slot is available before payment */
+export const checkSlotAvailability = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const parsed = CheckSlotAvailabilitySchema.safeParse(req.body);
+  if (!parsed.success) {
+    throw new ValidationError('Invalid request data', parsed.error.issues);
+  }
+
+  const result = await checkSlotAvailabilityService(
+    parsed.data.screenId,
+    parsed.data.date,
+    parsed.data.slot,
+  );
+  sendSuccess(res, result);
 });
 
 /** GET /api/bookings/info — dashboard summary stats */

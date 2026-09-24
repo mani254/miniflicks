@@ -47,12 +47,15 @@ const DetailedBooking = ({ bookingData }) => {
   const occasionPrice = bookingData.occasion?.price || 0;
 
   const getExactLedPrice = () => {
-    const ledData = bookingData.addons?.find((item) => item.name === "LED Name");
+    const ledData = bookingData.addons?.find((item) => {
+      const lower = item.name?.toLowerCase() || "";
+      return lower.includes("name") && (lower.includes("led") || lower === "led name");
+    });
     if (!ledData) return 0;
     if (bookingData.ledName && bookingData.ledName.length > 8) {
-      return ledData.price + (bookingData.ledName.length - 8) * 30;
+      return (ledData.price || 0) + (bookingData.ledName.length - 8) * 30;
     }
-    return ledData.price;
+    return ledData.price || 0;
   };
 
   const extraPeopleCount =
@@ -382,27 +385,37 @@ const DetailedBooking = ({ bookingData }) => {
 
                   {/* Cakes */}
                   {Array.isArray(bookingData.cakes) &&
-                    bookingData.cakes.map((cake, idx) => (
-                      <tr key={`cake-${idx}`}>
-                        <td className="px-4 py-2.5">
-                          <span className="font-medium text-gray-900">
-                            Cake: {cake.name}
-                          </span>
-                          {cake.free && (
-                            <span className="text-[11px] text-emerald-600 block">
-                              Package Included
+                    bookingData.cakes.map((cake, idx) => {
+                      const effectiveCakePrice = cake.free
+                        ? (cake.special ? (cake.specialPrice || 0) : 0)
+                        : (cake.price || 0);
+                      return (
+                        <tr key={`cake-${idx}`}>
+                          <td className="px-4 py-2.5">
+                            <span className="font-medium text-gray-900">
+                              Cake: {cake.name}
                             </span>
-                          )}
-                        </td>
-                        <td className="px-4 py-2.5 text-center">1</td>
-                        <td className="px-4 py-2.5 text-right font-mono">
-                          ₹{cake.price || 0}
-                        </td>
-                        <td className="px-4 py-2.5 text-right font-mono font-semibold text-gray-900">
-                          ₹{cake.price || 0}
-                        </td>
-                      </tr>
-                    ))}
+                            {cake.free && !cake.special && (
+                              <span className="text-[11px] text-emerald-600 block">
+                                Package Included (Free)
+                              </span>
+                            )}
+                            {cake.free && cake.special && (
+                              <span className="text-[11px] text-amber-600 block">
+                                Package Included (Special Upgrade: ₹{cake.specialPrice || 0})
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-4 py-2.5 text-center">1</td>
+                          <td className="px-4 py-2.5 text-right font-mono">
+                            ₹{effectiveCakePrice}
+                          </td>
+                          <td className="px-4 py-2.5 text-right font-mono font-semibold text-gray-900">
+                            ₹{effectiveCakePrice}
+                          </td>
+                        </tr>
+                      );
+                    })}
 
                   {/* Addons */}
                   {Array.isArray(bookingData.addons) &&

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { paymentsApi } from '../api/payments';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 /**
  * Hook for payment operations

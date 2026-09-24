@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { contactBalloon, contactBreadcrumb } from "../utils";
-import { FaPhoneAlt } from "react-icons/fa";
+import { FaPhoneAlt, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 import { IoMail } from "react-icons/io5";
 import { socialMediaLinks } from "../utils";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import apiClient from "../lib/apiClient";
 import Loader from "../components/Loader/Loader";
 import { Helmet } from "react-helmet-async";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 function ContactPage() {
+	const navigate = useNavigate();
 	const phoneCardRef = useRef(null);
 	const socialMediaCardRef = useRef(null);
 	const emailCardRef = useRef(null);
@@ -18,6 +19,8 @@ function ContactPage() {
 	const breadcrumbRef = useRef(null);
 	const formInputsRef = useRef([]);
 	const [loading, setLoading] = useState(false);
+	const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+	const [countdown, setCountdown] = useState(4);
 
 	const [formData, setFormData] = useState({
 		name: "",
@@ -89,20 +92,38 @@ function ContactPage() {
 		e.preventDefault();
 		try {
 			setLoading(true);
-			await apiClient.post("/sendContactForm", formData);
-			toast.success("Message Sent Successfully");
+			await apiClient.post("/api/contact", formData);
 			setFormData({
 				name: "",
 				phone: "",
 				email: "",
 				message: "",
 			});
+			setCountdown(4);
+			setShowSuccessDialog(true);
 		} catch (error) {
 			toast.error(error.message || "Something went wrong");
 		} finally {
 			setLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		if (!showSuccessDialog) return;
+
+		const timer = setInterval(() => {
+			setCountdown((prev) => {
+				if (prev <= 1) {
+					clearInterval(timer);
+					navigate("/");
+					return 0;
+				}
+				return prev - 1;
+			});
+		}, 1000);
+
+		return () => clearInterval(timer);
+	}, [showSuccessDialog, navigate]);
 
 	return (
 		<>
@@ -241,6 +262,34 @@ function ContactPage() {
 					</div>
 				</section>
 			</div>
+
+			{/* Success Confirmation Dialog */}
+			{showSuccessDialog && (
+				<div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+					<div className="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center border border-gray-100 transform transition-all">
+						<div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+							<FaCheckCircle />
+						</div>
+						<h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Message Received!</h3>
+						<p className="text-gray-600 text-sm sm:text-base mb-6 leading-relaxed">
+							Thank you for reaching out to us. We have received your message and will get back to you within <strong>24 hours</strong>.
+						</p>
+						<div className="bg-gray-50 rounded-xl py-3 px-4 mb-6 border border-gray-100 flex items-center justify-center gap-2">
+							<span className="inline-block w-2 h-2 rounded-full bg-primary animate-ping"></span>
+							<p className="text-xs sm:text-sm text-gray-600 font-medium">
+								Redirecting to home page in <span className="font-bold text-primary">{countdown}s</span>
+							</p>
+						</div>
+						<button
+							type="button"
+							onClick={() => navigate("/")}
+							className="btn-3 w-full flex items-center justify-center gap-2 text-center"
+						>
+							Go to Home Now <FaArrowRight className="text-xs" />
+						</button>
+					</div>
+				</div>
+			)}
 		</>
 	);
 }

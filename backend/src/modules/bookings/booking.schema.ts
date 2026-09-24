@@ -41,7 +41,10 @@ export interface ICakeSnapshot {
   name: string;
   price: number;
   free: boolean;
+  special?: boolean;
+  specialPrice?: number;
 }
+
 
 // ─── Main booking document interface ─────────────────────────────────────────
 
@@ -123,6 +126,8 @@ const bookingSchema = new Schema<IBooking>(
         name: { type: String, required: true },
         price: { type: Number, required: true, default: 0 },
         free: { type: Boolean, default: false },
+        special: { type: Boolean, default: false },
+        specialPrice: { type: Number, default: 0 },
       },
     ],
     customer: { type: Schema.Types.ObjectId, ref: 'Customer', required: true },
@@ -153,6 +158,7 @@ const bookingSchema = new Schema<IBooking>(
 
 /** Slot conflict detection: find all bookings for a given screen on a date */
 bookingSchema.index({ date: 1, screen: 1, status: 1 });
+bookingSchema.index({ screen: 1, date: 1, 'slot.from': 1, 'slot.to': 1, status: 1 });
 
 /** Payment verification: look up booking by Razorpay order ID */
 bookingSchema.index({ razorpayOrderId: 1 }, { sparse: true });

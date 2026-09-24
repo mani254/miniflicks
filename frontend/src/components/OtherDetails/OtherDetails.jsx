@@ -7,7 +7,7 @@ import SelectedDetails from "./SelectedDetails";
 import OtherDetailsButton from "../Booking/OtherDetailsButton";
 
 function OtherDetails() {
-	const [navOptions, setNavOptions] = useState(["Packages", "Occasions", "Addons", "Cakes", "Gifts"]);
+	const [navOptions, setNavOptions] = useState(["Packages", "Occasions", "Cakes", "Addons", "Gifts"]);
 	const [activeIndex, setActiveIndex] = useState(0);
 
 	return (

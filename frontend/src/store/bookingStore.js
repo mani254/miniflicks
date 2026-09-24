@@ -51,13 +51,11 @@ const loadSavedState = () => {
   return defaultInitialState;
 };
 
-export const useBookingStore = create((set, get) => ({
-  ...loadSavedState(),
+let persistTimeout = null;
 
-  // Save helper
-  _persist: () => {
+const debouncedPersist = (state, immediate = false) => {
+  const save = () => {
     try {
-      const state = get();
       const dataToSave = {};
       Object.keys(state).forEach((key) => {
         if (typeof state[key] !== 'function' && !key.startsWith('_')) {
@@ -68,6 +66,24 @@ export const useBookingStore = create((set, get) => ({
     } catch (e) {
       console.error('Failed to persist booking to sessionStorage', e);
     }
+  };
+
+  if (immediate) {
+    if (persistTimeout) clearTimeout(persistTimeout);
+    save();
+    return;
+  }
+
+  if (persistTimeout) clearTimeout(persistTimeout);
+  persistTimeout = setTimeout(save, 150);
+};
+
+export const useBookingStore = create((set, get) => ({
+  ...loadSavedState(),
+
+  // Save helper
+  _persist: (immediate = false) => {
+    debouncedPersist(get(), immediate);
   },
 
   setCustomerBooking: (data) => {
@@ -176,6 +192,7 @@ export const useBookingStore = create((set, get) => ({
   },
 
   resetBooking: () => {
+    if (persistTimeout) clearTimeout(persistTimeout);
     sessionStorage.removeItem('customerBooking');
     localStorage.removeItem('customerBooking');
     set({ ...defaultInitialState, date: getInitialDate() });

@@ -132,9 +132,13 @@ function calcCouponDiscountPaise(
 
 /**
  * Checks whether the "LED Name" addon is present in the booking.
+ * Matches case-insensitively for variations like "LED Name", "Led Name", "LED Name Decor".
  */
 function hasLedNameAddon(addons: BookingAddon[]): boolean {
-  return addons.some((a) => a.name === 'LED Name');
+  return addons.some((a) => {
+    const lower = a.name.toLowerCase();
+    return lower.includes('name') && (lower.includes('led') || lower === 'led name');
+  });
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
@@ -226,13 +230,11 @@ export function getPackagePriceForDate(
   packageBase: { price: number; customPrice: Array<{ date: Date; price: number }> },
   selectedDate: Date,
 ): number {
-  const targetDate = new Date(selectedDate);
-  targetDate.setHours(0, 0, 0, 0);
+  const targetDateKey = new Date(selectedDate).toISOString().split('T')[0];
 
   const customEntry = packageBase.customPrice.find((entry) => {
-    const entryDate = new Date(entry.date);
-    entryDate.setHours(0, 0, 0, 0);
-    return entryDate.getTime() === targetDate.getTime();
+    const entryDateKey = new Date(entry.date).toISOString().split('T')[0];
+    return entryDateKey === targetDateKey;
   });
 
   return customEntry ? customEntry.price : packageBase.price;
