@@ -5,7 +5,7 @@ import { Admin } from '../admin/admin.schema';
 import { City } from '../cities/city.schema';
 import { Screen } from '../screens/screen.schema';
 import { asyncHandler } from '../../shared/utils/asyncHandler';
-import { getRelativeFilePath } from '../../shared/utils/upload';
+import { uploadFileToCloudinary } from '../../shared/utils/upload';
 import {
   AuthorizationError,
   NotFoundError,
@@ -188,7 +188,7 @@ export const addLocation = asyncHandler(async (req: Request, res: Response): Pro
   // Handle uploaded image
   let imagePath: string | undefined;
   if (req.file) {
-    imagePath = getRelativeFilePath('locations', req.file.filename);
+    imagePath = await uploadFileToCloudinary(req.file, 'locations');
   } else if (typeof body.image === 'string' && body.image.trim()) {
     imagePath = body.image.trim();
   }
@@ -267,7 +267,7 @@ export const updateLocation = asyncHandler(async (req: Request, res: Response): 
 
   // Handle image upload
   if (req.file) {
-    existingLocation.image = getRelativeFilePath('locations', req.file.filename);
+    existingLocation.image = await uploadFileToCloudinary(req.file, 'locations');
   } else if (typeof body.image === 'string' && body.image.trim()) {
     existingLocation.image = body.image.trim();
   }

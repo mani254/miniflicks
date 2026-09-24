@@ -1,0 +1,551 @@
+[
+  {
+    "filename": "1732795872196-923539041-ledNumber.webp",
+    "folder": "addons",
+    "localRelativePath": "/uploads/addons/1732795872196-923539041-ledNumber.webp",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\addons\\1732795872196-923539041-ledNumber.webp",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212035/miniflicks/addons/rte8kl2qa1mmvikjemnw.webp",
+    "publicId": "miniflicks/addons/rte8kl2qa1mmvikjemnw",
+    "uploadedAt": "2026-09-24T01:07:16.010Z"
+  },
+  {
+    "filename": "1755359442632-307359892-image.jpg",
+    "folder": "addons",
+    "localRelativePath": "/uploads/addons/1755359442632-307359892-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\addons\\1755359442632-307359892-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212037/miniflicks/addons/nwsloapbrbcolyqhb3qn.webp",
+    "publicId": "miniflicks/addons/nwsloapbrbcolyqhb3qn",
+    "uploadedAt": "2026-09-24T01:07:18.881Z"
+  },
+  {
+    "filename": "1757444633702-451244175-image.jpg",
+    "folder": "addons",
+    "localRelativePath": "/uploads/addons/1757444633702-451244175-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\addons\\1757444633702-451244175-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212040/miniflicks/addons/e09ndpe2gjbfr7uktibi.jpg",
+    "publicId": "miniflicks/addons/e09ndpe2gjbfr7uktibi",
+    "uploadedAt": "2026-09-24T01:07:21.885Z"
+  },
+  {
+    "filename": "1758003997242-796859431-1000226908.jpg",
+    "folder": "addons",
+    "localRelativePath": "/uploads/addons/1758003997242-796859431-1000226908.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\addons\\1758003997242-796859431-1000226908.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212042/miniflicks/addons/n2kpvbms8dul1nqqzzd4.jpg",
+    "publicId": "miniflicks/addons/n2kpvbms8dul1nqqzzd4",
+    "uploadedAt": "2026-09-24T01:07:23.190Z"
+  },
+  {
+    "filename": "1732787700927-57635837-banner-1.jpg",
+    "folder": "banners",
+    "localRelativePath": "/uploads/banners/1732787700927-57635837-banner-1.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\banners\\1732787700927-57635837-banner-1.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212043/miniflicks/banners/yelazsnjoot14q2mm4pb.jpg",
+    "publicId": "miniflicks/banners/yelazsnjoot14q2mm4pb",
+    "uploadedAt": "2026-09-24T01:07:24.295Z"
+  },
+  {
+    "filename": "1732787918608-844882824-banner-5.jpg",
+    "folder": "banners",
+    "localRelativePath": "/uploads/banners/1732787918608-844882824-banner-5.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\banners\\1732787918608-844882824-banner-5.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212044/miniflicks/banners/hdjpgq6d1hynd00c2cyv.jpg",
+    "publicId": "miniflicks/banners/hdjpgq6d1hynd00c2cyv",
+    "uploadedAt": "2026-09-24T01:07:25.126Z"
+  },
+  {
+    "filename": "1732788085668-406159429-banner-4.jpg",
+    "folder": "banners",
+    "localRelativePath": "/uploads/banners/1732788085668-406159429-banner-4.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\banners\\1732788085668-406159429-banner-4.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212046/miniflicks/banners/une8lczd5a5knnepb1vm.jpg",
+    "publicId": "miniflicks/banners/une8lczd5a5knnepb1vm",
+    "uploadedAt": "2026-09-24T01:07:28.496Z"
+  },
+  {
+    "filename": "1732788192493-375124678-banner-2.jpg",
+    "folder": "banners",
+    "localRelativePath": "/uploads/banners/1732788192493-375124678-banner-2.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\banners\\1732788192493-375124678-banner-2.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212049/miniflicks/banners/sreeqcjd5ent1tlfrdz4.jpg",
+    "publicId": "miniflicks/banners/sreeqcjd5ent1tlfrdz4",
+    "uploadedAt": "2026-09-24T01:07:29.256Z"
+  },
+  {
+    "filename": "1732788274468-519103839-banner-3.jpg",
+    "folder": "banners",
+    "localRelativePath": "/uploads/banners/1732788274468-519103839-banner-3.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\banners\\1732788274468-519103839-banner-3.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212049/miniflicks/banners/styctpseckbjmvs6xlm7.jpg",
+    "publicId": "miniflicks/banners/styctpseckbjmvs6xlm7",
+    "uploadedAt": "2026-09-24T01:07:30.105Z"
+  },
+  {
+    "filename": "1732788335733-747201123-family-1.jpg",
+    "folder": "banners",
+    "localRelativePath": "/uploads/banners/1732788335733-747201123-family-1.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\banners\\1732788335733-747201123-family-1.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212050/miniflicks/banners/rjvjn6fzgr90el2pvskz.jpg",
+    "publicId": "miniflicks/banners/rjvjn6fzgr90el2pvskz",
+    "uploadedAt": "2026-09-24T01:07:30.808Z"
+  },
+  {
+    "filename": "1788539980946-501826.jpg",
+    "folder": "banners",
+    "localRelativePath": "/uploads/banners/1788539980946-501826.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\banners\\1788539980946-501826.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212051/miniflicks/banners/hocfok6kiqk1vwa5vsde.jpg",
+    "publicId": "miniflicks/banners/hocfok6kiqk1vwa5vsde",
+    "uploadedAt": "2026-09-24T01:07:31.684Z"
+  },
+  {
+    "filename": "1788540527806-776021.jpg",
+    "folder": "banners",
+    "localRelativePath": "/uploads/banners/1788540527806-776021.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\banners\\1788540527806-776021.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212052/miniflicks/banners/jhbfb3fdvvtno8cjrqhs.jpg",
+    "publicId": "miniflicks/banners/jhbfb3fdvvtno8cjrqhs",
+    "uploadedAt": "2026-09-24T01:07:32.886Z"
+  },
+  {
+    "filename": "1733401173290-10785729-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401173290-10785729-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401173290-10785729-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212053/miniflicks/cakes/spgx7po4rdb20u7qf0hm.webp",
+    "publicId": "miniflicks/cakes/spgx7po4rdb20u7qf0hm",
+    "uploadedAt": "2026-09-24T01:07:33.651Z"
+  },
+  {
+    "filename": "1733401179739-488573202-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401179739-488573202-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401179739-488573202-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212054/miniflicks/cakes/pcx4hcczn6ukujrihjgt.webp",
+    "publicId": "miniflicks/cakes/pcx4hcczn6ukujrihjgt",
+    "uploadedAt": "2026-09-24T01:07:34.429Z"
+  },
+  {
+    "filename": "1733401186941-810241016-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401186941-810241016-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401186941-810241016-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212054/miniflicks/cakes/ojaxbzxbvt2wspmyamf0.webp",
+    "publicId": "miniflicks/cakes/ojaxbzxbvt2wspmyamf0",
+    "uploadedAt": "2026-09-24T01:07:35.180Z"
+  },
+  {
+    "filename": "1733401195131-839787226-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401195131-839787226-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401195131-839787226-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212055/miniflicks/cakes/e5br8cuvvdtdfmddyt3f.webp",
+    "publicId": "miniflicks/cakes/e5br8cuvvdtdfmddyt3f",
+    "uploadedAt": "2026-09-24T01:07:35.885Z"
+  },
+  {
+    "filename": "1733401202869-980223960-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401202869-980223960-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401202869-980223960-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212056/miniflicks/cakes/pbmr7smdce5cpn4oavjj.webp",
+    "publicId": "miniflicks/cakes/pbmr7smdce5cpn4oavjj",
+    "uploadedAt": "2026-09-24T01:07:36.594Z"
+  },
+  {
+    "filename": "1733401253743-361874646-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401253743-361874646-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401253743-361874646-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212057/miniflicks/cakes/jruiabestk4q25rz31iu.webp",
+    "publicId": "miniflicks/cakes/jruiabestk4q25rz31iu",
+    "uploadedAt": "2026-09-24T01:07:37.386Z"
+  },
+  {
+    "filename": "1733401260487-464462337-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401260487-464462337-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401260487-464462337-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212057/miniflicks/cakes/hokjximcbz1dcecoih7n.webp",
+    "publicId": "miniflicks/cakes/hokjximcbz1dcecoih7n",
+    "uploadedAt": "2026-09-24T01:07:38.153Z"
+  },
+  {
+    "filename": "1733401266746-43833714-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401266746-43833714-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401266746-43833714-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212058/miniflicks/cakes/dnki8iiu74lezobhsuol.webp",
+    "publicId": "miniflicks/cakes/dnki8iiu74lezobhsuol",
+    "uploadedAt": "2026-09-24T01:07:39.052Z"
+  },
+  {
+    "filename": "1733401272648-618491079-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401272648-618491079-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401272648-618491079-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212059/miniflicks/cakes/rwyxptyghqiox0ymdlwf.webp",
+    "publicId": "miniflicks/cakes/rwyxptyghqiox0ymdlwf",
+    "uploadedAt": "2026-09-24T01:07:39.737Z"
+  },
+  {
+    "filename": "1733401278604-416696610-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401278604-416696610-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401278604-416696610-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212060/miniflicks/cakes/m81ixw4naqta2spu73dc.webp",
+    "publicId": "miniflicks/cakes/m81ixw4naqta2spu73dc",
+    "uploadedAt": "2026-09-24T01:07:40.978Z"
+  },
+  {
+    "filename": "1733401289787-132888882-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401289787-132888882-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401289787-132888882-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212061/miniflicks/cakes/m20fkphhquu3pyectvdv.webp",
+    "publicId": "miniflicks/cakes/m20fkphhquu3pyectvdv",
+    "uploadedAt": "2026-09-24T01:07:43.045Z"
+  },
+  {
+    "filename": "1733401298225-241390016-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401298225-241390016-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401298225-241390016-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212063/miniflicks/cakes/g5s3meuoijspnc0ty2eh.webp",
+    "publicId": "miniflicks/cakes/g5s3meuoijspnc0ty2eh",
+    "uploadedAt": "2026-09-24T01:07:43.859Z"
+  },
+  {
+    "filename": "1733401309311-250954654-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401309311-250954654-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401309311-250954654-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212064/miniflicks/cakes/dw3csvho97bpen8h6iax.webp",
+    "publicId": "miniflicks/cakes/dw3csvho97bpen8h6iax",
+    "uploadedAt": "2026-09-24T01:07:44.796Z"
+  },
+  {
+    "filename": "1733401326432-69881431-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401326432-69881431-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401326432-69881431-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212065/miniflicks/cakes/pin0ucknzyhbvmb8smal.webp",
+    "publicId": "miniflicks/cakes/pin0ucknzyhbvmb8smal",
+    "uploadedAt": "2026-09-24T01:07:45.612Z"
+  },
+  {
+    "filename": "1733401359091-829187697-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401359091-829187697-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401359091-829187697-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212066/miniflicks/cakes/c3rr9io74gu51nbwaxrz.webp",
+    "publicId": "miniflicks/cakes/c3rr9io74gu51nbwaxrz",
+    "uploadedAt": "2026-09-24T01:07:46.298Z"
+  },
+  {
+    "filename": "1733401376739-211034311-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401376739-211034311-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401376739-211034311-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212066/miniflicks/cakes/inrnfdpwwompkts3wb0n.webp",
+    "publicId": "miniflicks/cakes/inrnfdpwwompkts3wb0n",
+    "uploadedAt": "2026-09-24T01:07:46.970Z"
+  },
+  {
+    "filename": "1733401384849-235604265-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401384849-235604265-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401384849-235604265-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212067/miniflicks/cakes/qpoabwzcoxdas37bemdo.webp",
+    "publicId": "miniflicks/cakes/qpoabwzcoxdas37bemdo",
+    "uploadedAt": "2026-09-24T01:07:47.730Z"
+  },
+  {
+    "filename": "1733401392559-594308917-image.jpg",
+    "folder": "cakes",
+    "localRelativePath": "/uploads/cakes/1733401392559-594308917-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\cakes\\1733401392559-594308917-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212068/miniflicks/cakes/mmwfhjpb5fxwytfuoyps.webp",
+    "publicId": "miniflicks/cakes/mmwfhjpb5fxwytfuoyps",
+    "uploadedAt": "2026-09-24T01:07:48.370Z"
+  },
+  {
+    "filename": "1733400960959-774106565-image.jpg",
+    "folder": "gifts",
+    "localRelativePath": "/uploads/gifts/1733400960959-774106565-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\gifts\\1733400960959-774106565-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212068/miniflicks/gifts/dvjm7is9gf0zlutponfs.webp",
+    "publicId": "miniflicks/gifts/dvjm7is9gf0zlutponfs",
+    "uploadedAt": "2026-09-24T01:07:49.202Z"
+  },
+  {
+    "filename": "1733401818542-758116844-image.jpg",
+    "folder": "gifts",
+    "localRelativePath": "/uploads/gifts/1733401818542-758116844-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\gifts\\1733401818542-758116844-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212069/miniflicks/gifts/ykxfflqmmguel0wilarb.webp",
+    "publicId": "miniflicks/gifts/ykxfflqmmguel0wilarb",
+    "uploadedAt": "2026-09-24T01:07:49.915Z"
+  },
+  {
+    "filename": "1733402304139-364497497-catcover.jpg",
+    "folder": "gifts",
+    "localRelativePath": "/uploads/gifts/1733402304139-364497497-catcover.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\gifts\\1733402304139-364497497-catcover.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212070/miniflicks/gifts/xejbnumtdykfeohuezch.jpg",
+    "publicId": "miniflicks/gifts/xejbnumtdykfeohuezch",
+    "uploadedAt": "2026-09-24T01:07:50.845Z"
+  },
+  {
+    "filename": "1756041100415-159819298-image.jpg",
+    "folder": "gifts",
+    "localRelativePath": "/uploads/gifts/1756041100415-159819298-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\gifts\\1756041100415-159819298-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212071/miniflicks/gifts/kl5fwv2jprf5c3zozfqg.webp",
+    "publicId": "miniflicks/gifts/kl5fwv2jprf5c3zozfqg",
+    "uploadedAt": "2026-09-24T01:07:51.819Z"
+  },
+  {
+    "filename": "1788669526387-814129.jpg",
+    "folder": "gifts",
+    "localRelativePath": "/uploads/gifts/1788669526387-814129.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\gifts\\1788669526387-814129.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212072/miniflicks/gifts/e9gpse1xyd34aowps2y3.jpg",
+    "publicId": "miniflicks/gifts/e9gpse1xyd34aowps2y3",
+    "uploadedAt": "2026-09-24T01:07:52.784Z"
+  },
+  {
+    "filename": "1738243962274-836259219-image.jpg",
+    "folder": "locations",
+    "localRelativePath": "/uploads/locations/1738243962274-836259219-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\locations\\1738243962274-836259219-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212073/miniflicks/locations/blubov0gg9ravb9scrvn.jpg",
+    "publicId": "miniflicks/locations/blubov0gg9ravb9scrvn",
+    "uploadedAt": "2026-09-24T01:07:53.545Z"
+  },
+  {
+    "filename": "1788542530609-805771.jpg",
+    "folder": "locations",
+    "localRelativePath": "/uploads/locations/1788542530609-805771.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\locations\\1788542530609-805771.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212074/miniflicks/locations/x6uxatc9xffyouoaymeb.jpg",
+    "publicId": "miniflicks/locations/x6uxatc9xffyouoaymeb",
+    "uploadedAt": "2026-09-24T01:07:54.343Z"
+  },
+  {
+    "filename": "1788542640034-801745.jpg",
+    "folder": "locations",
+    "localRelativePath": "/uploads/locations/1788542640034-801745.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\locations\\1788542640034-801745.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212074/miniflicks/locations/iwso5w020vz5ov9etpra.jpg",
+    "publicId": "miniflicks/locations/iwso5w020vz5ov9etpra",
+    "uploadedAt": "2026-09-24T01:07:55.268Z"
+  },
+  {
+    "filename": "1732790645657-371519481-29460 (1).webp",
+    "folder": "occasions",
+    "localRelativePath": "/uploads/occasions/1732790645657-371519481-29460 (1).webp",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\occasions\\1732790645657-371519481-29460 (1).webp",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212075/miniflicks/occasions/z2asuyjpv5ge2qukeyjr.webp",
+    "publicId": "miniflicks/occasions/z2asuyjpv5ge2qukeyjr",
+    "uploadedAt": "2026-09-24T01:07:56.042Z"
+  },
+  {
+    "filename": "1732791093728-632177708-2147972067.webp",
+    "folder": "occasions",
+    "localRelativePath": "/uploads/occasions/1732791093728-632177708-2147972067.webp",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\occasions\\1732791093728-632177708-2147972067.webp",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212076/miniflicks/occasions/kmbkbnxlzxwfjw9monxw.webp",
+    "publicId": "miniflicks/occasions/kmbkbnxlzxwfjw9monxw",
+    "uploadedAt": "2026-09-24T01:07:56.767Z"
+  },
+  {
+    "filename": "1732792159056-476086063-14355 (2).webp",
+    "folder": "occasions",
+    "localRelativePath": "/uploads/occasions/1732792159056-476086063-14355 (2).webp",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\occasions\\1732792159056-476086063-14355 (2).webp",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212077/miniflicks/occasions/szoai0jnfnqlclsv2drn.webp",
+    "publicId": "miniflicks/occasions/szoai0jnfnqlclsv2drn",
+    "uploadedAt": "2026-09-24T01:07:57.548Z"
+  },
+  {
+    "filename": "1732792457323-2816150-2855.webp",
+    "folder": "occasions",
+    "localRelativePath": "/uploads/occasions/1732792457323-2816150-2855.webp",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\occasions\\1732792457323-2816150-2855.webp",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212078/miniflicks/occasions/hr7cxaqvbexz5l1irqym.webp",
+    "publicId": "miniflicks/occasions/hr7cxaqvbexz5l1irqym",
+    "uploadedAt": "2026-09-24T01:07:58.379Z"
+  },
+  {
+    "filename": "1732792907828-905554911-2151219981.webp",
+    "folder": "occasions",
+    "localRelativePath": "/uploads/occasions/1732792907828-905554911-2151219981.webp",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\occasions\\1732792907828-905554911-2151219981.webp",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212078/miniflicks/occasions/x80gopxqeovmp94s66ie.webp",
+    "publicId": "miniflicks/occasions/x80gopxqeovmp94s66ie",
+    "uploadedAt": "2026-09-24T01:07:59.291Z"
+  },
+  {
+    "filename": "1732793551865-358439860-1780.webp",
+    "folder": "occasions",
+    "localRelativePath": "/uploads/occasions/1732793551865-358439860-1780.webp",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\occasions\\1732793551865-358439860-1780.webp",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212079/miniflicks/occasions/nziaoolvkwhzalti3y1w.webp",
+    "publicId": "miniflicks/occasions/nziaoolvkwhzalti3y1w",
+    "uploadedAt": "2026-09-24T01:08:00.073Z"
+  },
+  {
+    "filename": "1732794025038-268148572-2147651894.webp",
+    "folder": "occasions",
+    "localRelativePath": "/uploads/occasions/1732794025038-268148572-2147651894.webp",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\occasions\\1732794025038-268148572-2147651894.webp",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212080/miniflicks/occasions/jpgfzb0ejcdym702wmco.webp",
+    "publicId": "miniflicks/occasions/jpgfzb0ejcdym702wmco",
+    "uploadedAt": "2026-09-24T01:08:01.378Z"
+  },
+  {
+    "filename": "1733401737313-656248552-images.jpg",
+    "folder": "occasions",
+    "localRelativePath": "/uploads/occasions/1733401737313-656248552-images.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\occasions\\1733401737313-656248552-images.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212081/miniflicks/occasions/t0qzf6cfn0csqb1jpffq.jpg",
+    "publicId": "miniflicks/occasions/t0qzf6cfn0csqb1jpffq",
+    "uploadedAt": "2026-09-24T01:08:02.103Z"
+  },
+  {
+    "filename": "1757384267780-712105170-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384267780-712105170-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384267780-712105170-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212082/miniflicks/screens/g5i6zljt1wnswzkfcguo.jpg",
+    "publicId": "miniflicks/screens/g5i6zljt1wnswzkfcguo",
+    "uploadedAt": "2026-09-24T01:08:02.919Z"
+  },
+  {
+    "filename": "1757384267784-249533610-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384267784-249533610-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384267784-249533610-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212083/miniflicks/screens/lsgxdz14zsprcyxlr8g2.jpg",
+    "publicId": "miniflicks/screens/lsgxdz14zsprcyxlr8g2",
+    "uploadedAt": "2026-09-24T01:08:03.836Z"
+  },
+  {
+    "filename": "1757384267786-626463194-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384267786-626463194-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384267786-626463194-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212084/miniflicks/screens/ec3ydzatiky8i13a56n3.jpg",
+    "publicId": "miniflicks/screens/ec3ydzatiky8i13a56n3",
+    "uploadedAt": "2026-09-24T01:08:04.652Z"
+  },
+  {
+    "filename": "1757384267788-599528197-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384267788-599528197-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384267788-599528197-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212085/miniflicks/screens/qgfhzcjqzmxhumnvkxhn.jpg",
+    "publicId": "miniflicks/screens/qgfhzcjqzmxhumnvkxhn",
+    "uploadedAt": "2026-09-24T01:08:05.458Z"
+  },
+  {
+    "filename": "1757384267790-444455777-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384267790-444455777-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384267790-444455777-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212085/miniflicks/screens/ridffu9johexeetdn7p9.jpg",
+    "publicId": "miniflicks/screens/ridffu9johexeetdn7p9",
+    "uploadedAt": "2026-09-24T01:08:06.382Z"
+  },
+  {
+    "filename": "1757384293794-553476626-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384293794-553476626-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384293794-553476626-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212086/miniflicks/screens/dwiyids8k1lcq8k096qv.jpg",
+    "publicId": "miniflicks/screens/dwiyids8k1lcq8k096qv",
+    "uploadedAt": "2026-09-24T01:08:07.537Z"
+  },
+  {
+    "filename": "1757384293796-233463429-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384293796-233463429-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384293796-233463429-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212088/miniflicks/screens/hhntnvopjtwggdmvv4ys.jpg",
+    "publicId": "miniflicks/screens/hhntnvopjtwggdmvv4ys",
+    "uploadedAt": "2026-09-24T01:08:08.567Z"
+  },
+  {
+    "filename": "1757384293799-281812429-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384293799-281812429-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384293799-281812429-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212089/miniflicks/screens/t6shi8omrvcudr5jr50f.jpg",
+    "publicId": "miniflicks/screens/t6shi8omrvcudr5jr50f",
+    "uploadedAt": "2026-09-24T01:08:09.485Z"
+  },
+  {
+    "filename": "1757384293801-846785744-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384293801-846785744-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384293801-846785744-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212090/miniflicks/screens/fps2qf4bwdds3fkpfowi.jpg",
+    "publicId": "miniflicks/screens/fps2qf4bwdds3fkpfowi",
+    "uploadedAt": "2026-09-24T01:08:10.591Z"
+  },
+  {
+    "filename": "1757384293803-864989317-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384293803-864989317-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384293803-864989317-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212091/miniflicks/screens/jukae0pc9vcwjxhyaelr.jpg",
+    "publicId": "miniflicks/screens/jukae0pc9vcwjxhyaelr",
+    "uploadedAt": "2026-09-24T01:08:11.506Z"
+  },
+  {
+    "filename": "1757384320040-529699088-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384320040-529699088-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384320040-529699088-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212092/miniflicks/screens/a01id8ssvt35arq02sfn.jpg",
+    "publicId": "miniflicks/screens/a01id8ssvt35arq02sfn",
+    "uploadedAt": "2026-09-24T01:08:12.331Z"
+  },
+  {
+    "filename": "1757384320043-295978974-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384320043-295978974-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384320043-295978974-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212092/miniflicks/screens/xazabgmubl19vewkuzbw.jpg",
+    "publicId": "miniflicks/screens/xazabgmubl19vewkuzbw",
+    "uploadedAt": "2026-09-24T01:08:13.874Z"
+  },
+  {
+    "filename": "1757384320044-418116125-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384320044-418116125-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384320044-418116125-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212094/miniflicks/screens/ay0j539rjtiazzl9aywc.jpg",
+    "publicId": "miniflicks/screens/ay0j539rjtiazzl9aywc",
+    "uploadedAt": "2026-09-24T01:08:15.038Z"
+  },
+  {
+    "filename": "1757384320047-176396427-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384320047-176396427-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384320047-176396427-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212095/miniflicks/screens/ngfnrog0ep75bnlijb0r.jpg",
+    "publicId": "miniflicks/screens/ngfnrog0ep75bnlijb0r",
+    "uploadedAt": "2026-09-24T01:08:16.270Z"
+  },
+  {
+    "filename": "1757384320053-688187714-image.jpg",
+    "folder": "screens",
+    "localRelativePath": "/uploads/screens/1757384320053-688187714-image.jpg",
+    "localAbsolutePath": "E:\\freelance-projects\\miniflicks\\miniflicks\\backend\\public\\uploads\\screens\\1757384320053-688187714-image.jpg",
+    "cloudinaryUrl": "https://res.cloudinary.com/dsrfjmzcs/image/upload/v1790212096/miniflicks/screens/imuxur0rob4zdweokbmj.jpg",
+    "publicId": "miniflicks/screens/imuxur0rob4zdweokbmj",
+    "uploadedAt": "2026-09-24T01:08:17.132Z"
+  }
+]

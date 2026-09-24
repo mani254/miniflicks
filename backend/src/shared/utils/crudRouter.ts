@@ -1,7 +1,7 @@
 import { Router, type Request, type Response, type NextFunction, type RequestHandler } from 'express';
 import mongoose, { type Model } from 'mongoose';
 import { requireAuth, requireSuperAdmin } from '../../middleware/auth.middleware';
-import { createUploader, getRelativeFilePath } from './upload';
+import { createUploader, uploadFileToCloudinary } from './upload';
 
 export interface CrudRouterOptions {
   populateFields?: string[];
@@ -114,10 +114,10 @@ export function createCrudRouter(
   });
 
   // Helper to normalize body fields when receiving FormData
-  const normalizeBody = (req: Request) => {
+  const normalizeBody = async (req: Request) => {
     const body = req.body || {};
     if (upload && req.file && options.uploadFolder) {
-      body.image = getRelativeFilePath(options.uploadFolder, req.file.filename);
+      body.image = await uploadFileToCloudinary(req.file, options.uploadFolder);
     }
     if (typeof body.status === 'string') {
       body.status = body.status === 'true';
@@ -145,7 +145,7 @@ export function createCrudRouter(
   if (upload) postHandlers.push(upload.single('image'));
   postHandlers.push(async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = normalizeBody(req);
+      const data = await normalizeBody(req);
       const item = await model.create(data);
       res.status(201).json({
         success: true,
@@ -170,7 +170,7 @@ export function createCrudRouter(
     }
 
     try {
-      const data = normalizeBody(req);
+      const data = await normalizeBody(req);
       const item = await model.findByIdAndUpdate(id, data, { new: true, runValidators: true });
       if (!item) {
         res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'Resource not found' } });

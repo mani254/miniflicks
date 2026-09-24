@@ -33,6 +33,11 @@ const EnvSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   SMTP_FROM: z.string().default('"MiniFlicks" <miniflicksprivatetheatres@gmail.com>'),
+
+  // Cloudinary
+  CLOUDINARY_CLOUD_NAME: z.string().optional().default(''),
+  CLOUDINARY_API_KEY: z.string().optional().default(''),
+  CLOUDINARY_API_SECRET: z.string().optional().default(''),
 });
 
 function parseEnv() {
@@ -102,6 +107,12 @@ export const config = {
   upload: {
     maxFileSizeBytes: 5 * 1024 * 1024, // 5 MB
     allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'],
+  },
+
+  cloudinary: {
+    cloudName: _env.CLOUDINARY_CLOUD_NAME,
+    apiKey: _env.CLOUDINARY_API_KEY,
+    apiSecret: _env.CLOUDINARY_API_SECRET,
   },
 
   booking: {

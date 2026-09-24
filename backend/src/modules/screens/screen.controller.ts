@@ -3,7 +3,7 @@ import mongoose, { type Types } from 'mongoose';
 import { Screen } from './screen.schema';
 import { Location } from '../locations/location.schema';
 import { asyncHandler } from '../../shared/utils/asyncHandler';
-import { getRelativeFilePath } from '../../shared/utils/upload';
+import { uploadFilesToCloudinary } from '../../shared/utils/upload';
 import {
   AuthorizationError,
   NotFoundError,
@@ -132,10 +132,9 @@ export const addScreen = asyncHandler(async (req: Request, res: Response): Promi
 
   // Handle uploaded files
   const imagePaths: string[] = [];
-  if (req.files && Array.isArray(req.files)) {
-    for (const file of req.files) {
-      imagePaths.push(getRelativeFilePath('screens', file.filename));
-    }
+  if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+    const uploadedUrls = await uploadFilesToCloudinary(req.files as Express.Multer.File[], 'screens');
+    imagePaths.push(...uploadedUrls);
   }
 
   // Handle any existing/string image paths passed
@@ -208,9 +207,8 @@ export const updateScreen = asyncHandler(async (req: Request, res: Response): Pr
 
   // If new files were uploaded
   if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-    for (const file of req.files) {
-      updatedImages.push(getRelativeFilePath('screens', file.filename));
-    }
+    const uploadedUrls = await uploadFilesToCloudinary(req.files as Express.Multer.File[], 'screens');
+    updatedImages.push(...uploadedUrls);
   }
 
   // If existing image paths were retained in body.images

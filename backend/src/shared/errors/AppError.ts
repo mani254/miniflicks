@@ -79,6 +79,13 @@ export class ExternalServiceError extends AppError {
   }
 }
 
+/** 500 — configuration error */
+export class ConfigurationError extends AppError {
+  constructor(message: string) {
+    super(message, 500, 'CONFIGURATION_ERROR', false);
+  }
+}
+
 export function isAppError(err: unknown): err is AppError {
   return err instanceof AppError;
 }

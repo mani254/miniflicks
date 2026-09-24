@@ -1,7 +1,7 @@
 import { Router, type Request, type Response, type NextFunction } from 'express';
 import mongoose from 'mongoose';
 import { Banner } from './banner.schema';
-import { createUploader, getRelativeFilePath } from '../../shared/utils/upload';
+import { createUploader, uploadFileToCloudinary } from '../../shared/utils/upload';
 import { requireAuth, requireSuperAdmin } from '../../middleware/auth.middleware';
 
 const bannerRouter = Router();
@@ -60,9 +60,9 @@ bannerRouter.post('/', requireAuth, requireSuperAdmin, upload.single('image'), a
 
     let imagePath: string | undefined;
     if (req.file) {
-      imagePath = getRelativeFilePath('banners', req.file.filename);
-    } else if (typeof req.body.image === 'string' && (req.body.image as string).startsWith('/uploads/')) {
-      imagePath = req.body.image as string;
+      imagePath = await uploadFileToCloudinary(req.file, 'banners');
+    } else if (typeof req.body.image === 'string' && req.body.image.trim()) {
+      imagePath = req.body.image.trim();
     }
 
     if (!imagePath) {
@@ -122,9 +122,9 @@ bannerRouter.put('/:id', requireAuth, requireSuperAdmin, upload.single('image'),
     };
 
     if (req.file) {
-      updateData['image'] = getRelativeFilePath('banners', req.file.filename);
-    } else if (typeof req.body.image === 'string' && (req.body.image as string).startsWith('/uploads/')) {
-      updateData['image'] = req.body.image as string;
+      updateData['image'] = await uploadFileToCloudinary(req.file, 'banners');
+    } else if (typeof req.body.image === 'string' && req.body.image.trim()) {
+      updateData['image'] = req.body.image.trim();
     }
 
     const banner = await Banner.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });

@@ -15,11 +15,12 @@ const BACKEND_URI = import.meta.env.VITE_APP_BACKENDURI || '';
  * @returns {string}
  */
 export function getImageUrl(imagePath) {
-  if (!imagePath) return '';
-  // Already a full URL — return as-is (legacy / external)
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-    return imagePath;
+  if (!imagePath || typeof imagePath !== 'string') return '';
+  const trimmed = imagePath.trim();
+  // Already a full URL (e.g. Cloudinary HTTPS or external) — return as-is
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed;
   }
   // Relative path — prepend backend origin
-  return `${BACKEND_URI}${imagePath.startsWith('/') ? imagePath : `/${imagePath}`}`;
+  return `${BACKEND_URI}${trimmed.startsWith('/') ? trimmed : `/${trimmed}`}`;
 }
